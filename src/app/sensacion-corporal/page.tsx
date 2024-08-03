@@ -159,7 +159,6 @@ const SensacionCorp = () => {
           </div>
         </div>
       </div>
-      <Sidebar />
     </div>
   );
 };

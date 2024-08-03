@@ -25,11 +25,11 @@ const page = () => {
 //     navigate.push(page);
 //   };
   return (
-    <div className="flex justify-between w-full h-screen bg-slate-50">
-      <div className="flex justify-start p-6 w-4/5">
-        <div className="flex flex-col justify-around gap-4 w-full text-center">
+    <div className="flex justify-center items-center w-full h-screen bg-slate-50">
+      <div className="flex justify-center p-6 w-4/5">
+        <div className="flex flex-col justify-around gap-2 w-full text-center">
           <h3 className="font-semibold">ACTIVIDADES</h3>
-          <div className="flex flex-row justify-around px-12 items-center relative">
+          <div className="flex flex-row justify-around gap-8 items-center relative">
             <button className="w-[250px] h-[250px]">
               QUIERO ESCUCHAR MUSICA
               <Image
@@ -66,18 +66,18 @@ const page = () => {
                 QUIERO MIRAR UNA SERIE
               <Image src={serie} className='flex object-contain w-full' alt="serie" />
             </button> */}
-            <button className="absolute right-0 top-[35%]">
+            {/* <button className="absolute right-0 top-[35%]">
               <Image
                 src={flechaDerecha}
                 alt="flechaDerecha"
                 width={100}
                 height={100}
               />
-            </button>
+            </button> */}
           </div>
           {/* <div className="flex flex-col justify-around gap-4 w-full"> */}
            <h3 className="font-semibold">COCINA</h3>
-            <div className="flex flex-row justify-around px-12 items-center relative">
+            <div className="flex flex-row justify-around gap-8 items-center relative">
             <button className="w-[250px] h-[250px]">
               QUIERO COMER
               <Image
@@ -110,19 +110,19 @@ const page = () => {
                 alt="Sandwich"
               />
             </button>
-            <button className="absolute right-0 top-[35%]">
+            {/* <button className="absolute right-0 top-[35%]">
               <Image
                 src={flechaDerecha}
                 alt="flechaDerecha"
                 width={100}
                 height={100}
               />
-            </button>
+            </button> */}
           </div>
           {/* </div> */}
           {/* <div className="flex flex-col justify-around gap-4 w-full"> */}
            <h3 className="font-semibold">BAÑO</h3>
-            <div className="flex flex-row justify-around px-12 items-center relative">
+            <div className="flex flex-row justify-around gap-8 items-center relative">
             <button className="w-[250px] h-[250px]">
               QUIERO IR AL BAÑO
               <Image
@@ -156,19 +156,18 @@ const page = () => {
               />
             </button>
 
-            <button className="absolute right-0 top-[35%]">
+            {/* <button className="absolute right-0 top-[35%]">
               <Image
                 src={flechaDerecha}
                 alt="flechaDerecha"
                 width={100}
                 height={100}
               />
-            </button>
+            </button> */}
           </div>
          {/* </div> */}
         </div>
       </div>
-      <Sidebar />
     </div>
   );
 };
