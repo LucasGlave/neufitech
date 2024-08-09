@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teclado Virtual</title>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: rgb(0, 0, 0);
+        }
+
+        .key-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: calc(12px + 1vw);
+            color: white;
+        }
+
+        .progress-bar {
+            position: absolute;
+            height: 12%;
+            background-color: #4caf50;
+            transition: width;
+            pointer-events: none;
+        }
+
+        .progress-bar-top {
+            top: 0;
+            right: 0;
+        }
+
+        .progress-bar-bottom {
+            bottom: 0;
+            left: 0;
+        }
+
+        .flash {
+            animation: flash 0.2s ease-in-out;
+        }
+
+        @keyframes flash {
+            0%, 100% { background-color: rgb(40, 40, 40); }
+            50% { background-color: #4caf50; }
+        }
+
+        button {
+            background-color: rgb(40, 40, 40);
+            border: 1px solid rgb(60, 60, 60);
+            color: white;
+        }
+
+        button.active {
+            border: 1px solid #4caf50;
+            border-color: 1px solid #4caf50;
+        }
+
+        .extra-button {
+            font-size: 10px; /* Ajustar tamaño de fuente */
+            width: 80px; /* Ajustar ancho */
+            height: 40px; /* Ajustar alto */
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const KeyboardLayout = [
+            ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
+            ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'ñ'],
+            [',', 'z', 'x', 'c', 'v', 'b', 'n', 'm', '.']
+        ];
+
+        const SymbolsLayoutPage1 = [
+            ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
+            ['@', '#', '$', '&', '_', '-', '(', ')', '=', '%'],
+            ["'", '"', '*', ':', ';', '/', '!', '?', '+']
+        ];
+
+        const SymbolsLayoutPage2 = [
+            ['£', '€', '¥', '¢', '©', '®', '±', '÷', '¿'],
+            ['[', ']', '{', '}', '<', '>', '~', '^', '¡'],
+            ['`', '|', '\\', '×', '¬','§', '¶', '•'],
+        ];
+
+        const SpecialKeys = {
+            SHIFT: 'SHIFT',
+            SPACE: '______',
+            BACKSPACE: 'BACKSPACE',
+            ENTER: 'ENTER',
+            SYMBOLS: 'SYMBOLS',
+            TILDE: 'TILDE',
+            GUARDAR: 'GUARDAR TEXTO',
+            HABLAR: 'HABLAR',
+            NOTAS: 'VER NOTAS',
+            SALIR: 'SALIR'
+        };
+
+        function Keyboard() {
+            const [output, setOutput] = React.useState('');
+            const [isUpperCase, setIsUpperCase] = React.useState(false);
+            const [showSymbols, setShowSymbols] = React.useState(false);
+            const [symbolPage, setSymbolPage] = React.useState(1);
+            const [keySize, setKeySize] = React.useState({ width: 40, height: 40 });
+            const [activeKey, setActiveKey] = React.useState(null);
+            const [isTildeActive, setIsTildeActive] = React.useState(false); // Estado para la tecla TILDE
+            const [isSpeaking, setIsSpeaking] = React.useState(false); // Estado para verificar si ya se está hablando
+            const timerRefs = React.useRef({});
+            const containerRef = React.useRef(null);
+
+            React.useEffect(() => {
+                const updateKeySize = () => {
+                    if (containerRef.current) {
+                        const containerWidth = containerRef.current.offsetWidth;
+                        const containerHeight = containerRef.current.offsetHeight;
+                        const keyWidth = Math.floor(containerWidth / 11) - 4;
+                        const keyHeight = Math.floor(containerHeight / 6) - 4;
+                        setKeySize({ width: keyWidth, height: keyHeight });
+                    }
+                };
+
+                updateKeySize();
+                window.addEventListener('resize', updateKeySize);
+                return () => window.removeEventListener('resize', updateKeySize);
+            }, []);
+
+            const handleKeyPress = React.useCallback((key) => {
+                if (key === SpecialKeys.SHIFT) {
+                    if (showSymbols) {
+                        if (symbolPage === 1) {
+                            setSymbolPage(2);
+                        } else if (symbolPage === 2) {
+                            setSymbolPage(1);
+                        }
+                    } else {
+                        setIsUpperCase(prev => !prev);
+                    }
+                } else if (key === SpecialKeys.SPACE) {
+                    setOutput(prev => prev + ' ');
+                } else if (key === SpecialKeys.BACKSPACE) {
+                    setOutput(prev => prev.slice(0, -1));
+                } else if (key === SpecialKeys.ENTER) {
+                    setOutput(prev => prev + '\n');
+                } else if (key === SpecialKeys.SYMBOLS) {
+                    if (showSymbols) {
+                        setShowSymbols(false); // Volver a letras
+                    } else {
+                        setShowSymbols(true);
+                        setSymbolPage(1); // siempre vuelve a simbolos 1
+                    }
+                } else if (key === SpecialKeys.TILDE) {
+                    setIsTildeActive(true);
+                } else if (key === SpecialKeys.GUARDAR) {
+                    saveTextToFile(output);
+                } else if (key === SpecialKeys.HABLAR) {
+                    speakText();
+                } else {
+                    let modifiedKey = key;
+                    if (isTildeActive) {
+                        if (isUpperCase) {
+                            modifiedKey = { 'a': 'Á', 'e': 'É', 'i': 'Í', 'o': 'Ó', 'u': 'Ú' }[key.toLowerCase()] || key;
+                        } else {
+                            modifiedKey = { 'a': 'á', 'e': 'é', 'i': 'í', 'o': 'ó', 'u': 'ú' }[key.toLowerCase()] || key;
+                        }
+                        setIsTildeActive(false);
+                    }
+                    setOutput(prev => prev + (isUpperCase ? modifiedKey.toUpperCase() : modifiedKey));
+                    if (isUpperCase) setIsUpperCase(false);
+                }
+                setActiveKey(null);
+            }, [isUpperCase, showSymbols, symbolPage, isTildeActive, output]);
+
+            const handleKeyEnter = React.useCallback((key, uniqueId) => {
+                setActiveKey(key);
+                let progress = 0;
+                timerRefs.current[uniqueId] = setInterval(() => {
+                    progress += 2.5;
+                    if (progress >= 100) {
+                        clearInterval(timerRefs.current[uniqueId]);
+                        handleKeyPress(key);
+                        document.querySelector(`.progress-bar-bottom-${uniqueId}`).style.width = '0%';
+                        document.querySelector(`.progress-bar-top-${uniqueId}`).style.width = '0%';
+                        document.querySelector(`.key-${uniqueId}`).classList.add('flash');
+                        setTimeout(() => {
+                            document.querySelector(`.key-${uniqueId}`).classList.remove('flash');
+                        }, 300);
+                    } else {
+                        document.querySelector(`.progress-bar-bottom-${uniqueId}`).style.width = `${progress}%`;
+                        document.querySelector(`.progress-bar-top-${uniqueId}`).style.width = `${progress}%`;
+                    }
+                }, 18);
+            }, [handleKeyPress]);
+
+            const handleKeyLeave = React.useCallback((uniqueId) => {
+                if (timerRefs.current[uniqueId]) {
+                    clearInterval(timerRefs.current[uniqueId]);
+                }
+                setActiveKey(null);
+                document.querySelector(`.progress-bar-bottom-${uniqueId}`).style.width = '0%';
+                document.querySelector(`.progress-bar-top-${uniqueId}`).style.width = '0%';
+            }, []);
+
+            const renderKey = (key, index, rowIndex, width = keySize.width, extraClass = '', onClick = () => {}) => {
+                const uniqueId = `${rowIndex}-${index}`;
+
+                const getKeyDisplay = (key) => {
+                    if (key === SpecialKeys.BACKSPACE) {
+                        return '←';
+                    } else if (key === SpecialKeys.SYMBOLS) {
+                        return showSymbols ? 'abc' : '123';
+                    } else if (key === SpecialKeys.SHIFT) {
+                        return showSymbols ? (symbolPage === 1 ? '1/2' : '2/2') : 'SHIFT';
+                    } else if (key === SpecialKeys.TILDE) {
+                        return 'TILDE';
+                    } else if (key === SpecialKeys.GUARDAR) {
+                        return 'GUARDAR';
+                    } else if (key === SpecialKeys.HABLAR) {
+                        return 'HABLAR';
+                    } else {
+                        let displayKey = key;
+                        if (isTildeActive) {
+                            displayKey = { 
+                                'a': 'á', 'e': 'é', 'i': 'í', 'o': 'ó', 'u': 'ú', 
+                                'A': 'Á', 'E': 'É', 'I': 'Í', 'O': 'Ó', 'U': 'Ú'
+                            }[key] || key;
+                        }
+                        return isUpperCase ? displayKey.toUpperCase() : displayKey;
+                    }
+                };
+
+                const fontSize = Math.min(keySize.width, keySize.height) * 0.3;
+
+                return (
+                    <div className={`key-container ${extraClass}`} key={uniqueId} style={{ width: `${width}px`, height: `${keySize.height}px` }}>
+                        <div className={`progress-bar progress-bar-bottom progress-bar-bottom-${uniqueId}`}></div>
+                        <div className={`progress-bar progress-bar-top progress-bar-top-${uniqueId}`}></div>
+                        <button
+                            className={`key-${uniqueId} bg-gray-800 border rounded shadow hover:bg-gray-700 transition-colors flex items-center justify-center`}
+                            onMouseEnter={() => handleKeyEnter(key, uniqueId)}
+                            onMouseLeave={() => handleKeyLeave(uniqueId)}
+                            onClick={() => {
+                                handleKeyPress(key);
+                                onClick();
+                            }}
+                            style={{ width: '100%', height: '100%', fontSize: `${fontSize}px` }}
+                        >
+                            {getKeyDisplay(key)}
+                        </button>
+                    </div>
+                );
+            };
+
+
+            const speakText = () => {
+                if (isSpeaking) return; // Evita iniciar otra síntesis si ya está en curso
+                setIsSpeaking(true);
+                const utterance = new SpeechSynthesisUtterance(output);
+                utterance.lang = 'es-ES';
+                utterance.onend = () => setIsSpeaking(false); // Marca el fin de la síntesis
+                speechSynthesis.speak(utterance);   
+            };
+
+            const currentSymbolsLayout = symbolPage === 1 ? SymbolsLayoutPage1 : SymbolsLayoutPage2;
+
+            const saveTextToFile = (text) => {
+                const element = document.createElement("a");
+                const file = new Blob([text], { type: 'text/plain' });
+                element.href = URL.createObjectURL(file);
+                element.download = "output.txt";
+                document.body.appendChild(element);
+                element.click();
+            };
+
+            return (
+                <div className="flex flex-col items-center p-4 bg-black rounded-lg shadow-md h-screen" ref={containerRef}>
+                    <div className="flex items-start w-full mb-4">
+                        <textarea
+                            value={output}
+                            onChange={(e) => setOutput(e.target.value)}
+                            className="w-3/4 h-4/4 p-2 border rounded resize-none"
+                            style={{ fontSize: '44px' }}
+                            placeholder="Tu texto aparecerá aquí..."
+                        />
+                        <div className="flex flex-row gap-2 ml-5">
+                            {renderKey(SpecialKeys.TILDE, 0, 'extra', undefined, 'extra-button')}
+                            {renderKey(SpecialKeys.HABLAR, 1, 'extra', undefined, 'extra-button', speakText)}
+                            {renderKey(SpecialKeys.GUARDAR, 2, 'extra', undefined, 'extra-button')}
+                            {renderKey(SpecialKeys.NOTAS, 3, 'extra', undefined, 'extra-button')}
+                            {renderKey(SpecialKeys.SALIR, 4, 'extra', undefined, 'extra-button')}
+                        </div>
+                    </div>
+                    <div className="grid gap-2 w-full">
+                        {(showSymbols ? currentSymbolsLayout : KeyboardLayout).map((row, rowIndex) => (
+                            <div key={rowIndex} className="flex justify-center gap-2">
+                                {row.map((key, index) => renderKey(key, index, rowIndex))}
+                            </div>
+                        ))}
+                        <div className="flex justify-center gap-2 mt-1">
+                            {renderKey(SpecialKeys.SHIFT, 0, 'special', keySize.width * 1.5)}
+                            {renderKey(SpecialKeys.SYMBOLS, 1, 'special', keySize.width * 1.5)}
+                            {renderKey(SpecialKeys.SPACE, 2, 'special', keySize.width * 3)}
+                            {renderKey(SpecialKeys.BACKSPACE, 3, 'special', keySize.width * 1.5)}
+                            {renderKey(SpecialKeys.ENTER, 4, 'special', keySize.width * 1.5)}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<Keyboard />, document.getElementById('root'));
+    </script>
+</body>
+</html>
