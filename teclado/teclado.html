@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,28 +10,28 @@
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body {
+        /* body {
             background-color: rgb(0, 0, 0);
-        }
+        } */
 
-        .key-container {
+        /* .key-container {
             position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: calc(12px + 1vw);
             color: white;
-        }
+        } */
 
-        .progress-bar {
+        /* .progress-bar {
             position: absolute;
             height: 12%;
             background-color: #4caf50;
             transition: width;
             pointer-events: none;
-        }
+        } */
 
-        .progress-bar-top {
+        /* .progress-bar-top {
             top: 0;
             right: 0;
         }
@@ -38,18 +39,25 @@
         .progress-bar-bottom {
             bottom: 0;
             left: 0;
-        }
+        } */
 
-        .flash {
+        /* .flash {
             animation: flash 0.2s ease-in-out;
         }
 
         @keyframes flash {
-            0%, 100% { background-color: rgb(40, 40, 40); }
-            50% { background-color: #4caf50; }
-        }
 
-        button {
+            0%,
+            100% {
+                background-color: rgb(40, 40, 40);
+            }
+
+            50% {
+                background-color: #4caf50;
+            }
+        } */
+
+        /* button {
             background-color: rgb(40, 40, 40);
             border: 1px solid rgb(60, 60, 60);
             color: white;
@@ -59,14 +67,15 @@
             border: 1px solid #4caf50;
             border-color: 1px solid #4caf50;
         }
-
-        .extra-button {
-            font-size: 10px; /* Ajustar tamaño de fuente */
-            width: 80px; /* Ajustar ancho */
-            height: 40px; /* Ajustar alto */
-        }
+*/
+        /* .extra-button {
+            font-size: 10px;
+            width: 80px;
+            height: 40px;
+        } */
     </style>
 </head>
+
 <body>
     <div id="root"></div>
     <script type="text/babel">
@@ -85,7 +94,7 @@
         const SymbolsLayoutPage2 = [
             ['£', '€', '¥', '¢', '©', '®', '±', '÷', '¿'],
             ['[', ']', '{', '}', '<', '>', '~', '^', '¡'],
-            ['`', '|', '\\', '×', '¬','§', '¶', '•'],
+            ['`', '|', '\\', '×', '¬', '§', '¶', '•'],
         ];
 
         const SpecialKeys = {
@@ -205,7 +214,7 @@
                 document.querySelector(`.progress-bar-top-${uniqueId}`).style.width = '0%';
             }, []);
 
-            const renderKey = (key, index, rowIndex, width = keySize.width, extraClass = '', onClick = () => {}) => {
+            const renderKey = (key, index, rowIndex, width = keySize.width, extraClass = '', onClick = () => { }) => {
                 const uniqueId = `${rowIndex}-${index}`;
 
                 const getKeyDisplay = (key) => {
@@ -224,8 +233,8 @@
                     } else {
                         let displayKey = key;
                         if (isTildeActive) {
-                            displayKey = { 
-                                'a': 'á', 'e': 'é', 'i': 'í', 'o': 'ó', 'u': 'ú', 
+                            displayKey = {
+                                'a': 'á', 'e': 'é', 'i': 'í', 'o': 'ó', 'u': 'ú',
                                 'A': 'Á', 'E': 'É', 'I': 'Í', 'O': 'Ó', 'U': 'Ú'
                             }[key] || key;
                         }
@@ -234,13 +243,15 @@
                 };
 
                 const fontSize = Math.min(keySize.width, keySize.height) * 0.3;
+                //     font-size: calc(12px + 1vw);
+
 
                 return (
-                    <div className={`key-container ${extraClass}`} key={uniqueId} style={{ width: `${width}px`, height: `${keySize.height}px` }}>
-                        <div className={`progress-bar progress-bar-bottom progress-bar-bottom-${uniqueId}`}></div>
-                        <div className={`progress-bar progress-bar-top progress-bar-top-${uniqueId}`}></div>
+                    <div className={`key-container relative flex items-center justify-center text-white ${extraClass}`} key={uniqueId} style={{ width: `${width}px`, height: `${keySize.height}px` }}>
+                        <div className={`progress-bar absolute top-0 right-0 h-[12%] bg-[#4caf50] transition-width pointer-events-none progress-bar-bottom progress-bar-bottom-${uniqueId}`}></div>
+                        <div className={`progress-bar absolute bottom-0 left-0 h-[12%] bg-[#4caf50] transition-width pointer-events-none progress-bar-top progress-bar-top-${uniqueId}`}></div>
                         <button
-                            className={`key-${uniqueId} bg-gray-800 border rounded shadow hover:bg-gray-700 transition-colors flex items-center justify-center`}
+                            className={`key-${uniqueId} bg-gray-800 border rounded shadow hover:bg-gray-700 active:border active:border-[#4caf50] transition-colors flex items-center justify-center`}
                             onMouseEnter={() => handleKeyEnter(key, uniqueId)}
                             onMouseLeave={() => handleKeyLeave(uniqueId)}
                             onClick={() => {
@@ -262,7 +273,7 @@
                 const utterance = new SpeechSynthesisUtterance(output);
                 utterance.lang = 'es-ES';
                 utterance.onend = () => setIsSpeaking(false); // Marca el fin de la síntesis
-                speechSynthesis.speak(utterance);   
+                speechSynthesis.speak(utterance);
             };
 
             const currentSymbolsLayout = symbolPage === 1 ? SymbolsLayoutPage1 : SymbolsLayoutPage2;
@@ -275,7 +286,6 @@
                 document.body.appendChild(element);
                 element.click();
             };
-
             return (
                 <div className="flex flex-col items-center p-4 bg-black rounded-lg shadow-md h-screen" ref={containerRef}>
                     <div className="flex items-start w-full mb-4">
@@ -315,4 +325,5 @@
         ReactDOM.render(<Keyboard />, document.getElementById('root'));
     </script>
 </body>
+
 </html>
