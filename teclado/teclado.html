@@ -10,69 +10,25 @@
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* body {
-            background-color: rgb(0, 0, 0);
-        } */
-
-        /* .key-container {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: calc(12px + 1vw);
+        .config-panel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #333;
             color: white;
-        } */
-
-        /* .progress-bar {
-            position: absolute;
-            height: 12%;
-            background-color: #4caf50;
-            transition: width;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.75);
+            z-index: 1000;
+            width: 80%;
+            max-width: 600px;
+            height: 60%;
+        }
+        .disabled {
             pointer-events: none;
-        } */
-
-        /* .progress-bar-top {
-            top: 0;
-            right: 0;
+            opacity: 0.25;
         }
-
-        .progress-bar-bottom {
-            bottom: 0;
-            left: 0;
-        } */
-
-        /* .flash {
-            animation: flash 0.2s ease-in-out;
-        }
-
-        @keyframes flash {
-
-            0%,
-            100% {
-                background-color: rgb(40, 40, 40);
-            }
-
-            50% {
-                background-color: #4caf50;
-            }
-        } */
-
-        /* button {
-            background-color: rgb(40, 40, 40);
-            border: 1px solid rgb(60, 60, 60);
-            color: white;
-        }
-
-        button.active {
-            border: 1px solid #4caf50;
-            border-color: 1px solid #4caf50;
-        }
-*/
-        /* .extra-button {
-            font-size: 10px;
-            width: 80px;
-            height: 40px;
-        } */
     </style>
 </head>
 
@@ -84,6 +40,13 @@
             ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'ñ'],
             [',', 'z', 'x', 'c', 'v', 'b', 'n', 'm', '.']
         ];
+        const alphaLayout = [
+            ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'],
+            ['k', 'l', 'm', 'n', 'ñ', 'o', 'p', 'q', 'r', 's'],
+            [',', 't', 'u', 'v', 'w', 'x', 'y', 'z', '.']
+        ];
+
+        const vowels = ['a', 'á', 'e', 'é', 'i', 'í', 'o', 'ó', 'u', 'ú', 'A', 'Á', 'E', 'É', 'I', 'Í', 'O', 'Ó', 'U', 'Ú']
 
         const SymbolsLayoutPage1 = [
             ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
@@ -107,27 +70,43 @@
             GUARDAR: 'GUARDAR TEXTO',
             HABLAR: 'HABLAR',
             NOTAS: 'VER NOTAS',
-            SALIR: 'SALIR'
+            SALIR: 'SALIR',
+            CONFIGURACION: 'CONFIG',
+            SUSPENDER: 'SUSPENDER'
         };
+
+        const configKeys = {
+            CONFIRMAR: 'Confirmar Cambios',
+            SALIR: 'Salir',
+            ALPHA: 'Orden Alfabetico',
+            VOCAL: 'Resaltar Vocales',
+            RESPONSESLOW: '-',
+            RESPONSEFAST: '+'
+        }
+        var keyResponseTime = 20;
 
         function Keyboard() {
             const [output, setOutput] = React.useState('');
-            const [isUpperCase, setIsUpperCase] = React.useState(false);
+            const [isUpperCase, setUpperCase] = React.useState(false);
+            const [isSuspended, setSuspended] = React.useState(false);
             const [showSymbols, setShowSymbols] = React.useState(false);
+            const [isTildeActive, setTildeActive] = React.useState(false);
+            const [isAlphabetical, setAlphabetical] = React.useState(false);
+            const [isVocalHighlight, setVocalHighlight] = React.useState(false);
+            const [showConfigPanel, setShowConfigPanel] = React.useState(false);
             const [symbolPage, setSymbolPage] = React.useState(1);
             const [keySize, setKeySize] = React.useState({ width: 40, height: 40 });
             const [activeKey, setActiveKey] = React.useState(null);
-            const [isTildeActive, setIsTildeActive] = React.useState(false); // Estado para la tecla TILDE
-            const [isSpeaking, setIsSpeaking] = React.useState(false); // Estado para verificar si ya se está hablando
+            const [isSpeaking, setIsSpeaking] = React.useState(false);
             const timerRefs = React.useRef({});
             const containerRef = React.useRef(null);
-
+            
             React.useEffect(() => {
                 const updateKeySize = () => {
                     if (containerRef.current) {
                         const containerWidth = containerRef.current.offsetWidth;
                         const containerHeight = containerRef.current.offsetHeight;
-                        const keyWidth = Math.floor(containerWidth / 11) - 4;
+                        const keyWidth = Math.floor(containerWidth / 12) - 4;
                         const keyHeight = Math.floor(containerHeight / 6) - 4;
                         setKeySize({ width: keyWidth, height: keyHeight });
                     }
@@ -139,56 +118,81 @@
             }, []);
 
             const handleKeyPress = React.useCallback((key) => {
-                if (key === SpecialKeys.SHIFT) {
-                    if (showSymbols) {
-                        if (symbolPage === 1) {
-                            setSymbolPage(2);
-                        } else if (symbolPage === 2) {
-                            setSymbolPage(1);
-                        }
-                    } else {
-                        setIsUpperCase(prev => !prev);
-                    }
-                } else if (key === SpecialKeys.SPACE) {
-                    setOutput(prev => prev + ' ');
-                } else if (key === SpecialKeys.BACKSPACE) {
-                    setOutput(prev => prev.slice(0, -1));
-                } else if (key === SpecialKeys.ENTER) {
-                    setOutput(prev => prev + '\n');
-                } else if (key === SpecialKeys.SYMBOLS) {
-                    if (showSymbols) {
-                        setShowSymbols(false); // Volver a letras
-                    } else {
-                        setShowSymbols(true);
-                        setSymbolPage(1); // siempre vuelve a simbolos 1
-                    }
-                } else if (key === SpecialKeys.TILDE) {
-                    setIsTildeActive(true);
-                } else if (key === SpecialKeys.GUARDAR) {
-                    saveTextToFile(output);
-                } else if (key === SpecialKeys.HABLAR) {
-                    speakText();
-                } else {
-                    let modifiedKey = key;
-                    if (isTildeActive) {
-                        if (isUpperCase) {
-                            modifiedKey = { 'a': 'Á', 'e': 'É', 'i': 'Í', 'o': 'Ó', 'u': 'Ú' }[key.toLowerCase()] || key;
-                        } else {
-                            modifiedKey = { 'a': 'á', 'e': 'é', 'i': 'í', 'o': 'ó', 'u': 'ú' }[key.toLowerCase()] || key;
-                        }
-                        setIsTildeActive(false);
-                    }
-                    setOutput(prev => prev + (isUpperCase ? modifiedKey.toUpperCase() : modifiedKey));
-                    if (isUpperCase) setIsUpperCase(false);
+                if (key === SpecialKeys.SUSPENDER) {
+                    setSuspended(!isSuspended);
                 }
+                else if(!isSuspended){
+                    if (key === SpecialKeys.SHIFT) {
+                        if (showSymbols) {
+                            if (symbolPage === 1) {
+                                setSymbolPage(2);
+                            } else if (symbolPage === 2) {
+                                setSymbolPage(1);
+                            }
+                        } else {
+                            setUpperCase(prev => !prev);
+                        }
+                    } else if (key === SpecialKeys.SPACE) {
+                        setOutput(prev => prev + ' ');
+                    } else if (key === SpecialKeys.BACKSPACE) {
+                        setOutput(prev => prev.slice(0, -1));
+                    } else if (key === SpecialKeys.ENTER) {
+                        setOutput(prev => prev + '\n');
+                    } else if (key === SpecialKeys.SYMBOLS) {
+                        if (showSymbols) {
+                            setShowSymbols(false); // Volver a letras
+                        } else {
+                            setShowSymbols(true);
+                            setSymbolPage(1); // siempre vuelve a simbolos 1
+                        }
+                    } else if (key === SpecialKeys.TILDE) {
+                        setTildeActive(prev => !prev);
+                    } else if (key === SpecialKeys.GUARDAR) {
+                        saveTextToFile(output);
+                    } else if (key === SpecialKeys.HABLAR) {
+                        speakText();
+                    } else if (key === SpecialKeys.CONFIGURACION) {
+                        setShowConfigPanel(true);
+                    }/* else if (key === configKeys.CONFIRMAR) {
+                        confirmConfigChanges();
+                    } */else if (key === configKeys.SALIR) {
+                        closeConfigPanel();
+                    } else if (key === configKeys.ALPHA) {
+                        setAlpha();
+                    } else if (key === configKeys.VOCAL) {
+                        setVocalHL();
+                    } else if (key === configKeys.RESPONSESLOW) {
+                        setKeyResponseTimeSlow();
+                    } else if (key === configKeys.RESPONSEFAST) {
+                        setKeyResponseTimeFast();
+                    } else {
+                        let modifiedKey = key;
+                        if (isTildeActive) {
+                            if (isUpperCase) {
+                                modifiedKey = { 'a': 'Á', 'e': 'É', 'i': 'Í', 'o': 'Ó', 'u': 'Ú' }[key.toLowerCase()] || key;
+                            } else {
+                                modifiedKey = { 'a': 'á', 'e': 'é', 'i': 'í', 'o': 'ó', 'u': 'ú' }[key.toLowerCase()] || key;
+                            }
+                            setTildeActive(false);
+                        } else {
+                            if (isUpperCase) {
+                                modifiedKey = { 'a': 'A', 'e': 'E', 'i': 'I', 'o': 'O', 'u': 'U' }[key.toLowerCase()] || key;
+                            } else {
+                                modifiedKey = { 'a': 'a', 'e': 'e', 'i': 'i', 'o': 'o', 'u': 'u' }[key.toLowerCase()] || key;
+                            }
+                        }
+                        setOutput(prev => prev + (isUpperCase ? modifiedKey.toUpperCase() : modifiedKey));
+                        if (isUpperCase) setUpperCase(false);
+                    }
                 setActiveKey(null);
-            }, [isUpperCase, showSymbols, symbolPage, isTildeActive, output]);
+            }
+            }, [isUpperCase, isSuspended, showSymbols, symbolPage, isTildeActive, output]);
 
             const handleKeyEnter = React.useCallback((key, uniqueId) => {
                 setActiveKey(key);
                 let progress = 0;
                 timerRefs.current[uniqueId] = setInterval(() => {
-                    progress += 2.5;
+                    progress += 100/(keyResponseTime*2.5);
                     if (progress >= 100) {
                         clearInterval(timerRefs.current[uniqueId]);
                         handleKeyPress(key);
@@ -202,7 +206,7 @@
                         document.querySelector(`.progress-bar-bottom-${uniqueId}`).style.width = `${progress}%`;
                         document.querySelector(`.progress-bar-top-${uniqueId}`).style.width = `${progress}%`;
                     }
-                }, 18);
+                }, keyResponseTime);
             }, [handleKeyPress]);
 
             const handleKeyLeave = React.useCallback((uniqueId) => {
@@ -214,7 +218,7 @@
                 document.querySelector(`.progress-bar-top-${uniqueId}`).style.width = '0%';
             }, []);
 
-            const renderKey = (key, index, rowIndex, width = keySize.width, extraClass = '', onClick = () => { }) => {
+            const renderKey = (key, index, rowIndex, width = keySize.width, height = keySize.height , extraClass = '', onClick = () => { }) => {
                 const uniqueId = `${rowIndex}-${index}`;
 
                 const getKeyDisplay = (key) => {
@@ -243,20 +247,22 @@
                 };
 
                 const fontSize = Math.min(keySize.width, keySize.height) * 0.3;
-                //     font-size: calc(12px + 1vw);
-
 
                 return (
-                    <div className={`key-container relative flex items-center justify-center text-white ${extraClass}`} key={uniqueId} style={{ width: `${width}px`, height: `${keySize.height}px` }}>
-                        <div className={`progress-bar absolute top-0 right-0 h-[12%] bg-[#4caf50] transition-width pointer-events-none progress-bar-bottom progress-bar-bottom-${uniqueId}`}></div>
-                        <div className={`progress-bar absolute bottom-0 left-0 h-[12%] bg-[#4caf50] transition-width pointer-events-none progress-bar-top progress-bar-top-${uniqueId}`}></div>
+                    <div className={`key-container relative flex items-center justify-center text-white ${extraClass}}`} key={uniqueId} style={{ width: `${width}px`, height: `${height}px` }}>
+                        <div className={`progress-bar absolute top-0 right-0 h-[14%] bg-[#4caf50] transition-width pointer-events-none progress-bar-bottom progress-bar-bottom-${uniqueId}`}></div>
+                        <div className={`progress-bar absolute bottom-0 left-0 h-[14%] bg-[#4caf50] transition-width pointer-events-none progress-bar-top progress-bar-top-${uniqueId}`}></div>
                         <button
-                            className={`key-${uniqueId} bg-gray-800 border rounded shadow hover:bg-gray-700 active:border active:border-[#4caf50] transition-colors flex items-center justify-center`}
+                        className={`key-${uniqueId}
+                            ${Object.values(SpecialKeys).includes(key) ? 
+                                (key === SpecialKeys.SUSPENDER && isSuspended ? 'bg-[#ff0000] hover:bg-[#cc0000]' : 'bg-[#006040] hover:bg-[#008070]') :
+                                (isVocalHighlight && vowels.includes(key) ? 'bg-[#600000] hover:bg-[#700000]' : 'bg-[#001820] hover:bg-[#003030]')
+                            } border rounded shadow hover:bg-[#003030] hover:border hover:border-[#4caf50] transition-colors flex items-center justify-center`}
                             onMouseEnter={() => handleKeyEnter(key, uniqueId)}
                             onMouseLeave={() => handleKeyLeave(uniqueId)}
                             onClick={() => {
                                 handleKeyPress(key);
-                                onClick();
+                                //onClick();
                             }}
                             style={{ width: '100%', height: '100%', fontSize: `${fontSize}px` }}
                         >
@@ -266,9 +272,8 @@
                 );
             };
 
-
             const speakText = () => {
-                if (isSpeaking) return; // Evita iniciar otra síntesis si ya está en curso
+                if (isSpeaking) return; 
                 setIsSpeaking(true);
                 const utterance = new SpeechSynthesisUtterance(output);
                 utterance.lang = 'es-ES';
@@ -286,36 +291,98 @@
                 document.body.appendChild(element);
                 element.click();
             };
+
+            const closeConfigPanel = () => {
+                setShowConfigPanel(false);
+            };
+            /*
+            const confirmConfigChanges = () => {
+                closeConfigPanel();
+            };
+            */
+            const setAlpha = () => {
+                setAlphabetical(!isAlphabetical);
+            };
+
+            const setVocalHL = () => {
+                setVocalHighlight(!isVocalHighlight);
+            };
+            
+            const setKeyResponseTimeSlow = () => {
+                if(keyResponseTime>5)
+                    keyResponseTime--;
+            };
+            const setKeyResponseTimeFast = () => {
+                if(keyResponseTime<50)
+                    keyResponseTime++;
+            };
+            
+
+            const renderConfigPanel = () => (
+                <div className="config-panel">
+                    <h2 className="text-center text-2xl font-bold mb-4" style={{ color: '#ffff00' }}>
+                        Configuración del Teclado
+                    </h2>
+                    <div className="flex flex-col items-center gap-5 mr-8">
+                        <div className="flex flex-row items-center gap-2 rounded-lg">
+                            {renderKey(configKeys.ALPHA, 1,'extra', keySize.width * 1.5, keySize.height * 1,'extra-button')}
+                            {renderKey(configKeys.VOCAL, 2,'extra', keySize.width * 1.5, keySize.height * 1,'extra-button')}
+                        </div>
+                        <div className="flex flex-row items-center gap-3">
+                            {renderKey(configKeys.RESPONSESLOW, 3, 'extra', keySize.width * 1.5, keySize.height * 0.5, 'extra-button')}
+                            <div style={{ fontSize: '30px', margin: '0 10px' }}>
+                                {keyResponseTime}
+                            </div>
+                            {renderKey(configKeys.RESPONSEFAST, 4, 'extra', keySize.width * 1.5, keySize.height * 0.5, 'extra-button')}
+                        </div>
+                        {renderKey(configKeys.SALIR, 5,'extra', keySize.width * 1.75, keySize.height * 0.75,'extra-button')}
+                    </div>
+                </div>
+            );
+
+            const currentKeyboardLayout = isAlphabetical ? alphaLayout : KeyboardLayout;
+
             return (
                 <div className="flex flex-col items-center p-4 bg-black rounded-lg shadow-md h-screen" ref={containerRef}>
-                    <div className="flex items-start w-full mb-4">
-                        <textarea
-                            value={output}
-                            onChange={(e) => setOutput(e.target.value)}
-                            className="w-3/4 h-4/4 p-2 border rounded resize-none"
-                            style={{ fontSize: '44px' }}
-                            placeholder="Tu texto aparecerá aquí..."
-                        />
-                        <div className="flex flex-row gap-2 ml-5">
-                            {renderKey(SpecialKeys.TILDE, 0, 'extra', undefined, 'extra-button')}
-                            {renderKey(SpecialKeys.HABLAR, 1, 'extra', undefined, 'extra-button', speakText)}
-                            {renderKey(SpecialKeys.GUARDAR, 2, 'extra', undefined, 'extra-button')}
-                            {renderKey(SpecialKeys.NOTAS, 3, 'extra', undefined, 'extra-button')}
-                            {renderKey(SpecialKeys.SALIR, 4, 'extra', undefined, 'extra-button')}
-                        </div>
-                    </div>
-                    <div className="grid gap-2 w-full">
-                        {(showSymbols ? currentSymbolsLayout : KeyboardLayout).map((row, rowIndex) => (
-                            <div key={rowIndex} className="flex justify-center gap-2">
-                                {row.map((key, index) => renderKey(key, index, rowIndex))}
+                    {showConfigPanel && renderConfigPanel()}
+                    <div className={`flex flex-col items-center w-full ${showConfigPanel ? 'disabled' : ''}`}>
+                        <div className="flex items-center w-full mb-4">
+                            <div className="ml-5 mr-5">
+                                {renderKey(SpecialKeys.HABLAR, 0, 'extra', keySize.width * 1.5, keySize.height * 1.5, 'extra-button', speakText)}
                             </div>
-                        ))}
-                        <div className="flex justify-center gap-2 mt-1">
-                            {renderKey(SpecialKeys.SHIFT, 0, 'special', keySize.width * 1.5)}
-                            {renderKey(SpecialKeys.SYMBOLS, 1, 'special', keySize.width * 1.5)}
-                            {renderKey(SpecialKeys.SPACE, 2, 'special', keySize.width * 3)}
-                            {renderKey(SpecialKeys.BACKSPACE, 3, 'special', keySize.width * 1.5)}
-                            {renderKey(SpecialKeys.ENTER, 4, 'special', keySize.width * 1.5)}
+                            <textarea
+                                value={output}
+                                onChange={(e) => setOutput(e.target.value)}
+                                className="p-2 border rounded resize-none"
+                                style={{
+                                    fontSize: '40px',
+                                    width: '50vw',
+                                    height: '24vh'
+                                }}
+                                placeholder="Tu texto aparecerá aquí..."
+                            />
+                            <div className="grid grid-cols-2 gap-2 ml-4">
+                                {renderKey(SpecialKeys.SUSPENDER, 1, 'extra', keySize.width * 2, keySize.height * 0.75, 'extra-button')}
+                                {renderKey(SpecialKeys.SALIR, 2, 'extra', keySize.width * 2, keySize.height * 0.75, 'extra-button')}
+                                {renderKey(SpecialKeys.CONFIGURACION, 3, 'extra', keySize.width * 2, keySize.height * 0.75, 'extra-button')}
+                                {renderKey(SpecialKeys.NOTAS, 4, 'extra', keySize.width * 2, keySize.height * 0.75, 'extra-button')}
+                            </div>
+                        </div>
+                        <div className="grid gap-2 w-full justify-center ml-5">
+                            {(showSymbols ? currentSymbolsLayout : currentKeyboardLayout).map((row, rowIndex) => (
+                                <div key={rowIndex} className="flex justify-center gap-2">
+                                    {row.map((key, index) => renderKey(key, index, rowIndex, keySize.width * 1.12))}
+                                </div>
+                            ))}
+                            <div className="flex justify-center gap-2 mt-1">
+                                {renderKey(SpecialKeys.TILDE, 0, 'special', keySize.width * 1.25)}
+                                {renderKey(SpecialKeys.SHIFT, 1, 'special', keySize.width * 1.5)}
+                                {renderKey(SpecialKeys.SYMBOLS, 2, 'special', keySize.width * 1.25)}
+                                {renderKey(SpecialKeys.SPACE, 3, 'special', keySize.width * 3)}
+                                {renderKey(SpecialKeys.BACKSPACE, 4, 'special', keySize.width * 1.25)}
+                                {renderKey(SpecialKeys.ENTER, 5, 'special', keySize.width * 1.5)}
+                                {renderKey(SpecialKeys.GUARDAR, 6, 'special', keySize.width * 1.5)}
+                            </div>
                         </div>
                     </div>
                 </div>
