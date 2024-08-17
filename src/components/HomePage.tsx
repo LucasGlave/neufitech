@@ -19,6 +19,7 @@ import logoEscritura from '../../public/icon-escritura.jpg'
 import logoEscrituraIA from '../../public/icon-escritura-ia.jpg'
 import flechaDerecha from '../../public/flecha-derecha.png'
 import { useRouter } from "next/navigation";
+import ButtonAnimation from "./ButtonAnimation";
 
 const HomePage = () => {
     const navigate = useRouter()
@@ -31,18 +32,10 @@ const HomePage = () => {
             <div className="flex justify-start p-6 w-4/5">
                 <div className="flex flex-col justify-around gap-4 w-full">
                     <div className="flex flex-row justify-around px-12 items-center relative">
-                        <button onClick={() => handleNavigate('sensacion-corporal')}>
-                            <Image src={logoSensacionCorp} alt="SensacionCorp" width={200} height={200} />
-                        </button>
-                        <button onClick={() => handleNavigate('senal-comunicacion')}>
-                            <Image src={logoComunicacion} alt="Comunicacion" width={200} height={200} />
-                        </button>
-                        <button onClick={() => handleNavigate('teclado')}>
-                            <Image src={logoEscritura} alt="Escritura" width={200} height={200} />
-                        </button>
-                        <button onClick={() => handleNavigate('teclado')}>
-                            <Image src={logoEscrituraIA} alt="EscrituraIA" width={200} height={200} />
-                        </button>
+                        <ButtonAnimation navigation="sensacion-corporal" propClass="w-[200px] h-[200px]" imagen={{ src: logoSensacionCorp, width: 200, height: 200 }} />
+                        <ButtonAnimation navigation="senal-comunicacion" propClass="w-[200px] h-[200px]" imagen={{ src: logoComunicacion, width: 200, height: 200 }} />
+                        <ButtonAnimation navigation="teclado" propClass="w-[200px] h-[200px]" imagen={{ src: logoEscritura, width: 200, height: 200 }} />
+                        <ButtonAnimation navigation="teclado" propClass="w-[200px] h-[200px]" imagen={{ src: logoEscrituraIA, width: 200, height: 200 }} />
 
                         <button className="absolute right-0 top-[35%]">
                             <Image src={flechaDerecha} alt="flechaDerecha" width={100} height={100} />
@@ -108,7 +101,7 @@ const HomePage = () => {
                     </div>
                 </div>
             </div>
-            <Sidebar />
+            {/* <Sidebar /> */}
         </div>
     );
 };

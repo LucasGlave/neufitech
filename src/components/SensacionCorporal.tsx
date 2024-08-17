@@ -11,16 +11,11 @@ import flechaIzquierda from "../../public/flechaIzquierda.png";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Sidebar from "@/components/Sidebar";
+import ButtonAnimation from "./ButtonAnimation";
 
 const SensacionCorporal = () => {
     const [sex, setSex] = useState(false);
     const [position, setPosition] = useState(false);
-
-    const navigate = useRouter();
-
-    const handleNavigate = (page: string) => {
-        navigate.push(page);
-    };
     return (
         <div className="w-full h-full flex">
             <div className="flex flex-row justify-around gap-12 w-full h-screen bg-zinc-900 p-12">
@@ -45,21 +40,15 @@ const SensacionCorporal = () => {
                     >
                         {sex ? "HOMBRE" : "MUJER"}
                     </button>
-                    <button className="absolute w-36 h-36 top-0 right-0 border bg-neutral-400 rounded-bl-md rounded-tr-md font-semibold text-xl text-white">
-                        CABEZA
-                    </button>
+                    <ButtonAnimation text="CABEZA" propClass="bg-neutral-400 absolute w-36 h-36 top-0 right-0" />
                     <button className="absolute w-36 h-36 left-0 bg-neutral-400 rounded-br-md rounded-tr-md font-semibold text-xl text-white">
                         VIENTRE
                     </button>
-                    <button className="absolute w-36 h-36 right-0 bg-neutral-400 rounded-bl-md rounded-tl-md font-semibold text-xl text-white">
-                        MANO
-                    </button>
+                    <ButtonAnimation text="MANO" propClass="bg-neutral-400 absolute w-36 h-36 right-0" />
                     <button className="absolute w-36 h-36 bottom-0 left-0 border bg-neutral-400 rounded-tr-md rounded-bl-md font-semibold text-xl text-white">
                         PIE
                     </button>
-                    <button className="absolute w-36 h-36 bottom-0 right-0 border bg-neutral-400 rounded-tl-md rounded-br-md font-semibold text-xl text-white">
-                        VOLVER
-                    </button>
+                    <ButtonAnimation text="VOLVER" propClass="bg-neutral-400 absolute w-36 h-36 bottom-0 right-0" />
                 </div>
 
                 <div className="flex flex-col justify-between items-center w-144 bg-zinc-900">
@@ -73,12 +62,7 @@ const SensacionCorporal = () => {
                         >
                             GIRAR
                         </button>
-                        <button
-                            onClick={() => handleNavigate("/")}
-                            className="w-44 h-28 border rounded-md font-light text-xl text-white"
-                        >
-                            VOLVER
-                        </button>
+                        <ButtonAnimation text="VOLVER" navigation="/" propClass=" w-44 h-28" />
                     </div>
 
                     <div className="flex flex-col gap-2">
