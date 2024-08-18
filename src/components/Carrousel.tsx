@@ -13,7 +13,6 @@ const Carrousel: React.FC = () => {
   const appendNumber = useRef(500);
   const prependNumber = useRef(1);
 
-  // Create array with 500 slides
   const [slides, setSlides] = useState(
     Array.from({ length: 500 }).map((_, index) => `Slide ${index + 1}`)
   );
@@ -45,14 +44,14 @@ const Carrousel: React.FC = () => {
       swiperRef.slideTo(newIndex);
     }
   };
-  
+
   const handlePrev = () => {
     if (swiperRef) {
       const newIndex = swiperRef.activeIndex - 4;
       swiperRef.slideTo(newIndex);
     }
   };
-  
+
 
   return (
     <>
