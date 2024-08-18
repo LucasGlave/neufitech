@@ -16,130 +16,73 @@ import ButtonAnimation from "./ButtonAnimation";
 const SensacionCorporal = () => {
     const [sex, setSex] = useState(false);
     const [position, setPosition] = useState(false);
+    const functionState = (wich: string) => {
+        wich === "sex" ? setSex(!sex) : setPosition(!position)
+    }
     return (
-        <div className="w-full h-full flex">
-            <div className="flex flex-row justify-around gap-12 w-full h-screen bg-zinc-900 p-12">
-                <div className="relative h-full w-1/2 bg-white rounded-lg flex justify-center items-center">
-                    {position ? (
-                        <Image
-                            src={position && sex ? cuerpoHombreEspalda : cuerpoMujerEspalda}
-                            alt="cuerpoHumanoFrontal"
-                            className="w-full h-full object-contain"
-                        />
-                    ) : (
-                        <Image
-                            src={sex ? cuerpoHombreFrontal : cuerpoMujerFrontal}
-                            alt="cuerpoHumanoEspalda"
-                            className="w-full h-full object-contain"
-                        />
-                    )}
-
-                    <button
-                        onClick={() => setSex(!sex)}
-                        className="absolute w-36 h-36 top-0 left-0 border bg-neutral-400 rounded-br-md rounded-tl-md font-semibold text-xl text-white"
-                    >
-                        {sex ? "HOMBRE" : "MUJER"}
-                    </button>
-                    <ButtonAnimation text="CABEZA" propClass="bg-neutral-400 absolute w-36 h-36 top-0 right-0" />
-                    <button className="absolute w-36 h-36 left-0 bg-neutral-400 rounded-br-md rounded-tr-md font-semibold text-xl text-white">
-                        VIENTRE
-                    </button>
-                    <ButtonAnimation text="MANO" propClass="bg-neutral-400 absolute w-36 h-36 right-0" />
-                    <button className="absolute w-36 h-36 bottom-0 left-0 border bg-neutral-400 rounded-tr-md rounded-bl-md font-semibold text-xl text-white">
-                        PIE
-                    </button>
-                    <ButtonAnimation text="VOLVER" propClass="bg-neutral-400 absolute w-36 h-36 bottom-0 right-0" />
+        <div className="flex flex-row justify-around gap-12 w-full h-screen bg-zinc-900 p-12">
+            <div className="h-full w-[10%] flex flex-col justify-between">
+                <ButtonAnimation text="SUSPENDER" propClass=" w-44 h-28" />
+                <div className="flex flex-col gap-2">
+                    <ButtonAnimation text="SI" propClass="w-44 h-28" />
+                    <ButtonAnimation text="NO" propClass=" w-44 h-28" />
                 </div>
-
-                <div className="flex flex-col justify-between items-center w-144 bg-zinc-900">
+                <ButtonAnimation text="SALIR" propClass=" w-44 h-28" />
+            </div>
+            <div className="relative h-full w-[40%] bg-white rounded-lg flex justify-center items-center">
+                {position ? (
+                    <Image
+                        src={position && sex ? cuerpoHombreEspalda : cuerpoMujerEspalda}
+                        alt="cuerpoHumanoFrontal"
+                        className="w-full h-full object-contain"
+                    />
+                ) : (
+                    <Image
+                        src={sex ? cuerpoHombreFrontal : cuerpoMujerFrontal}
+                        alt="cuerpoHumanoEspalda"
+                        className="w-full h-full object-contain"
+                    />
+                )}
+                <ButtonAnimation state={() => functionState("sex")} text={`${sex ? "HOMBRE" : "MUJER"}`} color="bg-black" propClass="absolute w-36 h-36 top-0 left-0" />
+                <ButtonAnimation text="CABEZA" color="bg-black" propClass="absolute w-36 h-36 top-0 right-0" />
+                <ButtonAnimation text="VIENTRE" color="bg-black" propClass="absolute w-36 h-36 left-0" />
+                <ButtonAnimation text="MANO" color="bg-black" propClass="absolute w-36 h-36 right-0" />
+                <ButtonAnimation text="PIE" color="bg-black" propClass="absolute w-36 h-36 bottom-0 left-0" />
+                <ButtonAnimation text="VOLVER" color="bg-black" propClass="absolute w-36 h-36 bottom-0 right-0" />
+            </div>
+            <div className="flex flex-col justify-between gap-2 items-center w-[40%] bg-zinc-900">
+                <div className="flex flex-row gap-2">
+                    <ButtonAnimation text="LOCALIZACION RAPIDA" propClass=" w-44 h-28" />
+                    <ButtonAnimation state={() => functionState("girar")} text="GIRAR" propClass="w-44 h-28" />
+                    <ButtonAnimation text="VOLVER" navigation="/" propClass=" w-44 h-28" />
+                </div>
+                <div className="flex flex-col gap-2">
                     <div className="flex flex-row gap-2">
-                        <button className="w-44 h-28 border rounded-md font-light text-xl text-white">
-                            LOCALICACION RAPIDA
-                        </button>
-                        <button
-                            onClick={() => setPosition(!position)}
-                            className="w-44 h-28 border rounded-md font-light text-xl text-white"
-                        >
-                            GIRAR
-                        </button>
-                        <ButtonAnimation text="VOLVER" navigation="/" propClass=" w-44 h-28" />
+                        <div className="w-44 h-28 "></div>
+                        <ButtonAnimation propClass="w-44 h-28 flex justify-center items-center" imagen={{ src: flechaArriba, width: 60, height: 60 }} />
+                        <div className="w-44 h-28 "></div>
                     </div>
-
-                    <div className="flex flex-col gap-2">
-                        <div className="flex flex-row gap-2">
-                            <button className="w-44 h-28 "></button>
-                            <button className="flex justify-center items-center w-44 h-28 border rounded-md font-light text-xl text-white">
-                                <Image
-                                    src={flechaArriba}
-                                    alt="flechaAbajo"
-                                    width={60}
-                                    height={60}
-                                />
-                            </button>
-                            <button className="w-44 h-28 "></button>
-                        </div>
-                        <div className="flex flex-row gap-2">
-                            <button className="flex justify-center items-center w-44 h-28 border rounded-md font-light text-xl text-white">
-                                <Image
-                                    src={flechaIzquierda}
-                                    alt="flechaAbajo"
-                                    width={60}
-                                    height={60}
-                                />
-                            </button>
-                            <button className="flex justify-center items-center w-44 h-28 border rounded-md font-light text-xl text-white">
-                                <Image
-                                    src={flechaAbajo}
-                                    alt="flechaAbajo"
-                                    width={60}
-                                    height={60}
-                                />
-                            </button>
-                            <button className="flex justify-center items-center w-44 h-28 border rounded-md font-light text-xl text-white">
-                                <Image
-                                    src={flechaDerecha}
-                                    alt="flechaAbajo"
-                                    width={60}
-                                    height={60}
-                                />
-                            </button>
-                        </div>
+                    <div className="flex flex-row gap-2">
+                        <ButtonAnimation propClass="w-44 h-28 flex justify-center items-center" imagen={{ src: flechaIzquierda, width: 60, height: 60 }} />
+                        <ButtonAnimation propClass="w-44 h-28 flex justify-center items-center" imagen={{ src: flechaAbajo, width: 60, height: 60 }} />
+                        <ButtonAnimation propClass="w-44 h-28 flex justify-center items-center" imagen={{ src: flechaDerecha, width: 60, height: 60 }} />
                     </div>
-
-                    <div className="flex flex-col gap-2">
-                        <div className="flex flex-row gap-2">
-                            <button className="w-44 h-28 border rounded-md font-light text-xl text-white">
-                                DOLOR
-                            </button>
-                            <button className="w-44 h-28 border rounded-md font-light text-xl text-white">
-                                ADORMECIDO
-                            </button>
-                            <button className="w-44 h-28 border rounded-md font-light text-xl text-white">
-                                HORMIGUEO
-                            </button>
-                        </div>
-                        <div className="flex flex-row gap-2">
-                            <button className="w-44 h-28 border rounded-md font-light text-xl text-white">
-                                PICOR
-                            </button>
-                            <button className="w-44 h-28 border rounded-md font-light text-xl text-white">
-                                PRESION
-                            </button>
-                            <button className="w-44 h-28 border rounded-md font-light text-xl text-white">
-                                MOLESTIA
-                            </button>
-                        </div>
-                        <div className="flex flex-row gap-2">
-                            <button className="w-44 h-28 bg-amber-300 rounded-md font-semibold text-xl">
-                                LEVE
-                            </button>
-                            <button className="w-44 h-28 bg-orange-400 rounded-md font-semibold text-xl">
-                                MODERADO
-                            </button>
-                            <button className="w-44 h-28 bg-red-500 rounded-md font-semibold text-xl">
-                                FUERTE
-                            </button>
-                        </div>
+                </div>
+                <div className="flex flex-col gap-2">
+                    <div className="flex flex-row gap-2">
+                        <ButtonAnimation text="DOLOR" color="bg-transparent" propClass="w-44 h-28" />
+                        <ButtonAnimation text="ADORMECIDO" color="bg-transparent" propClass="w-44 h-28" />
+                        <ButtonAnimation text="HORMIGUEO" color="bg-transparent" propClass="w-44 h-28" />
+                    </div>
+                    <div className="flex flex-row gap-2">
+                        <ButtonAnimation text="PICOR" color="bg-transparent" propClass="w-44 h-28" />
+                        <ButtonAnimation text="PRESION" color="bg-transparent" propClass="w-44 h-28" />
+                        <ButtonAnimation text="MOLESTIA" color="bg-transparent" propClass="w-44 h-28" />
+                    </div>
+                    <div className="flex flex-row gap-2">
+                        <ButtonAnimation text="LEVE" color="bg-amber-300" propClass="w-44 h-28" />
+                        <ButtonAnimation text="MODERADO" color="bg-orange-400" propClass="w-44 h-28" />
+                        <ButtonAnimation text="FUERTE" color="bg-red-500" propClass="w-44 h-28" />
                     </div>
                 </div>
             </div>

@@ -2,7 +2,9 @@ import HomePage from "@/components/HomePage";
 
 const Page = () => {
   return (
-    <HomePage />
+    <div className="bg-zinc-900">
+      <HomePage />
+    </div>
   );
 };
 
