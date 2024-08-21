@@ -15,7 +15,9 @@ const createWindow = () => {
         width: 1920,
         height: 1080,
         webPreferences: {
-            preload: join(__dirname, 'preload.js')
+            preload: join(__dirname, 'preload.js'),
+            nodeIntegration: false, // Importante: Desactiva nodeIntegration para seguridad
+            contextIsolation: true,
         }
     });
     win.maximize()

@@ -19,8 +19,11 @@
     "electron-serve": "^2.0.0",
     "lucide-react": "^0.407.0",
     "next": "14.2.5",
+    "offline-tts": "^1.1.4",
     "react": "^18",
     "react-dom": "^18",
+    "say": "^0.16.0",
+    "simpletts": "^2.6.0",
     "swiper": "^11.1.4",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7"

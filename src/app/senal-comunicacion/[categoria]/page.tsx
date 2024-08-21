@@ -1,8 +1,8 @@
-import SeñalComunicacion from "@/components/SeñalComunicacion";
+import Activities from "@/components/señal-comunicacion/Activities";
 
 const page = () => {
     return (
-        <SeñalComunicacion />
+        <Activities />
     );
 };
 
