@@ -44,13 +44,11 @@ const ButtonAnimation = ({ text, propClass, navigation, imagen, color, speakText
         state && state()
         if (speakText) {
           if (window.electron) {
-            // Llama a la función expuesta desde el preload script
             window.electron.speak(speakText);
           } else {
             console.log(window)
-            const say = require('offline-tts');
+            const say = require('offline-tts')
             say(speakText, 1, 1, 1, 1);
-            ; // Aquí podrías usar un fallback para el navegador si es necesario
           }
         }
         navigation != null && navigate.push(navigation)

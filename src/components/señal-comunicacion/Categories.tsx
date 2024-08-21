@@ -15,6 +15,7 @@ import flechaArriba from "../../../public/flechaArriba.png";
 import flechaAbajo from "../../../public/flechaAbajo.png";
 import eliminar from "../../../public/eliminar.svg";
 import ButtonAnimation from "../ButtonAnimation";
+import { mockCategories } from "./mockArray";
 
 const Categories = () => {
     return (
@@ -24,126 +25,27 @@ const Categories = () => {
                     <div className="flex flex-col w-full gap-2">
                         <div className="flex flex-row justify-between items-center w-full">
                             <h3 className="font-semibold text-3xl w-full text-start">CATEGORIAS</h3>
-                            <ButtonAnimation text="VOLVER" navigation="/" propClass="w-[200px] h-[80px]" />
+                            <ButtonAnimation speakText="Volver" text="VOLVER" navigation="/" propClass="w-[200px] h-[80px]" />
                         </div>
                         <hr className="bg-white w-full h-[0.5]" />
                     </div>
-                    <div className="flex flex-row justify-between w-full h-full">
+                    <div className="flex flex-row justify-between gap-8 w-full h-full">
                         <div className="w-full h-full flex flex-col gap-8">
                             <div className="flex flex-row justify-start gap-8 items-center relative">
-                                {/* <button className="w-[250px] h-[250px]">
-                            QUIERO ESCUCHAR MUSICA
-                            <Image
-                                src={escucharMusica}
-                                className="flex object-contain w-full"
-                                alt="escucharMusica"
-                            />
-                            </button> */}
-                                <ButtonAnimation propClass="w-[250px] h-[250px]" imagen={{ src: escucharMusica, width: 250, height: 250, add: "h-full" }} />
-                                {/* <button className="w-[250px] h-[250px]">
-                            QUIERO DESCANSAR
-                            <Image
-                                src={descansar}
-                                className="flex object-contain w-full"
-                                alt="descansar"
-                            />
-                            </button> */}
-                                <ButtonAnimation propClass="w-[250px] h-[250px]" imagen={{ src: descansar, width: 250, height: 250, add: "h-full" }} />
-                                {/* <button className="w-[250px] h-[250px]">
-                            QUIERO MIRAR UNA PELICULA
-                            <Image
-                                src={pelicula}
-                                className="flex object-contain w-full"
-                                alt="pelicula"
-                            />
-                            </button> */}
-                                <ButtonAnimation propClass="w-[250px] h-[250px]" imagen={{ src: pelicula, width: 250, height: 250, add: "h-full" }} />
-                                {/* <button className="w-[250px] h-[250px]">
-                            QUIERO LEER
-                            <Image
-                                src={leer}
-                                className="flex object-contain w-full"
-                                alt="leer"
-                            />
-                            </button> */}
-                                <ButtonAnimation propClass="w-[250px] h-[250px]" imagen={{ src: leer, width: 250, height: 250, add: "h-full" }} />
-
-                            </div>
-                            <div className="flex flex-row justify-start gap-8 items-center relative">
-                                {/* <button className="w-[250px] h-[250px]">
-                            QUIERO COMER
-                            <Image
-                                src={comer}
-                                className="flex object-contain w-full"
-                                alt="comer"
-                            />
-                            </button> */}
-                                <ButtonAnimation propClass="w-[250px] h-[250px]" imagen={{ src: comer, width: 250, height: 250, add: "h-full" }} />
-                                {/* <button className="w-[250px] h-[250px]">
-                            QUIERO TOMAR AGUA
-                            <Image
-                                src={beberAgua}
-                                className="flex object-contain w-full"
-                                alt="BeberAgua"
-                            />
-                            </button> */}
-                                <ButtonAnimation propClass="w-[250px] h-[250px]" imagen={{ src: beberAgua, width: 250, height: 250, add: "h-full" }} />
-                                {/* <button className="w-[250px] h-[250px]">
-                            QUIERO TOMAR JUGO
-                            <Image
-                                src={beberJugo}
-                                className="flex object-contain w-full"
-                                alt="BeberJugo"
-                            />
-                            </button> */}
-                                <ButtonAnimation propClass="w-[250px] h-[250px]" imagen={{ src: beberJugo, width: 250, height: 250, add: "h-full" }} />
-                                {/* <button className="w-[250px] h-[250px]">
-                            QUIERO COMER UN SANDWICH
-                            <Image
-                                src={sandwich}
-                                className="flex object-contain w-full"
-                                alt="Sandwich"
-                            />
-                            </button> */}
-                                <ButtonAnimation propClass="w-[250px] h-[250px]" imagen={{ src: sandwich, width: 250, height: 250, add: "h-full" }} />
-                            </div>
-                            <div className="flex flex-row justify-start gap-8 items-center relative">
-                                {/* <button className="w-[250px] h-[250px]">
-                            QUIERO IR AL BAÑO
-                            <Image
-                                src={bano}
-                                className="flex object-contain w-full"
-                                alt="bano"
-                            />
-                            </button> */}
-                                <ButtonAnimation propClass="w-[250px] h-[250px]" imagen={{ src: bano, width: 250, height: 250, add: "h-full" }} />
-                                {/* <button className="w-[250px] h-[250px]">
-                            QUIERO CEPILLARME LOS DIENTES
-                            <Image
-                                src={cepillarDientes}
-                                className="flex object-contain w-full"
-                                alt="cepillarDientes"
-                            />
-                            </button> */}
-                                <ButtonAnimation propClass="w-[250px] h-[250px]" imagen={{ src: cepillarDientes, width: 250, height: 250, add: "h-full" }} />
-                                {/* <button className="w-[250px] h-[250px]">
-                            QUIERO BAÑARME
-                            <Image
-                                src={banarse}
-                                className="flex object-contain w-full"
-                                alt="banarse"
-                            />
-                            </button> */}
-                                <ButtonAnimation propClass="w-[250px] h-[250px]" imagen={{ src: banarse, width: 250, height: 250, add: "h-full" }} />
-                                {/* <button className="w-[250px] h-[250px]">
-                            QUIERO LAVARME LAS MANOS
-                            <Image
-                                src={lavarManos}
-                                className="flex object-contain w-full"
-                                alt="lavarManos+"
-                            />
-                            </button> */}
-                                <ButtonAnimation propClass="w-[250px] h-[250px]" imagen={{ src: lavarManos, width: 250, height: 250, add: "h-full" }} />
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
+                                    {Object.entries(mockCategories).map(([i, actions]) => (
+                                        <ButtonAnimation
+                                            propClass="w-full h-[400px] flex items-center justify-center"
+                                            innerText={`${Object.keys(actions)[0]}`}
+                                            imagen={{
+                                                src: escucharMusica,
+                                                width: 400,
+                                                height: 400,
+                                                add: "h-full w-full object-cover"
+                                            }}
+                                        />
+                                    ))}
+                                </div>
                             </div>
                         </div>
                         <div className="flex gap-8 flex-col">

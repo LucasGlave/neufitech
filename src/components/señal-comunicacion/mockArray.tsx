@@ -5,4 +5,3 @@ export const mockActivities = [{
     "HABITACION": [{ "QUIERO COMER": "IMAGEN" }, { "QUIERO BEBER": "IMAGEN" }, { "QUIERO TOMAR AGUA": "IMAGEN" }, { "QUIERO TOMAR JUGO": "IMAGEN" }],
     "EMOCIONES": [{ "QUIERO COMER": "IMAGEN" }, { "QUIERO BEBER": "IMAGEN" }, { "QUIERO TOMAR AGUA": "IMAGEN" }, { "QUIERO TOMAR JUGO": "IMAGEN" }]
 }]
-

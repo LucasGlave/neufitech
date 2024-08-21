@@ -1,16 +1,5 @@
 "use client";
 import escucharMusica from "../../../public/escucharMusica.jpg";
-// import descansar from "../../../public/descansar.jpg";
-// import comer from "../../../public/comer.jpg";
-// import pelicula from "../../../public/mirarPelicula.jpg";
-// import leer from "../../../public/leer.jpg";
-// import beberAgua from "../../../public/beberAgua.jpg";
-// import sandwich from "../../../public/sandwich.jpg";
-// import beberJugo from "../../../public/jugo.jpg";
-// import bano from "../../../public/bano.jpg";
-// import lavarManos from "../../../public/lavarManos.jpg";
-// import banarse from "../../../public/ducharse.jpg";
-// import cepillarDientes from "../../../public/cepillarDientes.jpg";
 import flechaArriba from "../../../public/flechaArriba.png";
 import flechaAbajo from "../../../public/flechaAbajo.png";
 import eliminar from "../../../public/eliminar.svg";
@@ -33,21 +22,31 @@ const Activities = () => {
                         </div>
                         <hr className="bg-white w-full h-[0.5]" />
                     </div>
-                    <div className="flex flex-row justify-between w-full h-full">
+                    <div className="flex flex-row justify-between gap-8 w-full h-full">
                         <div className="w-full h-full flex flex-col gap-8">
                             <div className="flex flex-row justify-start gap-8 items-center relative">
                                 {/* <ButtonAnimation propClass="w-[250px] h-[250px]" imagen={{ src: escucharMusica, width: 250, height: 250, add: "h-full" }} /> */}
                                 {Object.entries(mockActivities[0]).map(([activity, actions]) => (
                                     activity === categoria ? (
-                                        <div key={activity} className="w-full flex">
-                                            <div className="grid grid-cols-3 gap-12">
+                                        <div className="w-full flex">
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
                                                 {actions.map((action, index) => (
                                                     <li key={index} className="flex flex-col items-center">
-                                                        <ButtonAnimation propClass="w-[400px] h-[400px] flex items-center justify-center" innerText={`${Object.keys(action)[0]}`} imagen={{ src: escucharMusica, width: 400, height: 400, add: "h-full" }} />
+                                                        <ButtonAnimation
+                                                            propClass="w-full h-[400px] flex items-center justify-center"
+                                                            innerText={`${Object.keys(action)[0]}`}
+                                                            imagen={{
+                                                                src: escucharMusica,
+                                                                width: 400,
+                                                                height: 400,
+                                                                add: "h-full w-full object-cover"
+                                                            }}
+                                                        />
                                                     </li>
                                                 ))}
                                             </div>
                                         </div>
+
                                     ) : null
                                 ))}
                             </div>
