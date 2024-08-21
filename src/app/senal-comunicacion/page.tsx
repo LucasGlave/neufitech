@@ -1,8 +1,8 @@
-import SeñalComunicacion from "@/components/SeñalComunicacion";
+import Categories from "@/components/señal-comunicacion/Categories";
 
 const page = () => {
   return (
-    <SeñalComunicacion />
+    <Categories />
   );
 };
 

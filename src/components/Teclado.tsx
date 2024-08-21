@@ -1,5 +1,7 @@
 "use client"
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import ButtonAnimation from './ButtonAnimation';
+import trash from "../../public/eliminar.svg"
 
 interface KeySize {
     width: number;
@@ -26,9 +28,9 @@ const Teclado = () => {
     ];
 
     const SpecialKeys = {
-        SHIFT: 'SHIFT',
+        MAYUS: 'MAYUS',
         SPACE: '______',
-        BACKSPACE: 'BACKSPACE',
+        CTRLZ: 'CTRLZ',
         ENTER: 'ENTER',
         SYMBOLS: 'SYMBOLS',
         TILDE: 'TILDE',
@@ -66,7 +68,7 @@ const Teclado = () => {
     }, []);
 
     const handleKeyPress = useCallback((key: string) => {
-        if (key === SpecialKeys.SHIFT) {
+        if (key === SpecialKeys.MAYUS) {
             if (showSymbols) {
                 setSymbolPage(symbolPage === 1 ? 2 : 1);
             } else {
@@ -74,7 +76,7 @@ const Teclado = () => {
             }
         } else if (key === SpecialKeys.SPACE) {
             setOutput(prev => prev + ' ');
-        } else if (key === SpecialKeys.BACKSPACE) {
+        } else if (key === SpecialKeys.CTRLZ) {
             setOutput(prev => prev.slice(0, -1));
         } else if (key === SpecialKeys.ENTER) {
             setOutput(prev => prev + '\n');
@@ -144,12 +146,12 @@ const Teclado = () => {
         const uniqueId = `${rowIndex}-${index}`;
 
         const getKeyDisplay = (key: string) => {
-            if (key === SpecialKeys.BACKSPACE) {
+            if (key === SpecialKeys.CTRLZ) {
                 return '←';
             } else if (key === SpecialKeys.SYMBOLS) {
                 return showSymbols ? 'abc' : '123';
-            } else if (key === SpecialKeys.SHIFT) {
-                return showSymbols ? (symbolPage === 1 ? '1/2' : '2/2') : 'SHIFT';
+            } else if (key === SpecialKeys.MAYUS) {
+                return showSymbols ? (symbolPage === 1 ? '1/2' : '2/2') : 'MAYUS';
             } else if (key === SpecialKeys.TILDE) {
                 return 'TILDE';
             } else if (key === SpecialKeys.GUARDAR) {
@@ -169,22 +171,20 @@ const Teclado = () => {
         };
 
         const fontSize = Math.min(keySize.width, keySize.height) * 0.3;
-        //     font-size: calc(12px + 1vw);
-
 
         return (
-            <div className={`key-container relative flex items-center justify-center text-white ${extraClass}`} key={uniqueId} style={{ width: `${width}px`, height: `${keySize.height}px` }}>
-                <div className={`progress-bar absolute top-0 right-0 h-[12%] bg-[#4caf50] transition-width pointer-events-none progress-bar-bottom progress-bar-bottom-${uniqueId}`}></div>
-                <div className={`progress-bar absolute bottom-0 left-0 h-[12%] bg-[#4caf50] transition-width pointer-events-none progress-bar-top progress-bar-top-${uniqueId}`}></div>
+            <div className={`key-container relative flex items-center max-h-[120px] justify-center text-white ${extraClass}`} key={uniqueId} style={{ width: `${width}px`, height: `${keySize.height}px` }}>
+                <div className={`progress-bar absolute top-0 right-0 max-h-[120px] w-full bg-[#4caf50] transition-width pointer-events-none progress-bar-bottom progress-bar-bottom-${uniqueId}`}></div>
+                <div className={`progress-bar absolute bottom-0 left-0 max-h-[120px] w-full bg-[#4caf50] transition-width pointer-events-none progress-bar-top progress-bar-top-${uniqueId}`}></div>
                 <button
-                    className={`key-${uniqueId} bg-gray-800 border rounded shadow hover:bg-gray-700 active:border active:border-[#4caf50] transition-colors flex items-center justify-center`}
+                    className={`key-${uniqueId} bg-keybackground border rounded shadow hover:bg-gray-700 active:border active:border-[#4caf50] transition-colors flex items-center justify-center`}
                     onMouseEnter={() => handleKeyEnter(key, uniqueId)}
                     onMouseLeave={() => handleKeyLeave(uniqueId)}
                     onClick={() => {
                         handleKeyPress(key);
                         onClick();
                     }}
-                    style={{ width: '100%', height: '100%', fontSize: `${fontSize}px` }}
+                    style={{ minHeight: 120, width: "100%", fontSize: `${fontSize}px` }}
                 >
                     {getKeyDisplay(key)}
                 </button>
@@ -213,37 +213,70 @@ const Teclado = () => {
         element.click();
     };
     return (
-        <div className="flex flex-col items-center p-4 bg-black rounded-lg shadow-md h-screen" ref={containerRef}>
-            <div className="flex items-start w-full mb-4">
+        <div className="flex flex-col gap-8 items-center bg-keyboardHeader rounded-lg shadow-md h-screen" ref={containerRef}>
+            <div className='w-full flex flex-row justify-between items-center p-4'>
+                <ButtonAnimation text='SALIR' navigation='/' propClass='w-[150px] h-[120px] bg-keybackground' />
+                <div className="flex gap-2">
+                    <ButtonAnimation text='SI' propClass='w-[150px] h-[120px]' />
+                    <ButtonAnimation text='NO' propClass='w-[150px] h-[120px]' />
+                </div>
+                <div className="flex gap-2">
+                    <ButtonAnimation text='Estoy escribiendo' propClass='w-[150px] h-[120px]' />
+                    <ButtonAnimation text='Necesito ayuda' propClass='w-[150px] h-[120px]' />
+                </div>
+                <div className="flex gap-2">
+                    <ButtonAnimation text='SUSPENDER' propClass='w-[150px] h-[120px] bg-keybackground' />
+                    <ButtonAnimation text='ENGRA' propClass='w-[150px] h-[120px] bg-keybackground' />
+                </div>
+            </div>
+            <div className="flex items-center gap-2 justify-between w-full px-4">
+                <div className="flex gap-2">
+                    <ButtonAnimation text='COPIAR' propClass='w-[150px] h-[120px] bg-keybackground' />
+                    <ButtonAnimation text='HABLAR' speakText={output} propClass='w-[150px] h-[120px] bg-keybackground' />
+                </div>
                 <textarea
                     value={output}
                     onChange={(e) => setOutput(e.target.value)}
-                    className="w-3/4 h-4/4 p-2 border rounded resize-none"
+                    className="w-3/4 h-[120px] p-2 border rounded resize-none"
                     style={{ fontSize: '44px' }}
                     placeholder="Tu texto aparecerá aquí..."
                 />
-                <div className="flex flex-row gap-2 ml-5">
-                    {renderKey(SpecialKeys.TILDE, 0, 'extra', undefined, 'extra-button')}
-                    {renderKey(SpecialKeys.HABLAR, 1, 'extra', undefined, 'extra-button', speakText)}
-                    {renderKey(SpecialKeys.GUARDAR, 2, 'extra', undefined, 'extra-button')}
-                    {renderKey(SpecialKeys.NOTAS, 3, 'extra', undefined, 'extra-button')}
-                    {renderKey(SpecialKeys.SALIR, 4, 'extra', undefined, 'extra-button')}
+                <div className="flex gap-2">
+                    <ButtonAnimation text='GUARDAR FRASE' propClass='w-[150px] h-[120px] bg-keybackground' />
+                    <ButtonAnimation text='FRASES GUARDADAS' propClass='w-[150px] h-[120px] bg-keybackground' />
                 </div>
             </div>
-            <div className="grid gap-2 w-full">
-                {(showSymbols ? currentSymbolsLayout : KeyboardLayout).map((row, rowIndex) => (
-                    <div key={rowIndex} className="flex justify-center gap-2">
-                        {row.map((key, index) => renderKey(key, index, rowIndex))}
+            <div className='bg-zinc-900 flex flex-col w-full h-full gap-8 pt-8 p-4'>
+                <div className='flex flex-row justify-between items-center'>
+                    <ButtonAnimation imagen={{ src: trash, width: 80, height: 80, add: 'invert' }} propClass='w-[150px] h-[120px] flex justify-center items-center' />
+                    <div className="flex gap-2">
+                        <ButtonAnimation propClass='w-[300px] h-[120px]' text='Sug. palabra' />
+                        <ButtonAnimation propClass='w-[300px] h-[120px]' text='Sug. palabra' />
+                        <ButtonAnimation propClass='w-[300px] h-[120px]' text='Sug. palabra' />
+                        <ButtonAnimation propClass='w-[300px] h-[120px]' text='Sug. palabra' />
                     </div>
-                ))}
-                <div className="flex justify-center gap-2 mt-1">
-                    {renderKey(SpecialKeys.SHIFT, 0, 'special', keySize.width * 1.5)}
-                    {renderKey(SpecialKeys.SYMBOLS, 1, 'special', keySize.width * 1.5)}
-                    {renderKey(SpecialKeys.SPACE, 2, 'special', keySize.width * 3)}
-                    {renderKey(SpecialKeys.BACKSPACE, 3, 'special', keySize.width * 1.5)}
-                    {renderKey(SpecialKeys.ENTER, 4, 'special', keySize.width * 1.5)}
+                    <div className="flex gap-2">
+                        <ButtonAnimation propClass='w-[150px] h-[120px]' text='Borrar letra' />
+                        <ButtonAnimation propClass='w-[150px] h-[120px]' text='Borrar palabra' />
+                    </div>
+                </div>
+                <div className="grid gap-2 w-full">
+                    {(showSymbols ? currentSymbolsLayout : KeyboardLayout).map((row, rowIndex) => (
+                        <div key={rowIndex} className="flex justify-center gap-2">
+                            {row.map((key, index) => renderKey(key, index, rowIndex))}
+                        </div>
+                    ))}
+                    <div className="flex justify-center gap-2 mt-1">
+                        {renderKey(SpecialKeys.TILDE, 0, 'extra', undefined, 'extra-button')}
+                        {renderKey(SpecialKeys.MAYUS, 0, 'special', keySize.width * 1.5)}
+                        {renderKey(SpecialKeys.SYMBOLS, 1, 'special', keySize.width * 1.5)}
+                        {renderKey(SpecialKeys.SPACE, 2, 'special', keySize.width * 3)}
+                        {renderKey(SpecialKeys.ENTER, 4, 'special', keySize.width * 1.5)}
+                        {renderKey(SpecialKeys.CTRLZ, 3, 'special', keySize.width * 1.5)}
+                    </div>
                 </div>
             </div>
+
         </div>
     );
 }

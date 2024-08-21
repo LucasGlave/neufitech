@@ -1,0 +1,8 @@
+export const mockCategories = [{ "COCINA": "IMAGEN" }, { "BAÑO": "IMAGEN" }, { "HABITACION": "IMAGEN" }, { "EMOCIONES": "IMAGEN" }]
+export const mockActivities = [{
+    "COCINA": [{ "QUIERO COMER": "IMAGEN" }, { "QUIERO BEBER": "IMAGEN" }, { "QUIERO TOMAR AGUA": "IMAGEN" }, { "QUIERO TOMAR JUGO": "IMAGEN" }],
+    "BAÑO": [{ "QUIERO COMER": "IMAGEN" }, { "QUIERO BEBER": "IMAGEN" }, { "QUIERO TOMAR AGUA": "IMAGEN" }, { "QUIERO TOMAR JUGO": "IMAGEN" }],
+    "HABITACION": [{ "QUIERO COMER": "IMAGEN" }, { "QUIERO BEBER": "IMAGEN" }, { "QUIERO TOMAR AGUA": "IMAGEN" }, { "QUIERO TOMAR JUGO": "IMAGEN" }],
+    "EMOCIONES": [{ "QUIERO COMER": "IMAGEN" }, { "QUIERO BEBER": "IMAGEN" }, { "QUIERO TOMAR AGUA": "IMAGEN" }, { "QUIERO TOMAR JUGO": "IMAGEN" }]
+}]
+

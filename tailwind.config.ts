@@ -20,6 +20,8 @@ const config = {
     extend: {
       colors: {
         border: "hsl(var(--border))",
+        keybackground: "#011820",
+        keyboardHeader: "#576280",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
