@@ -45,9 +45,10 @@ const Teclado = () => {
     const [showSymbols, setShowSymbols] = useState<boolean>(false);
     const [symbolPage, setSymbolPage] = useState<number>(1);
     const [keySize, setKeySize] = useState<KeySize>({ width: 40, height: 40 });
-    const [activeKey, setActiveKey] = useState<string | null>(null);
     const [isTildeActive, setIsTildeActive] = useState<boolean>(false);
     const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
+    const [isAllow, setIsAllow] = useState(false)
+    const [ejecFunction, setEjecFunction] = useState("")
     const timerRefs = useRef<Record<string, NodeJS.Timeout>>({});
     const containerRef = useRef<HTMLDivElement | null>(null);
 
@@ -88,7 +89,7 @@ const Teclado = () => {
                 setSymbolPage(1);
             }
         } else if (key === SpecialKeys.TILDE) {
-            setIsTildeActive(true);
+            setIsTildeActive(!isTildeActive);
         } else if (key === SpecialKeys.GUARDAR) {
             saveTextToFile(output);
         } else if (key === SpecialKeys.HABLAR) {
@@ -106,11 +107,9 @@ const Teclado = () => {
             setOutput(prev => prev + (isUpperCase ? modifiedKey.toUpperCase() : modifiedKey));
             if (isUpperCase) setIsUpperCase(false);
         }
-        setActiveKey(null);
     }, [isUpperCase, showSymbols, symbolPage, isTildeActive, output]);
 
     const handleKeyEnter = useCallback((key: string, uniqueId: string) => {
-        setActiveKey(key);
         let progress = 0;
         timerRefs.current[uniqueId] = setInterval(() => {
             progress += 2.5;
@@ -137,7 +136,6 @@ const Teclado = () => {
         if (timerRefs.current[uniqueId]) {
             clearInterval(timerRefs.current[uniqueId]);
         }
-        setActiveKey(null);
         document.querySelector(`.progress-bar-bottom-${uniqueId}`)?.setAttribute('style', 'width: 0%');
         document.querySelector(`.progress-bar-top-${uniqueId}`)?.setAttribute('style', 'width: 0%');
     }, []);
@@ -194,11 +192,11 @@ const Teclado = () => {
 
 
     const speakText = () => {
-        if (isSpeaking) return; // Evita iniciar otra síntesis si ya está en curso
+        if (isSpeaking) return;
         setIsSpeaking(true);
         const utterance = new SpeechSynthesisUtterance(output);
         utterance.lang = 'es-ES';
-        utterance.onend = () => setIsSpeaking(false); // Marca el fin de la síntesis
+        utterance.onend = () => setIsSpeaking(false);
         speechSynthesis.speak(utterance);
     };
 
@@ -212,21 +210,53 @@ const Teclado = () => {
         document.body.appendChild(element);
         element.click();
     };
+
+    const changeState = (functionToEjec: string) => {
+        setIsAllow(true)
+        setEjecFunction(functionToEjec)
+    }
+
+    const deleteLastWord = () => {
+        const lastSpaceIndex = output.lastIndexOf(" ");
+        if (lastSpaceIndex === -1) {
+            setOutput("");
+        }
+        setOutput(output.substring(0, lastSpaceIndex))
+    }
+
+    const functionAction = () => {
+        ejecFunction === "deleteAll" && setOutput("")
+        ejecFunction === "deleteOne" && setOutput(prev => prev.slice(0, -1))
+        ejecFunction === "deleteLastWord" && deleteLastWord()
+        ejecFunction === "changeTilde" && setIsTildeActive(!isTildeActive);
+        ejecFunction === "changeMayus" && setIsUpperCase(!isUpperCase);
+        ejecFunction === "changeSymbol" && setShowSymbols(!showSymbols)
+        ejecFunction === "spaceKey" && setOutput(prev => prev + ' ');
+        ejecFunction === "enterKey" && setOutput(prev => prev + '\n');
+        ejecFunction === "ctrlZKey" && alert("REALIZAR")
+    }
+
+    useEffect(() => {
+        functionAction()
+        setIsAllow(false)
+        setEjecFunction("")
+    }, [isAllow === true])
+
     return (
         <div className="flex flex-col gap-8 items-center bg-keyboardHeader rounded-lg shadow-md h-screen" ref={containerRef}>
             <div className='w-full flex flex-row justify-between items-center p-4'>
-                <ButtonAnimation text='SALIR' navigation='/' propClass='w-[150px] h-[120px] bg-keybackground' />
+                <ButtonAnimation speakText='Salir' text='SALIR' navigation='/' propClass='w-[150px] h-[120px] bg-keybackground' />
                 <div className="flex gap-2">
-                    <ButtonAnimation text='SI' propClass='w-[150px] h-[120px]' />
-                    <ButtonAnimation text='NO' propClass='w-[150px] h-[120px]' />
+                    <ButtonAnimation speakText='Si' text='SI' propClass='w-[150px] h-[120px]' />
+                    <ButtonAnimation speakText='No' text='NO' propClass='w-[150px] h-[120px]' />
                 </div>
                 <div className="flex gap-2">
-                    <ButtonAnimation text='Estoy escribiendo' propClass='w-[150px] h-[120px]' />
-                    <ButtonAnimation text='Necesito ayuda' propClass='w-[150px] h-[120px]' />
+                    <ButtonAnimation speakText='Estoy escribiendo' text='Estoy escribiendo' propClass='w-[150px] h-[120px]' />
+                    <ButtonAnimation speakText='Necesito ayuda' text='Necesito ayuda' propClass='w-[150px] h-[120px]' />
                 </div>
                 <div className="flex gap-2">
-                    <ButtonAnimation text='SUSPENDER' propClass='w-[150px] h-[120px] bg-keybackground' />
-                    <ButtonAnimation text='ENGRA' propClass='w-[150px] h-[120px] bg-keybackground' />
+                    <ButtonAnimation speakText='Suspender' text='SUSPENDER' propClass='w-[150px] h-[120px] bg-keybackground' />
+                    <ButtonAnimation speakText='Ajustes' text='ENGRA' propClass='w-[150px] h-[120px] bg-keybackground' />
                 </div>
             </div>
             <div className="flex items-center gap-2 justify-between w-full px-4">
@@ -242,13 +272,13 @@ const Teclado = () => {
                     placeholder="Tu texto aparecerá aquí..."
                 />
                 <div className="flex gap-2">
-                    <ButtonAnimation text='GUARDAR FRASE' propClass='w-[150px] h-[120px] bg-keybackground' />
-                    <ButtonAnimation text='FRASES GUARDADAS' propClass='w-[150px] h-[120px] bg-keybackground' />
+                    <ButtonAnimation disabled={true} text='GUARDAR FRASE' propClass='w-[150px] h-[120px] bg-keybackground' />
+                    <ButtonAnimation disabled={true} text='FRASES GUARDADAS' propClass='w-[150px] h-[120px] bg-keybackground' />
                 </div>
             </div>
             <div className='bg-zinc-900 flex flex-col w-full h-full gap-8 pt-8 p-4'>
                 <div className='flex flex-row justify-between items-center'>
-                    <ButtonAnimation imagen={{ src: trash, width: 80, height: 80, add: 'invert' }} propClass='w-[150px] h-[120px] flex justify-center items-center' />
+                    <ButtonAnimation functionKeyboard={{ funct: "deleteAll", state: changeState }} imagen={{ src: trash, width: 80, height: 80, add: 'invert' }} propClass='w-[150px] h-[120px] flex justify-center items-center' />
                     <div className="flex gap-2">
                         <ButtonAnimation propClass='w-[300px] h-[120px]' text='Sug. palabra' />
                         <ButtonAnimation propClass='w-[300px] h-[120px]' text='Sug. palabra' />
@@ -256,8 +286,8 @@ const Teclado = () => {
                         <ButtonAnimation propClass='w-[300px] h-[120px]' text='Sug. palabra' />
                     </div>
                     <div className="flex gap-2">
-                        <ButtonAnimation propClass='w-[150px] h-[120px]' text='Borrar letra' />
-                        <ButtonAnimation propClass='w-[150px] h-[120px]' text='Borrar palabra' />
+                        <ButtonAnimation functionKeyboard={{ funct: "deleteOne", state: changeState }} propClass='w-[150px] h-[120px]' text='Borrar letra' />
+                        <ButtonAnimation functionKeyboard={{ funct: "deleteLastWord", state: changeState }} propClass='w-[150px] h-[120px]' text='Borrar palabra' />
                     </div>
                 </div>
                 <div className="grid gap-2 w-full">
@@ -267,12 +297,12 @@ const Teclado = () => {
                         </div>
                     ))}
                     <div className="flex justify-center gap-2 mt-1">
-                        {renderKey(SpecialKeys.TILDE, 0, 'extra', undefined, 'extra-button')}
-                        {renderKey(SpecialKeys.MAYUS, 0, 'special', keySize.width * 1.5)}
-                        {renderKey(SpecialKeys.SYMBOLS, 1, 'special', keySize.width * 1.5)}
-                        {renderKey(SpecialKeys.SPACE, 2, 'special', keySize.width * 3)}
-                        {renderKey(SpecialKeys.ENTER, 4, 'special', keySize.width * 1.5)}
-                        {renderKey(SpecialKeys.CTRLZ, 3, 'special', keySize.width * 1.5)}
+                        <ButtonAnimation functionKeyboard={{ funct: "changeTilde", state: changeState }} propClass='w-full h-[120px]' text='TILDE' />
+                        <ButtonAnimation functionKeyboard={{ funct: "changeMayus", state: changeState }} propClass='w-full h-[120px]' text='MAYUS' />
+                        <ButtonAnimation functionKeyboard={{ funct: "changeSymbol", state: changeState }} propClass='w-full h-[120px]' text={`${showSymbols ? "ABC" : "123"}`} />
+                        <ButtonAnimation functionKeyboard={{ funct: "spaceKey", state: changeState }} propClass='w-full h-[120px]' text='____' />
+                        <ButtonAnimation functionKeyboard={{ funct: "enterKey", state: changeState }} propClass='w-full h-[120px]' text='ENTER' />
+                        <ButtonAnimation functionKeyboard={{ funct: "ctrlZKey", state: changeState }} propClass='w-full h-[120px]' text='CTRLZ' />
                     </div>
                 </div>
             </div>

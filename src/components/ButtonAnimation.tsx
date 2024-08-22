@@ -4,18 +4,6 @@ import { useRouter } from "next/navigation";
 import Image from 'next/image';
 import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 
-interface Voice {
-  name: string;
-  gender: "female" | "male";
-}
-
-interface Options {
-  text: string;
-  volume?: number;
-  speed?: number;
-  voice?: Voice | string;
-}
-
 type buttonProps = {
   text?: string
   propClass?: string
@@ -23,7 +11,12 @@ type buttonProps = {
   navigation?: string
   speakText?: string
   innerText?: string
+  disabled?: boolean
   state?: () => void
+  functionKeyboard?: {
+    funct: string,
+    state: (functionToEjec: string) => void
+  }
   imagen?: {
     src: StaticImport,
     width: number,
@@ -32,38 +25,66 @@ type buttonProps = {
   }
 }
 
-const ButtonAnimation = ({ text, propClass, navigation, imagen, color, speakText, state, innerText }: buttonProps) => {
+const ButtonAnimation = ({ text, propClass, navigation, imagen, color, speakText, state, innerText, disabled, functionKeyboard }: buttonProps) => {
   const navigate = useRouter()
   const [isActive, setIsActive] = useState(false)
   const [isAction, setIsAction] = useState(false)
+  const [progress, setProgress] = useState(0);
   useEffect(() => {
-    let timer: NodeJS.Timeout
+    let timer: NodeJS.Timeout;
+    let progressInterval: NodeJS.Timeout;
     if (isActive) {
+      setProgress(0);
+      progressInterval = setInterval(() => {
+        setProgress((prev) => (prev < 100 ? prev + 1 : 100));
+      }, 10);
       timer = setTimeout(() => {
-        setIsAction(true)
-        state && state()
+        setIsAction(true);
+        state && state();
+        functionKeyboard?.state(functionKeyboard.funct)
         if (speakText) {
           if (window.electron) {
             window.electron.speak(speakText);
           } else {
-            console.log(window)
-            const say = require('offline-tts')
+            const say = require('offline-tts');
             say(speakText, 1, 1, 1, 1);
           }
         }
-        navigation != null && navigate.push(navigation)
+        navigation != null && navigate.push(navigation);
+        clearInterval(progressInterval);
+        setProgress(0);
         setTimeout(() => {
-          setIsActive(false)
-        }, 1000)
-      }, 1000)
+          setIsAction(false)
+          setProgress(0);
+          setIsActive(false);
+        }, 1000);
+      }, 1000);
     }
-    return (() => clearTimeout(timer))
-  }, [isActive])
+    return () => {
+      clearTimeout(timer);
+      clearInterval(progressInterval);
+      setProgress(0);
+    };
+  }, [isActive]);
 
   return (
-    <button onMouseEnter={() => { setIsActive(true) }} onMouseLeave={() => { setIsActive(false); setIsAction(false) }} className={`border-2 ${!isAction ? color : "bg-green-300"} ${isActive && "border-green-400"} ${propClass} ${innerText && "relative"} rounded-lg font-semibold text-xl text-white`}>
-      {imagen != null ? <Image src={imagen.src} width={imagen.width} height={imagen.height} alt='dinamic image' className={`rounded-lg object-cover ${imagen.add && imagen.add} ${innerText && "opacity-85 brightness-75"}`} /> : text}
-      {innerText && <h3 className='absolute font-bold text-3xl flex text-center items-center justify-center'>{innerText}</h3>}
+    <button disabled={disabled ? true : false} onMouseEnter={() => { setIsActive(true) }} onMouseLeave={() => { setIsActive(false); setIsAction(false) }} className={`border-2 ${!isAction ? color : "bg-green-400"} ${isActive && "border-green-400"} ${propClass} ${innerText && "relative"} rounded-lg font-semibold text-xl text-white`}>
+      <div className="relative h-full w-full flex items-center justify-center">
+        {imagen != null ? <Image src={imagen.src} width={imagen.width} height={imagen.height} alt='dinamic image' className={`rounded-lg object-cover relative  ${imagen.add && imagen.add} ${innerText && "opacity-85 brightness-75"}`} /> : text}
+        {isActive && (
+          <div
+            className="absolute top-0 left-0 h-4 bg-green-400"
+            style={{ width: `${100 - progress}%`, right: 0, transition: 'width 0.1s linear' }}
+          ></div>
+        )}
+        {isActive && (
+          <div
+            className="absolute bottom-0 left-0 h-4 bg-green-400"
+            style={{ width: `${progress}%`, transition: 'width 0.1s linear' }}
+          ></div>
+        )}
+        {innerText && <h3 className='absolute font-bold text-3xl flex text-center items-center justify-center'>{innerText}</h3>}
+      </div>
     </button>
   )
 }
