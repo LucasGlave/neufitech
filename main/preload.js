@@ -14,7 +14,6 @@ contextBridge.exposeInMainWorld("electronAPI", {
                 console.error(`Error al ejecutar say: ${error}`);
                 return;
             }
-            console.log(`TTS Output: ${stdout}`);
         });
     }
 });
