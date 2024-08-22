@@ -43,6 +43,7 @@ const ButtonAnimation = ({ text, propClass, navigation, imagen, color, speakText
         state && state();
         functionKeyboard?.state(functionKeyboard.funct)
         if (speakText) {
+          console.log(speakText)
           if (window.electron) {
             window.electron.speak(speakText);
           } else {
@@ -54,13 +55,12 @@ const ButtonAnimation = ({ text, propClass, navigation, imagen, color, speakText
         clearInterval(progressInterval);
         setProgress(0);
         setTimeout(() => {
-          setIsAction(false)
-          setProgress(0);
           setIsActive(false);
-        }, 1000);
+        }, 100);
       }, 1000);
     }
     return () => {
+      setIsAction(false)
       clearTimeout(timer);
       clearInterval(progressInterval);
       setProgress(0);
