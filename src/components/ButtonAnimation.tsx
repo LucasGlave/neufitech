@@ -12,6 +12,7 @@ type buttonProps = {
   speakText?: string
   innerText?: string
   disabled?: boolean
+  svg?: string
   state?: () => void
   functionKeyboard?: {
     funct: string,
@@ -25,7 +26,7 @@ type buttonProps = {
   }
 }
 
-const ButtonAnimation = ({ text, propClass, navigation, imagen, color, speakText, state, innerText, disabled, functionKeyboard }: buttonProps) => {
+const ButtonAnimation = ({ text, propClass, navigation, imagen, color, speakText, state, innerText, disabled, functionKeyboard, svg }: buttonProps) => {
   const navigate = useRouter()
   const [isActive, setIsActive] = useState(false)
   const [isAction, setIsAction] = useState(false)
@@ -70,7 +71,8 @@ const ButtonAnimation = ({ text, propClass, navigation, imagen, color, speakText
   return (
     <button disabled={disabled ? true : false} onMouseEnter={() => { setIsActive(true) }} onMouseLeave={() => { setIsActive(false); setIsAction(false) }} className={`border-2 ${!isAction ? color : "bg-green-400"} ${isActive && "border-green-400"} ${propClass} ${innerText && "relative"} rounded-lg font-semibold text-xl text-white`}>
       <div className="relative h-full w-full flex items-center justify-center">
-        {imagen != null ? <Image src={imagen.src} width={imagen.width} height={imagen.height} alt='dinamic image' className={`rounded-lg object-cover relative  ${imagen.add && imagen.add} ${innerText && "opacity-85 brightness-75"}`} /> : text}
+        {imagen != null ? <Image src={imagen.src} width={imagen.width} height={imagen.height} alt='dinamic image' className={`rounded-lg object-cover relative  ${imagen.add && imagen.add} ${innerText && "opacity-85 brightness-75"}`} /> : text ? text : svg && <div className='bg-white' dangerouslySetInnerHTML={{__html: svg}}/>}
+        {svg && <div dangerouslySetInnerHTML={{__html:svg}}/>}
         {isActive && (
           <div
             className="absolute top-0 left-0 h-4 bg-green-400"
