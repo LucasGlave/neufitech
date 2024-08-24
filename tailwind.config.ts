@@ -81,6 +81,9 @@ const config = {
         // Añadir la animación `flash`
         flash: "flash 0.2s ease-in-out",
       },
+      fontSize: {
+        "5xl": "3rem"
+      }
     },
   },
   plugins: [require("tailwindcss-animate")],

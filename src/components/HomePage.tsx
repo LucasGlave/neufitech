@@ -22,7 +22,7 @@ const HomePage = () => {
                         <ButtonAnimation speakText="Sensacion corporal" navigation="sensacion-corporal" propClass="w-[250px] h-[250px]" imagen={{ src: logoSensacionCorp, width: 250, height: 250 }} />
                         <ButtonAnimation speakText="Señal comunicacion" navigation="senal-comunicacion" propClass="w-[250px] h-[250px]" imagen={{ src: logoComunicacion, width: 250, height: 250 }} />
                         <ButtonAnimation speakText="Escritura" navigation="teclado" propClass="w-[250px] h-[250px]" imagen={{ src: logoEscritura, width: 250, height: 250 }} />
-                        <ButtonAnimation disabled={true} speakText="Escritura con IA" navigation="teclado" propClass="w-[250px] h-[250px]" imagen={{ src: logoEscrituraIA, width: 250, height: 250 }} />
+                        <ButtonAnimation speakText="Escritura con IA" navigation="teclado-ia" propClass="w-[250px] h-[250px]" imagen={{ src: logoEscrituraIA, width: 250, height: 250 }} />
                     </div>
                     <div className="flex justify-around relative px-20 w-full">
                         <ButtonAnimation speakText="Whatsapp" propClass="w-[250px] h-[250px]" imagen={{ src: logoWhatsapp, width: 250, height: 250 }} />

@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import ButtonAnimation from "./ButtonAnimation";
-import trash from "../../public/eliminar.svg";
+import ButtonAnimation from "../ButtonAnimation";
+import trash from "../../../public/eliminar.svg";
 
 const Teclado = () => {
   const KeyboardLayout = [
@@ -213,7 +213,7 @@ const Teclado = () => {
             />
           </div>
         </div>
-        <div className="grid gap-2 w-full px-4">
+        <div className="grid gap-2 w-full h-full px-4">
           {(showSymbols
             ? currentSymbolsLayout
             : getUpdatedKeyboardLayout()
@@ -223,7 +223,7 @@ const Teclado = () => {
                 <ButtonAnimation
                   key={`${rowIndex}-${index}`}
                   text={key}
-                  propClass="w-full h-[120px] text-2xl"
+                  propClass="w-full h-full text-5xl"
                   functionKeyboard={{
                     funct: `pressKey ${key}`,
                     state: changeState,
@@ -235,27 +235,27 @@ const Teclado = () => {
           <div className="flex justify-center gap-2 mt-1">
             <ButtonAnimation
               functionKeyboard={{ funct: "changeTilde", state: changeState }}
-              propClass="w-full h-[80px]"
+              propClass="w-full h-full"
               text="TILDE"
             />
             <ButtonAnimation
               functionKeyboard={{ funct: "changeMayus", state: changeState }}
-              propClass="w-full h-[80px]"
+              propClass="w-full h-full"
               text="MAYUS"
             />
             <ButtonAnimation
               functionKeyboard={{ funct: "spaceKey", state: changeState }}
-              propClass="w-full h-[80px]"
+              propClass="w-full h-full"
               text="____"
             />
             <ButtonAnimation
               functionKeyboard={{ funct: "changeSymbol", state: changeState }}
-              propClass="w-full h-[80px]"
+              propClass="w-full h-full"
               text="SIMBOLOS"
             />
             <ButtonAnimation
               functionKeyboard={{ funct: "enterKey", state: changeState }}
-              propClass="w-full h-[80px]"
+              propClass="w-full h-full"
               text="INTRO"
             />
           </div>
