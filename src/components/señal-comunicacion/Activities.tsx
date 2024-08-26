@@ -46,6 +46,7 @@ const Activities = () => {
                               key={index}
                               propClass="w-full h-[400px] flex items-center justify-center"
                               innerText={`${Object.keys(action)[0]}`}
+                              speakText={`${Object.keys(action)[0]}`}
                               imagen={{
                                 src: Object.values(action)[0],
                                 width: 400,

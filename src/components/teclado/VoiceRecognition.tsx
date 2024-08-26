@@ -1,6 +1,7 @@
 "use client"
 import React, { useState, useEffect, useRef } from 'react';
-import ButtonAnimation from '../ButtonAnimation';
+import Image from 'next/image';
+import trash from "../../../public/eliminar.svg"
 
 declare global {
     interface Window {
@@ -89,20 +90,19 @@ const VoiceRecognition: React.FC = () => {
     };
 
     return (
-        <div className='w-full min-h-24 flex justify-between items-center rounded-lg text-white'>
-            <button className='w-[150px] h-[120px] border-green-400 border-4 rounded-lg' onClick={startRecognition}>
-                Iniciar Grabación
-            </button>
-            <div id="results">
-                {/* {finalTranscript.split('\n').map((line, index) => (
-                    <div key={index}>{line}</div>
-                ))} */}
+        <div className='w-full h-full bg-white flex justify-between items-center rounded-lg text-black font-semibold'>
+            <div className='flex flex-col'>
+                <button className='w-[150px] h-[70px] border-green-400 bg-green-200 border-4 rounded-t-lg' onClick={startRecognition}>
+                    Comenzar grabación
+                </button>
+                <button className='w-[150px] h-[70px] border-red-400 bg-red-200 border-4 rounded-b-lg' onClick={stopRecognition}>
+                    Detener grabación
+                </button>
+            </div>
+            <div id="results" className='w-full px-4'>
                 <h3 className='text-2xl'>{finalTranscript}</h3>
                 <em style={{ color: 'gray' }}>{interimTranscript}</em>
             </div>
-            <button className='w-[150px] h-[120px] border-red-400 border-4 rounded-lg' onClick={stopRecognition}>
-                Detener Grabación
-            </button>
         </div>
     );
 };

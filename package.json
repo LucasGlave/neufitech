@@ -24,6 +24,7 @@
     "react-dom": "^18",
     "say": "^0.16.0",
     "simpletts": "^2.6.0",
+    "sweetalert2": "^11.12.4",
     "swiper": "^11.1.4",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7"
