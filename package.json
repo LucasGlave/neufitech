@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "main": "main/main.js",
-  "type": "module",
+  "type": "commonjs",
   "author": "Neufitech",
   "description": "Electron + NextJS",
   "scripts": {
@@ -36,6 +36,7 @@
     "concurrently": "^8.2.2",
     "electron": "^31.4.0",
     "electron-builder": "^24.13.3",
+    "node-key-sender": "^1.0.11",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"

@@ -1,24 +1,21 @@
-import { app, BrowserWindow } from "electron";
-import serve from "electron-serve";
-import { fileURLToPath } from "url";
-import { dirname, join } from "path";
+const { app, BrowserWindow, ipcMain } = require("electron");
+// const serve = require("electron-serve");
+const path = require("path");
+const keySender = require("node-key-sender");
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const appServe = app.isPackaged
-  ? serve({
-      directory: join(__dirname, "../out"),
-    })
-  : null;
+// const appServe = app.isPackaged
+//   ? serve({
+//       directory: join(__dirname, "../out"),
+//     })
+//   : null;
 
 const createWindow = () => {
   const win = new BrowserWindow({
     width: 1920,
     height: 1080,
     webPreferences: {
-      preload: join(__dirname, "preload.js"),
-      nodeIntegration: false, // Importante: Desactiva nodeIntegration para seguridad
+      preload: path.join(__dirname, "preload.js"),
+      nodeIntegration: true, // Importante: Desactiva nodeIntegration para seguridad
       contextIsolation: true,
       webviewTag: true,
     },
@@ -47,4 +44,8 @@ app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
     app.quit();
   }
+});
+
+ipcMain.on("send-key-combination", (event, keys) => {
+  keySender.sendCombination(keys);
 });
