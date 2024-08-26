@@ -120,12 +120,6 @@ const Teclado = () => {
                             <h3 className="text-2xl">Opcion 2</h3>
                         </div>
                     </div>
-                    <div className="flex flex-row w-full gap-2">
-                        <button className="border-2 border-zinc-900 bg-white w-12 h-12 rounded-lg"></button>
-                        <div className="bg-zinc-900 w-full rounded-lg flex items-center px-4">
-                            <h3 className="text-2xl">Opcion 3</h3>
-                        </div>
-                    </div>
                 </div>
                 <div className="flex gap-2">
                     <ButtonAnimation
@@ -147,7 +141,7 @@ const Teclado = () => {
                         propClass="w-[150px] h-[120px] bg-keybackground"
                     />
                 </div>
-                <div className="flex w-1/2 flex-col justify-center items-center gap-2">
+                <div className="flex w-[60%] flex-col justify-center items-center gap-2">
                     <VoiceRecognition />
                     <textarea
                         value={output}
