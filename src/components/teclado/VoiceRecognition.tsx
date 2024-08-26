@@ -48,7 +48,6 @@ const VoiceRecognition: React.FC = () => {
     const [finalTranscript, setFinalTranscript] = useState('');
     const [interimTranscript, setInterimTranscript] = useState('');
     const recognitionRef = useRef<ISpeechRecognition | null>(null);
-    console.log(finalTranscript)
     useEffect(() => {
         if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
             alert('API de reconocimiento de voz no soportada en este navegador.');
@@ -70,7 +69,6 @@ const VoiceRecognition: React.FC = () => {
                     }
                 }
                 setInterimTranscript(interimText);
-                console.log(interimText)
             };
 
             recognition.onerror = (event: ISpeechRecognitionError) => {
@@ -92,10 +90,10 @@ const VoiceRecognition: React.FC = () => {
     return (
         <div className='w-full h-full bg-white flex justify-between items-center rounded-lg text-black font-semibold'>
             <div className='flex flex-col'>
-                <button className='w-[150px] h-[70px] border-green-400 bg-green-200 border-4 rounded-t-lg' onClick={startRecognition}>
+                <button className='w-[150px] max-h-[70px] border-green-400 bg-green-200 border-4 rounded-t-lg' onClick={startRecognition}>
                     Comenzar grabación
                 </button>
-                <button className='w-[150px] h-[70px] border-red-400 bg-red-200 border-4 rounded-b-lg' onClick={stopRecognition}>
+                <button className='w-[150px] max-h-[70px] border-red-400 bg-red-200 border-4 rounded-b-lg' onClick={stopRecognition}>
                     Detener grabación
                 </button>
             </div>
