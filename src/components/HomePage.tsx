@@ -1,4 +1,4 @@
-'use client'
+"use client"
 import logoFacebook from '../../public/icon-facebook.png'
 import logoWhatsapp from '../../public/icon-whatsapp.png'
 import logoInstagram from '../../public/icon-instagram.png'
@@ -12,8 +12,27 @@ import logoComunicacion from '../../public/icon-comunicacion.png'
 import logoEscritura from '../../public/icon-escritura.png'
 import logoEscrituraIA from '../../public/icon-escritura-ia.png'
 import ButtonAnimation from "./ButtonAnimation";
+import Swal from "sweetalert2"
+import { useEffect } from 'react'
 
 const HomePage = () => {
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const valorBooleano = JSON.parse(sessionStorage.getItem('miBooleano') || 'false');
+
+            if (!valorBooleano) {
+                Swal.fire({
+                    position: "bottom-end",
+                    title: "Recuerde clickear para activar el sonido",
+                    confirmButtonText: 'OK',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        sessionStorage.setItem('miBooleano', JSON.stringify(true));
+                    }
+                });
+            }
+        }
+    }, []);
     return (
         <div className="flex justify-between w-full h-screen bg-zinc-900">
             <div className="flex justify-start p-6 w-full">
