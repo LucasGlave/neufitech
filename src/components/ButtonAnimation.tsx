@@ -20,8 +20,8 @@ type buttonProps = {
   };
   imagen?: {
     src: StaticImport;
-    width: number;
-    height: number;
+    width?: number;
+    height?: number;
     add?: string;
   };
   keyCombination?: string[];
@@ -78,7 +78,7 @@ const ButtonAnimation = ({
             console.log("No se puede usar keySender");
           }
         }
-        functionKeyboard?.state(functionKeyboard.funct)
+        functionKeyboard?.state(functionKeyboard.funct);
         const utterance = new SpeechSynthesisUtterance(speakText);
         window.speechSynthesis.speak(utterance);
         navigation != null && navigate.push(navigation);
@@ -98,9 +98,43 @@ const ButtonAnimation = ({
   }, [isActive]);
 
   return (
-    <button id='myButton' disabled={disabled ? true : false} onMouseEnter={() => { setIsActive(true) }} onMouseLeave={() => { setIsActive(false); setIsAction(false) }} className={`border-2 ${!isAction ? color : "bg-green-400"} ${isActive && "border-green-400"} ${propClass} ${innerText && "relative"} rounded-lg font-semibold text-xl text-white`}>
+    <button
+      id="myButton"
+      disabled={disabled ? true : false}
+      onMouseEnter={() => {
+        setIsActive(true);
+      }}
+      onMouseLeave={() => {
+        setIsActive(false);
+        setIsAction(false);
+      }}
+      className={`border-2 ${!isAction ? color : "bg-green-400"} ${
+        isActive && "border-green-400"
+      } ${propClass} ${
+        innerText && "relative"
+      } rounded-lg font-semibold text-xl text-white`}
+    >
       <div className="relative h-full w-full flex items-center justify-center">
-        {imagen != null ? <Image src={imagen.src} width={imagen.width} height={imagen.height} alt='dinamic image' className={`rounded-lg object-contain relative  ${imagen.add && imagen.add} ${innerText && "opacity-85 brightness-75"}`} /> : text ? text : svg && <div className='bg-white' dangerouslySetInnerHTML={{ __html: svg }} />}
+        {imagen != null ? (
+          <Image
+            src={imagen.src}
+            width={imagen.width}
+            height={imagen.height}
+            alt="dinamic image"
+            className={`rounded-lg object-contain relative  ${
+              imagen.add && imagen.add
+            } ${innerText && "opacity-85 brightness-75"}`}
+          />
+        ) : text ? (
+          text
+        ) : (
+          svg && (
+            <div
+              className="bg-white"
+              dangerouslySetInnerHTML={{ __html: svg }}
+            />
+          )
+        )}
         {svg && <div dangerouslySetInnerHTML={{ __html: svg }} />}
         {isActive && (
           <div
