@@ -1,6 +1,7 @@
 const { contextBridge, ipcRenderer } = require("electron/renderer");
 
 contextBridge.exposeInMainWorld("electronAPI", {
+
   on: (channel, callback) => {
     ipcRenderer.on(channel, callback);
   },
@@ -10,3 +11,4 @@ contextBridge.exposeInMainWorld("electronAPI", {
   sendKeyCombination: (keys) => ipcRenderer.send("send-key-combination", keys),
   sendKey: (key) => ipcRenderer.send("send-key", key),
 });
+

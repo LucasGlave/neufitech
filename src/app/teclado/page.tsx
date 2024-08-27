@@ -1,4 +1,4 @@
-import Teclado from "@/components/Teclado";
+import Teclado from "@/components/teclado/Teclado";
 
 const Page = () => {
     return (
