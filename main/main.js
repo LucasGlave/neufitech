@@ -49,3 +49,7 @@ app.on("window-all-closed", () => {
 ipcMain.on("send-key-combination", (event, keys) => {
   keySender.sendCombination(keys);
 });
+
+ipcMain.on("send-key", (event, key) => {
+  keySender.sendKey(key);
+});

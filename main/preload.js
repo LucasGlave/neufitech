@@ -1,4 +1,3 @@
-console.log("preload loading");
 const { contextBridge, ipcRenderer } = require("electron/renderer");
 
 contextBridge.exposeInMainWorld("electronAPI", {
@@ -9,4 +8,5 @@ contextBridge.exposeInMainWorld("electronAPI", {
     ipcRenderer.send(channel, args);
   },
   sendKeyCombination: (keys) => ipcRenderer.send("send-key-combination", keys),
+  sendKey: (key) => ipcRenderer.send("send-key", key),
 });

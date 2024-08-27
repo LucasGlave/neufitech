@@ -24,7 +24,8 @@ type buttonProps = {
     height: number;
     add?: string;
   };
-  keyboardConfig?: object;
+  keyCombination?: string[];
+  keyPress?: string;
 };
 
 const ButtonAnimation = ({
@@ -39,7 +40,8 @@ const ButtonAnimation = ({
   disabled,
   functionKeyboard,
   svg,
-  keyboardConfig,
+  keyCombination,
+  keyPress,
 }: buttonProps) => {
   const navigate = useRouter();
   const [isActive, setIsActive] = useState(false);
@@ -57,19 +59,16 @@ const ButtonAnimation = ({
         setIsAction(true);
         state && state();
         functionKeyboard?.state(functionKeyboard.funct);
-        // if (speakText) {
-        //   console.log(speakText);
-        //   if (window.electronAPI) {
-        //     window.electronAPI.speak(speakText);
-        //   } else {
-        //     const say = require("offline-tts");
-        //     say(speakText, 1, 1, 1, 1);
-        //   }
-        // }
         navigation != null && navigate.push(navigation);
-        if (keyboardConfig) {
+        if (keyCombination) {
           if (window.electronAPI) {
-            window.electronAPI.sendKeyCombination(["control", "alt", "tab"]);
+            window.electronAPI.sendKeyCombination(keyCombination);
+          } else {
+            console.log("No se puede usar keySender");
+          }
+        } else if (keyPress) {
+          if (window.electronAPI) {
+            window.electronAPI.sendKey(keyPress);
           } else {
             console.log("No se puede usar keySender");
           }
