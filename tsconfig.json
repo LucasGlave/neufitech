@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "types": ["node", "electron"],
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
