@@ -43,12 +43,12 @@ const SensacionCorporal = () => {
                         className="w-full h-full object-contain"
                     />
                 )}
-                <ButtonAnimation speakText={`${sex ? "Hombre" : "Mujer"}`} state={() => functionState("sex")} text={`${sex ? "HOMBRE" : "MUJER"}`} color="bg-black" propClass="absolute w-36 h-36 top-0 left-0" />
-                <ButtonAnimation speakText="Cabeza" text="CABEZA" color="bg-black" propClass="absolute w-36 h-36 top-0 right-0" />
-                <ButtonAnimation speakText="Vientre" text="VIENTRE" color="bg-black" propClass="absolute w-36 h-36 left-0" />
-                <ButtonAnimation speakText="Mano" text="MANO" color="bg-black" propClass="absolute w-36 h-36 right-0" />
-                <ButtonAnimation speakText="Pie" text="PIE" color="bg-black" propClass="absolute w-36 h-36 bottom-0 left-0" />
-                <ButtonAnimation speakText="Volver" text="VOLVER" color="bg-black" propClass="absolute w-36 h-36 bottom-0 right-0" />
+                <ButtonAnimation speakText={`${sex ? "Hombre" : "Mujer"}`} state={() => functionState("sex")} text={`${sex ? "HOMBRE" : "MUJER"}`} color="bg-white" propClass="absolute w-32 h-32 top-0 left-0" buttonBorder="border-zinc-900" textColor="text-zinc-900" />
+                <ButtonAnimation speakText="Cabeza" text="CABEZA" color="bg-white" propClass="absolute w-32 h-32 top-0 right-0" buttonBorder="border-zinc-900" textColor="text-zinc-900" />
+                <ButtonAnimation speakText="Vientre" text="VIENTRE" color="bg-white" propClass="absolute w-32 h-32 left-0" buttonBorder="border-zinc-900" textColor="text-zinc-900" />
+                <ButtonAnimation speakText="Mano" text="MANO" color="bg-white" propClass="absolute w-32 h-32 right-0" buttonBorder="border-zinc-900" textColor="text-zinc-900" />
+                <ButtonAnimation speakText="Pie" text="PIE" color="bg-white" propClass="absolute w-32 h-32 bottom-0 left-0" buttonBorder="border-zinc-900" textColor="text-zinc-900" />
+                <ButtonAnimation speakText="Volver" text="VOLVER" color="bg-white" propClass="absolute w-32 h-32 bottom-0 right-0" buttonBorder="border-zinc-900" textColor="text-zinc-900" />
             </div>
             <div className="flex flex-col justify-between gap-2 items-center w-[40%] bg-zinc-900">
                 <div className="flex flex-row gap-2">
@@ -80,9 +80,9 @@ const SensacionCorporal = () => {
                         <ButtonAnimation speakText="Molestia" text="MOLESTIA" color="bg-transparent" propClass="w-44 h-28" />
                     </div>
                     <div className="flex flex-row gap-2">
-                        <ButtonAnimation speakText="Leve" text="LEVE" color="bg-amber-300" propClass="w-44 h-28" />
-                        <ButtonAnimation speakText="Moderado" text="MODERADO" color="bg-orange-400" propClass="w-44 h-28" />
-                        <ButtonAnimation speakText="Fuerte" text="FUERTE" color="bg-red-500" propClass="w-44 h-28" />
+                        <ButtonAnimation speakText="Leve" text="LEVE" color="bg-amber-300" propClass="w-44 h-28" buttonBorder="border-amber-300" textColor="text-zinc-900" />
+                        <ButtonAnimation speakText="Moderado" text="MODERADO" color="bg-orange-400" propClass="w-44 h-28" buttonBorder="border-orange-400" textColor="text-zinc-900" />
+                        <ButtonAnimation speakText="Fuerte" text="FUERTE" color="bg-red-500" propClass="w-44 h-28" buttonBorder="border-red-500" textColor="text-zinc-900" />
                     </div>
                 </div>
             </div>
