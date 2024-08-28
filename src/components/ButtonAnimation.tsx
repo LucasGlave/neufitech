@@ -6,6 +6,8 @@ import { StaticImport } from "next/dist/shared/lib/get-img-props";
 
 type buttonProps = {
   text?: string;
+  textColor?: string;
+  buttonBorder?: string;
   propClass?: string;
   color?: string;
   navigation?: string;
@@ -30,6 +32,8 @@ type buttonProps = {
 
 const ButtonAnimation = ({
   text,
+  textColor,
+  buttonBorder,
   propClass,
   navigation,
   imagen,
@@ -91,7 +95,7 @@ const ButtonAnimation = ({
   }, [isActive]);
 
   return (
-    <button id='myButton' disabled={disabled ? true : false} onMouseEnter={() => { setIsActive(true) }} onMouseLeave={() => { setIsActive(false); setIsAction(false) }} className={`border-2 ${!isAction ? color : "bg-green-400"} ${isActive && "border-green-400"} ${propClass} ${innerText && "relative"} z-10 rounded-lg font-semibold text-white`}>
+    <button id='myButton' disabled={disabled ? true : false} onMouseEnter={() => { setIsActive(true) }} onMouseLeave={() => { setIsActive(false); setIsAction(false) }} className={`border-2 ${!isAction ? color : "bg-green-400"} ${isActive ? "border-green-400" : buttonBorder ? buttonBorder : 'border-white'} ${propClass} ${innerText && "relative"} z-10 rounded-lg font-semibold ${textColor ? textColor : 'text-white'}`}>
       <div className="relative h-full w-full flex items-center justify-center">
         {imagen != null ? <Image src={imagen.src} width={imagen.width} height={imagen.height} alt='dynamic image' className={`rounded-lg object-contain relative ${imagen.add && imagen.add} ${innerText && "opacity-85 brightness-75"}`} /> : text ? text : svg && <div className='bg-white' dangerouslySetInnerHTML={{ __html: svg }} />}
         {isActive && (
