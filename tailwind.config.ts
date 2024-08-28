@@ -82,7 +82,7 @@ const config = {
         flash: "flash 0.2s ease-in-out",
       },
       fontSize: {
-        "5xl": "3rem"
+        "5xl": "2rem"
       }
     },
   },
