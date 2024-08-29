@@ -11,7 +11,13 @@ const Categories = () => {
   const [isAllow, setIsAllow] = useState(false);
   const [ejecFunction, setEjecFunction] = useState("");
   const [scrollActual, setScrollActual] = useState(0);
-  const scrollY = document.documentElement.scrollHeight - window.innerHeight
+  const [scrollY, setScrollY] = useState(0)
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const maxScrollValue = document.documentElement.scrollHeight - window.innerHeight;
+      setScrollY(maxScrollValue);
+    }
+  }, []);
   const changeState = (functionToEjec: string) => {
     setIsAllow(true);
     setEjecFunction(functionToEjec);
