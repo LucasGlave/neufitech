@@ -79,6 +79,7 @@ export const mockActivities = [
     HABITACION: [
       { "QUIERO DESCANSAR": descansar },
       { "ENCIENDE LA LUZ": prenderLuz },
+      { "DESEO MIRAR UNA PELICULA": mirarPelicula },
       { "APAGA LA LUZ": apagarLuz },
     ],
     ENTRETENIMIENTO: [
