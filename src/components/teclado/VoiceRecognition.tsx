@@ -1,7 +1,7 @@
-"use client"
-import React, { useState, useEffect, useRef } from 'react';
-import Image from 'next/image';
-import trash from "../../../public/eliminar.svg"
+"use client";
+import React, { useState, useEffect, useRef } from "react";
+import Image from "next/image";
+import trash from "../../../public/eliminar.svg";
 
 declare global {
     interface Window {
@@ -45,25 +45,32 @@ declare global {
 }
 
 const VoiceRecognition: React.FC = () => {
-    const [finalTranscript, setFinalTranscript] = useState('');
-    const [interimTranscript, setInterimTranscript] = useState('');
+    const [finalTranscript, setFinalTranscript] = useState("");
+    const [interimTranscript, setInterimTranscript] = useState("");
     const recognitionRef = useRef<ISpeechRecognition | null>(null);
     useEffect(() => {
-        if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-            alert('API de reconocimiento de voz no soportada en este navegador.');
+        if (
+            !("webkitSpeechRecognition" in window) &&
+            !("SpeechRecognition" in window)
+        ) {
+            alert("API de reconocimiento de voz no soportada en este navegador.");
         } else {
-            recognitionRef.current = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognitionRef.current = new (window.SpeechRecognition ||
+                window.webkitSpeechRecognition)();
             const recognition = recognitionRef.current;
-            recognition.lang = 'es-ES';
+            recognition.lang = "es-ES";
             recognition.continuous = true;
             recognition.interimResults = true;
 
             recognition.onresult = (event: ISpeechRecognitionEvent) => {
-                let interimText = '';
+                let interimText = "";
 
                 for (let i = event.resultIndex; i < event.results.length; ++i) {
                     if (event.results[i].isFinal) {
-                        setFinalTranscript(prevTranscript => prevTranscript + event.results[i][0].transcript + '\n');
+                        setFinalTranscript(
+                            (prevTranscript) =>
+                                prevTranscript + event.results[i][0].transcript + "\n"
+                        );
                     } else {
                         interimText += event.results[i][0].transcript;
                     }
@@ -72,15 +79,15 @@ const VoiceRecognition: React.FC = () => {
             };
 
             recognition.onerror = (event: ISpeechRecognitionError) => {
-                console.error('Error de reconocimiento de voz:', event.error);
+                console.error("Error de reconocimiento de voz:", event.error);
             };
         }
     }, []);
 
     const startRecognition = () => {
         recognitionRef.current?.start();
-        setFinalTranscript('');
-        setInterimTranscript('');
+        setFinalTranscript("");
+        setInterimTranscript("");
     };
 
     const stopRecognition = () => {
@@ -88,19 +95,23 @@ const VoiceRecognition: React.FC = () => {
     };
 
     return (
-        <div className='w-full h-full bg-white flex justify-between items-center rounded-lg text-black font-semibold'>
-            <div className='flex flex-col'>
-                <button className='w-[150px] max-h-[70px] border-green-400 bg-green-200 border-4 rounded-t-lg' onClick={startRecognition}>
-                    Comenzar grabación
-                </button>
-                <button className='w-[150px] max-h-[70px] border-red-400 bg-red-200 border-4 rounded-b-lg' onClick={stopRecognition}>
-                    Detener grabación
-                </button>
+        <div className="w-full h-full bg-white flex justify-between items-center rounded-lg text-black font-semibold">
+            <button
+                className="w-[150px] max-h-[70px] border-green-400 bg-green-200 border-4 rounded-l-lg"
+                onClick={startRecognition}
+            >
+                Comenzar grabación
+            </button>
+            <div id="results" className="w-full px-4">
+                <h3 className="text-2xl">{finalTranscript}</h3>
+                <em style={{ color: "gray" }}>{interimTranscript}</em>
             </div>
-            <div id="results" className='w-full px-4'>
-                <h3 className='text-2xl'>{finalTranscript}</h3>
-                <em style={{ color: 'gray' }}>{interimTranscript}</em>
-            </div>
+            <button
+                className="w-[150px] max-h-[70px] border-red-400 bg-red-200 border-4 rounded-r-lg"
+                onClick={stopRecognition}
+            >
+                Detener grabación
+            </button>
         </div>
     );
 };
