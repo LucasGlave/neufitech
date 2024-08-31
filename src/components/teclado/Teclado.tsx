@@ -177,7 +177,7 @@ const Teclado = () => {
         </div>
       </div>
       <div className="bg-zinc-900 flex flex-col w-full h-full gap-8 pt-4 p-2">
-        <div className="flex flex-row justify-between items-center">
+        <div className="flex flex-row justify-between items-center px-4">
             <ButtonAnimation
               functionKeyboard={{ funct: "deleteAll", state: changeState }}
               speakText="Eliminar"
