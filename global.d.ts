@@ -1,5 +1,6 @@
 interface Window {
   electronAPI: {
+    sendLetter: (keyPress: string) => void;
     sendKey: (keyPress: string) => void;
     speak: (text: string) => void;
     sendKeyCombination: (keys: array) => void;

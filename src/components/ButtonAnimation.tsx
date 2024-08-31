@@ -73,7 +73,7 @@ const ButtonAnimation = ({
           }
         } else if (keyPress) {
           if (window.electronAPI) {
-            window.electronAPI.sendKey(keyPress);
+            window.electronAPI.sendLetter(keyPress);
           } else {
             console.log("No se puede usar keySender");
           }

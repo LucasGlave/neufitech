@@ -2,6 +2,21 @@ const { app, BrowserWindow, ipcMain } = require("electron");
 // const serve = require("electron-serve");
 const path = require("path");
 const keySender = require("node-key-sender");
+var accentsMap = {
+  á: ["dead_acute", "a"],
+  é: ["dead_acute", "e"],
+  í: ["dead_acute", "i"],
+  ó: ["dead_acute", "o"],
+  ú: ["dead_acute", "u"],
+  ñ: ["dead_tilde", "n"],
+  Á: ["dead_acute", "A"],
+  É: ["dead_acute", "E"],
+  Í: ["dead_acute", "I"],
+  Ó: ["dead_acute", "O"],
+  Ú: ["dead_acute", "U"],
+  Ñ: ["dead_tilde", "N"],
+};
+keySender.aggregateKeyboardLayout(accentsMap);
 
 // const appServe = app.isPackaged
 //   ? serve({
@@ -52,4 +67,23 @@ ipcMain.on("send-key-combination", (event, keys) => {
 
 ipcMain.on("send-key", (event, key) => {
   keySender.sendKey(key);
+});
+
+ipcMain.on("send-letter", (event, key) => {
+  if (accentsMap[key]) {
+    if (key === "ñ") {
+      console.log("entra");
+      keySender.sendCombination([
+        "alt",
+        "numpad0",
+        "numpad2",
+        "numpad0",
+        "numpad9",
+      ]);
+    } else {
+      keySender.sendCombination(accentsMap[key]);
+    }
+  } else {
+    keySender.sendLetter(key);
+  }
 });

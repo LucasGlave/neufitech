@@ -1,10 +1,11 @@
 import React from "react";
 import Webview from "./Webview";
 import ButtonAnimation from "./ButtonAnimation";
+import TecladoGlobal from "./teclado/TecladoGlobal";
 
 const Whatsapp = () => {
   return (
-    <div className="h-[100vh] flex flex-row">
+    <div className="h-[100vh] w-screen flex flex-row">
       <div className="h-[100vh] flex flex-col">
         <ButtonAnimation
           propClass="w-[110px] h-[110px] bg-black"
@@ -48,7 +49,10 @@ const Whatsapp = () => {
         />
       </div>
 
-      <Webview url="https://web.whatsapp.com" />
+      <div className="h-[100vh] w-[100%]">
+        <Webview url="https://web.whatsapp.com" />
+        <TecladoGlobal />
+      </div>
 
       <div className="h-[100vh] flex flex-col">
         <ButtonAnimation
