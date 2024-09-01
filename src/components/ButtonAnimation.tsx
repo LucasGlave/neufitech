@@ -75,9 +75,17 @@ const ButtonAnimation = ({
             console.log("No se puede usar keySender");
           }
         }
+        if (speakText) {
+          if (window.electronAPI) {
+            console.log("electron")
+            window.electronAPI.speak(speakText)
+          } else {
+            console.log("web")
+            const utterance = new SpeechSynthesisUtterance(speakText);
+            window.speechSynthesis.speak(utterance);
+          }
+        }
         functionKeyboard?.state(functionKeyboard.funct);
-        const utterance = new SpeechSynthesisUtterance(speakText);
-        window.speechSynthesis.speak(utterance);
         navigation != null && navigate.push(navigation);
         clearInterval(progressInterval);
         setProgress(0);
