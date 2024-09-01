@@ -38,6 +38,7 @@ const createWindow = () => {
 
 app.on("ready", () => {
   createWindow();
+
 });
 
 app.on("window-all-closed", () => {
@@ -52,4 +53,9 @@ ipcMain.on("send-key-combination", (event, keys) => {
 
 ipcMain.on("send-key", (event, key) => {
   keySender.sendKey(key);
+});
+
+ipcMain.on("speak", (event, text) => {
+  const utterance = new SpeechSynthesisUtterance(text);
+  window.speechSynthesis.speak(utterance);
 });
