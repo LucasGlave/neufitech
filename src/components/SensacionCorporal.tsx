@@ -1,23 +1,25 @@
 "use client";
 import Image from "next/image";
-import cuerpoHombreFrontal from "../../public/hombreFrente.svg";
-import cuerpoMujerFrontal from "../../public/mujerFrente.svg";
-import cuerpoHombreEspalda from "../../public/hombreEspalda.svg";
-import cuerpoMujerEspalda from "../../public/mujerEspalda.svg";
 import flechaAbajo from "../../public/flechaAbajo.png";
 import flechaArriba from "../../public/flechaArriba.png";
 import flechaDerecha from "../../public/flechaDerecha.png";
 import flechaIzquierda from "../../public/flechaIzquierda.png";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Sidebar from "@/components/Sidebar";
+import bodyMujer from '../../public/frente-body-mujer.svg'
+import { useEffect, useState } from "react";
 import ButtonAnimation from "./ButtonAnimation";
 
 const SensacionCorporal = () => {
     const [sex, setSex] = useState(false);
     const [position, setPosition] = useState(false);
     const [isOff, setIsOff] = useState(false);
-    const changeState = () => {
+    const [imageBody, setImageBody] = useState(bodyMujer);
+
+    const changeState = (funcToEject: string) => {
+        if (funcToEject != 'changeIsOff') {
+            const newImage = require(`../../public/${funcToEject}.svg`);
+            setImageBody(newImage.default);
+            return
+        }
         setIsOff(!isOff)
     };
     const functionState = (wich: string) => {
@@ -42,31 +44,25 @@ const SensacionCorporal = () => {
                 </div>
             </div>
             <div className="relative h-full w-[40%] bg-white rounded-lg flex justify-center items-center">
-                {position ? (
-                    <Image
-                        src={position && sex ? cuerpoHombreEspalda : cuerpoMujerEspalda}
-                        alt="cuerpoHumanoFrontal"
-                        className="w-full h-full object-contain"
-                    />
-                ) : (
-                    <Image
-                        src={sex ? cuerpoHombreFrontal : cuerpoMujerFrontal}
-                        alt="cuerpoHumanoEspalda"
-                        className="w-full h-full object-contain"
-                    />
-                )}
+                <Image
+                    src={imageBody}
+                    width={300}
+                    height={300}
+                    alt="cuerpoHumanoFrontal"
+                    className="w-full h-full object-contain"
+                />
                 <ButtonAnimation
                     disabled={isOff ? true : false} speakText={`${sex ? "Hombre" : "Mujer"}`} state={() => functionState("sex")} text={`${sex ? "HOMBRE" : "MUJER"}`} color="bg-white" propClass="absolute w-32 h-32 top-0 left-0" buttonBorder="border-zinc-900" textColor="text-zinc-900" />
                 <ButtonAnimation
-                    disabled={isOff ? true : false} speakText="Cabeza" text="CABEZA" color="bg-white" propClass="absolute w-32 h-32 top-0 right-0" buttonBorder="border-zinc-900" textColor="text-zinc-900" />
+                    disabled={isOff ? true : false} speakText="Cabeza" functionKeyboard={{ funct: `${sex ? position ? 'frente-cabeza-hombre' : 'atras-cabeza-hombre' : position ? 'frente-cabeza-mujer' : 'atras-cabeza-mujer'}`, state: changeState }} text="CABEZA" color="bg-white" propClass="absolute w-32 h-32 top-0 right-0" buttonBorder="border-zinc-900" textColor="text-zinc-900" />
                 <ButtonAnimation
-                    disabled={isOff ? true : false} speakText="Vientre" text="VIENTRE" color="bg-white" propClass="absolute w-32 h-32 left-0" buttonBorder="border-zinc-900" textColor="text-zinc-900" />
+                    disabled={isOff ? true : false} speakText="Vientre" functionKeyboard={{ funct: `${sex ? position ? 'frente-vientre-hombre' : 'atras-vientre-hombre' : position ? 'frente-vientre-mujer' : 'atras-vientre-mujer'}`, state: changeState }} text="VIENTRE" color="bg-white" propClass="absolute w-32 h-32 left-0" buttonBorder="border-zinc-900" textColor="text-zinc-900" />
                 <ButtonAnimation
-                    disabled={isOff ? true : false} speakText="Mano" text="MANO" color="bg-white" propClass="absolute w-32 h-32 right-0" buttonBorder="border-zinc-900" textColor="text-zinc-900" />
+                    disabled={isOff ? true : false} speakText="Mano" functionKeyboard={{ funct: `${sex ? position ? 'frente-mano-hombre' : 'atras-mano-hombre' : position ? 'frente-mano-mujer' : 'atras-mano-mujer'}`, state: changeState }} text="MANO" color="bg-white" propClass="absolute w-32 h-32 right-0" buttonBorder="border-zinc-900" textColor="text-zinc-900" />
                 <ButtonAnimation
-                    disabled={isOff ? true : false} speakText="Pie" text="PIE" color="bg-white" propClass="absolute w-32 h-32 bottom-0 left-0" buttonBorder="border-zinc-900" textColor="text-zinc-900" />
+                    disabled={isOff ? true : false} speakText="Pie" functionKeyboard={{ funct: `${sex ? position ? 'frente-pie-hombre' : 'planta-pie-hombre' : position ? 'frente-pie-mujer' : 'planta-pie-mujer'}`, state: changeState }} text="PIE" color="bg-white" propClass="absolute w-32 h-32 bottom-0 left-0" buttonBorder="border-zinc-900" textColor="text-zinc-900" />
                 <ButtonAnimation
-                    disabled={isOff ? true : false} speakText="Volver" text="VOLVER" color="bg-white" propClass="absolute w-32 h-32 bottom-0 right-0" buttonBorder="border-zinc-900" textColor="text-zinc-900" />
+                    disabled={isOff ? true : false} speakText="Volver" functionKeyboard={{ funct: `${sex ? position ? 'frente-body-hombre' : 'espalda-body-hombre' : position ? 'frente-body-mujer' : 'atras-body-mujer'}`, state: changeState }} text="VOLVER" color="bg-white" propClass="absolute w-32 h-32 bottom-0 right-0" buttonBorder="border-zinc-900" textColor="text-zinc-900" />
             </div>
             <div className="flex flex-col justify-between gap-2 items-center w-[40%] bg-zinc-900">
                 <div className="flex flex-row gap-2">
