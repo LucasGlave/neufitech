@@ -56,6 +56,5 @@ ipcMain.on("send-key", (event, key) => {
 });
 
 ipcMain.on("speak", (event, text) => {
-  const utterance = new SpeechSynthesisUtterance(text);
-  window.speechSynthesis.speak(utterance);
+  event.sender.send("perform-tts", text);
 });

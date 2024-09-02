@@ -13,5 +13,9 @@ contextBridge.exposeInMainWorld("electronAPI", {
   speak: (text) => {
     ipcRenderer.send("speak", text);
   },
+  onPerformTTS: (callback) => ipcRenderer.on("perform-tts", (event, text) => {
+    const utterance = new SpeechSynthesisUtterance(text);
+    window.speechSynthesis.speak(utterance);
+  })
 });
 
