@@ -1,6 +1,11 @@
 const whatsappRoutes = [{
     "Perfil": {
-        keyCombination: ["control", "alt", "comma"]
+        keyCombination: ["control", "alt", "comma"],
+        buttons: {
+            "Volver": {
+                keyPress:"escape"
+            }
+        }
     }
 },
 {
@@ -34,6 +39,9 @@ const whatsappRoutes = [{
             },
             "Seleccionar": {
                 keyPress: "enter"
+            },
+            "Volver": {
+                keyPress:"escape"
             }
         }
     }
@@ -47,6 +55,9 @@ const whatsappRoutes = [{
             },
             "Fijar-chat": {
                 keyCombination: ["control", "alt", "shift", "p"]
+            },
+            "Volver": {
+                keyPress:"escape"
             }
         }
     }
