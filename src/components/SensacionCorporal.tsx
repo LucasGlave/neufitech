@@ -9,8 +9,6 @@ import flechaArriba from "../../public/flechaArriba.png";
 import flechaDerecha from "../../public/flechaDerecha.png";
 import flechaIzquierda from "../../public/flechaIzquierda.png";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Sidebar from "@/components/Sidebar";
 import ButtonAnimation from "./ButtonAnimation";
 
 const SensacionCorporal = () => {
