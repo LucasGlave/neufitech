@@ -17,9 +17,9 @@ const Whatsapp = () => {
   const [activeButtons, setActiveButtons] = useState([
     "Chat-anterior",
     "Chat-siguiente",
-    "Buscar-chat",
+    // "Buscar-chat",
     "Nuevo-chat",
-    "Seleccionar",
+    // "Seleccionar",
     "Perfil",
   ]);
   const [activeButtonConfigs, setActiveButtonConfigs] = useState<Record<string, RouteConfig>>({});
@@ -29,14 +29,13 @@ const Whatsapp = () => {
   };
 
   const handleActive = (func: string) => {
-    // Verificamos si la función es "Volver"
     if (func === "Volver") {
       setActiveButtons([
         "Chat-anterior",
         "Chat-siguiente",
-        "Buscar-chat",
+        // "Buscar-chat",
         "Nuevo-chat",
-        "Seleccionar",
+        // "Seleccionar",
         "Perfil",
       ]);
       setActiveButtonConfigs({});
@@ -50,14 +49,14 @@ const Whatsapp = () => {
       if (config && config.buttons) {
         const newButtons = Object.keys(config.buttons);
         setActiveButtons(newButtons);
-        setActiveButtonConfigs(config.buttons); // Guardamos la configuración de los botones activos
+        setActiveButtonConfigs(config.buttons);
       } else {
         setActiveButtons([
           "Chat-anterior",
           "Chat-siguiente",
-          "Buscar-chat",
+          // "Buscar-chat",
           "Nuevo-chat",
-          "Seleccionar",
+          // "Seleccionar",
           "Perfil",
         ]);
         setActiveButtonConfigs({});
@@ -73,24 +72,38 @@ const Whatsapp = () => {
 
   return (
     <div className="h-[100vh] flex flex-row bg-white">
-      <div className="w-[40%] p-2 gap-2 flex flex-col items-center justify-evenly">
-        {activeButtons.map((buttonName, index) => {
-          const buttonConfig = activeButtonConfigs[buttonName] || {};
-          return (
-            <ButtonAnimation
-              functionKeyboard={{ funct: buttonName, state: changeState }}
-              keyCombination={buttonConfig.keyCombination || []} // Pasa keyCombination si existe
-              keyPress={buttonConfig.keyPress || ""} // Pasa keyPress si existe
-              key={index}
-              textColor="black"
-              text={`${buttonName.replace("-", " ")}`}
-              buttonBorder="border-green-700"
-              propClass="w-full h-[80px]"
-            />
-          );
-        })}
+      <div
+        className="w-full flex items-center justify-center"
+      >
+        <div
+          className="p-2 gap-2 grid"
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(45%, 1fr))",
+            gridAutoRows: "auto",
+            gap: "8px",
+            maxWidth: "25%",
+          }}
+        >
+          {activeButtons.map((buttonName, index) => {
+            const buttonConfig = activeButtonConfigs[buttonName] || {};
+            const route = whatsappRoutes.find((route) => Object.keys(route)[0] === buttonName) as WhatsappRoute | undefined;
+            return (
+              <ButtonAnimation
+                functionKeyboard={{ funct: buttonName, state: changeState }}
+                keyCombination={!buttonConfig.keyCombination ? route && route[buttonName].keyCombination : buttonConfig.keyCombination}
+                keyPress={!buttonConfig.keyPress ? route && route[buttonName].keyPress : buttonConfig.keyPress}
+                key={index}
+                textColor="black"
+                text={`${buttonName.replace("-", " ").replace("-", " ")}`}
+                buttonBorder="border-green-700"
+                propClass="w-full h-[80px]"
+              />
+            );
+          })}
+        </div>
+        <Webview url="https://web.whatsapp.com" />
       </div>
-      <Webview url="https://web.whatsapp.com" />
     </div>
   );
 };

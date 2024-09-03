@@ -64,6 +64,7 @@ const ButtonAnimation = ({
         state && state();
         if (keyCombination) {
           if (window.electronAPI) {
+            console.log(keyCombination)
             window.electronAPI.sendKeyCombination(keyCombination);
           } else {
             console.log("No se puede usar keySender");
@@ -77,10 +78,8 @@ const ButtonAnimation = ({
         }
         if (speakText) {
           if (window.electronAPI) {
-            console.log("electron")
             window.electronAPI.speak(speakText)
           } else {
-            console.log("web")
             const utterance = new SpeechSynthesisUtterance(speakText);
             window.speechSynthesis.speak(utterance);
           }

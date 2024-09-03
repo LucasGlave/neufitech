@@ -12,7 +12,7 @@ import logoComunicacion from "../../public/icon-comunicacion.png";
 import logoEscritura from "../../public/icon-escritura.png";
 import logoEscrituraIA from "../../public/icon-escritura-ia.png";
 import ButtonAnimation from "./ButtonAnimation";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 // import Swal from "sweetalert2";
 // import { useEffect, useRef } from "react"
 
