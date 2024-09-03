@@ -12,31 +12,32 @@ import logoComunicacion from "../../public/icon-comunicacion.png";
 import logoEscritura from "../../public/icon-escritura.png";
 import logoEscrituraIA from "../../public/icon-escritura-ia.png";
 import ButtonAnimation from "./ButtonAnimation";
-import Swal from "sweetalert2";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
+// import Swal from "sweetalert2";
+// import { useEffect, useRef } from "react"
 
 const HomePage = () => {
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const valorBooleano = JSON.parse(
-        sessionStorage.getItem("miBooleano") || "false"
-      );
+  // useEffect(() => {
+  //   if (typeof window !== "undefined") {
+  //     const valorBooleano = JSON.parse(
+  //       sessionStorage.getItem("miBooleano") || "false"
+  //     );
 
-      if (!valorBooleano) {
-        Swal.fire({
-          position: "bottom-end",
-          title: "Recuerde clickear para activar el sonido",
-          confirmButtonText: "OK",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            sessionStorage.setItem("miBooleano", JSON.stringify(true));
-          }
-        });
-      }
-    }
-  }, []);
+  //     if (!valorBooleano) {
+  //       Swal.fire({
+  //         position: "bottom-end",
+  //         title: "Recuerde clickear para activar el sonido",
+  //         confirmButtonText: "OK",
+  //       }).then((result) => {
+  //         if (result.isConfirmed) {
+  //           sessionStorage.setItem("miBooleano", JSON.stringify(true));
+  //         }
+  //       });
+  //     }
+  //   }
+  // }, []);
   return (
-    <div className="flex justify-between w-full h-screen bg-zinc-900">
+    <div id="home" className="flex justify-between w-full h-screen bg-zinc-900">
       <div className="flex justify-start w-full px-20 py-10">
         <div className="flex flex-col justify-around gap-4 w-full">
           <div className="flex h-[30%] justify-around relative gap-4 w-full">

@@ -22,6 +22,7 @@ const config = {
         border: "hsl(var(--border))",
         keybackground: "#011820",
         keyboardHeader: "#576280",
+        charge: "#743ce6",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
@@ -82,7 +83,7 @@ const config = {
         flash: "flash 0.2s ease-in-out",
       },
       fontSize: {
-        "5xl": "3rem"
+        "5xl": "2rem"
       }
     },
   },

@@ -9,5 +9,10 @@ contextBridge.exposeInMainWorld("electronAPI", {
   },
   sendKeyCombination: (keys) => ipcRenderer.send("send-key-combination", keys),
   sendKey: (key) => ipcRenderer.send("send-key", key),
+
   sendLetter: (key) => ipcRenderer.send("send-letter", key),
+
+  speak: (text) => {
+    ipcRenderer.send("speak", text);
+  },
 });
