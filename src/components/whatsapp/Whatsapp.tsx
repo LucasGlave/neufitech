@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Webview from "../Webview";
 import ButtonAnimation from "../ButtonAnimation";
 import whatsappRoutes from "./routeWhatsapp";
+import TecladoGlobal from "../teclado/TecladoGlobal";
 
 type RouteConfig = {
   keyCombination?: string[];
@@ -102,7 +103,10 @@ const Whatsapp = () => {
             );
           })}
         </div>
-        <Webview url="https://web.whatsapp.com" />
+        <div className="flex flex-col w-full h-full">
+          <Webview url="https://web.whatsapp.com" />
+          <TecladoGlobal />
+        </div>
       </div>
     </div>
   );
