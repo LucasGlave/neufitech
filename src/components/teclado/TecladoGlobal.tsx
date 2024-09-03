@@ -57,7 +57,6 @@ const TecladoGlobal = () => {
       setOutput("");
     } else {
       let lastWord = output.split(" ").pop() as string;
-      console.log(lastWord);
       for (let i = 0; i <= lastWord?.length; i++) {
         window.electronAPI && window.electronAPI.sendLetter("back_space");
       }
@@ -109,14 +108,12 @@ const TecladoGlobal = () => {
     setEjecFunction("");
   }, [isAllow === true]);
 
-  useEffect(() => {
-    console.log(output);
-  }, [output]);
-
   return (
     <div
       className="flex flex-col gap-8 items-center bg-keyboardHeader shadow-md h-[40%]"
       ref={containerRef}
+      id="teclado-global"
+      tabIndex={-1}
     >
       <div className="bg-zinc-900 flex flex-col w-full h-full gap-8 pt-4 p-2">
         <div className="flex flex-row justify-between items-center">

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
+import copy from "copy-text-to-clipboard";
 
 type buttonProps = {
   text?: string;
@@ -62,18 +63,42 @@ const ButtonAnimation = ({
       progressInterval = setInterval(() => {
         setProgress((prev) => (prev < 100 ? prev + 1 : 100));
       }, 10);
-      timer = setTimeout(() => {
+      timer = setTimeout(async () => {
         setIsAction(true);
         state && state();
         if (keyCombination) {
           if (window.electronAPI) {
+            document.getElementById("whatsapp-webview")?.focus();
             window.electronAPI.sendKeyCombination(keyCombination);
           } else {
             console.log("No se puede usar keySender");
           }
         } else if (keyPress) {
           if (window.electronAPI) {
-            window.electronAPI.sendLetter(keyPress);
+            if (
+              keyPress === "ñ" ||
+              keyPress === "Ñ" ||
+              keyPress === "@" ||
+              keyPress === "%" ||
+              keyPress === "/" ||
+              keyPress === "=" ||
+              keyPress === ";" ||
+              keyPress === "?"
+            ) {
+              try {
+                window.focus();
+                document.getElementById("teclado-global")?.focus();
+                await new Promise((resolve) => setTimeout(resolve, 50));
+                await navigator.clipboard.writeText(keyPress);
+                document.getElementById("whatsapp-webview")?.focus();
+                window.electronAPI.sendKeyCombination(["control", "v"]);
+              } catch (err) {
+                console.error("Failed to copy: ", err);
+              }
+            } else {
+              document.getElementById("whatsapp-webview")?.focus();
+              window.electronAPI.sendLetter(keyPress);
+            }
           } else {
             console.log("No se puede usar keySender");
           }
