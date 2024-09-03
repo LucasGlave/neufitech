@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
-import copy from "copy-text-to-clipboard";
 
 type buttonProps = {
   text?: string;
@@ -102,10 +101,10 @@ const ButtonAnimation = ({
         }
         if (speakText) {
           if (window.electronAPI) {
-            console.log("electron")
-            window.electronAPI.speak(speakText)
+            console.log("electron");
+            window.electronAPI.speak(speakText);
           } else {
-            console.log("web")
+            console.log("web");
             const utterance = new SpeechSynthesisUtterance(speakText);
             window.speechSynthesis.speak(utterance);
           }
@@ -128,9 +127,49 @@ const ButtonAnimation = ({
   }, [isActive]);
 
   return (
-    <button id='myButton' disabled={disabled ? true : false} onMouseEnter={() => { setIsActive(true) }} onMouseLeave={() => { setIsActive(false); setIsAction(false) }} className={`border-2 ${!isAction ? color : "bg-charge"} ${isActive ? "border-charge" && 'scale-105' : buttonBorder ? buttonBorder : 'border-white'} ${propClass} ${innerText && "relative"} z-10 rounded-lg transition-all animate-in animate-out font-semibold ${textColor ? textColor : 'text-white'}`}>
+    <button
+      id="myButton"
+      disabled={disabled ? true : false}
+      onMouseEnter={() => {
+        setIsActive(true);
+      }}
+      onMouseLeave={() => {
+        setIsActive(false);
+        setIsAction(false);
+      }}
+      className={`border-2 ${!isAction ? color : "bg-charge"} ${
+        isActive
+          ? "border-charge" && "scale-105"
+          : buttonBorder
+          ? buttonBorder
+          : "border-white"
+      } ${propClass} ${
+        innerText && "relative"
+      } z-10 rounded-lg transition-all animate-in animate-out font-semibold ${
+        textColor ? textColor : "text-white"
+      }`}
+    >
       <div className="relative h-full w-full flex items-center justify-center">
-        {imagen != null ? <Image src={imagen.src} width={imagen.width} height={imagen.height} alt='dynamic image' className={`rounded-lg object-contain relative ${imagen.add && imagen.add} ${innerText && "opacity-85 brightness-75"}`} /> : text ? text : svg && <div className='bg-white' dangerouslySetInnerHTML={{ __html: svg }} />}
+        {imagen != null ? (
+          <Image
+            src={imagen.src}
+            width={imagen.width}
+            height={imagen.height}
+            alt="dynamic image"
+            className={`rounded-lg object-contain relative ${
+              imagen.add && imagen.add
+            } ${innerText && "opacity-85 brightness-75"}`}
+          />
+        ) : text ? (
+          text
+        ) : (
+          svg && (
+            <div
+              className="bg-white"
+              dangerouslySetInnerHTML={{ __html: svg }}
+            />
+          )
+        )}
         {isActive && (
           <div
             className="absolute top-0 left-0 h-2 bg-charge"
@@ -147,8 +186,17 @@ const ButtonAnimation = ({
             style={{ width: `${progress}%`, transition: "width 0.1s linear" }}
           ></div>
         )}
-        {svg && <div className='flex items-center justify-center w-[50px] h-[50px] z-[-1]' dangerouslySetInnerHTML={{ __html: svg }} />}
-        {innerText && <h3 className='absolute font-bold text-3xl flex text-center items-center justify-center'>{innerText}</h3>}
+        {svg && (
+          <div
+            className="flex items-center justify-center w-[50px] h-[50px] z-[-1]"
+            dangerouslySetInnerHTML={{ __html: svg }}
+          />
+        )}
+        {innerText && (
+          <h3 className="absolute font-bold text-3xl flex text-center items-center justify-center">
+            {innerText}
+          </h3>
+        )}
       </div>
     </button>
   );
