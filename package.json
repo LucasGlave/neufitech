@@ -21,6 +21,7 @@
     "next": "14.2.5",
     "offline-tts": "^1.1.4",
     "react": "^18",
+    "react-animated-cursor": "^2.11.2",
     "react-dom": "^18",
     "say": "^0.16.0",
     "simpletts": "^2.6.0",
