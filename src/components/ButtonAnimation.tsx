@@ -59,25 +59,55 @@ const ButtonAnimation = ({
       progressInterval = setInterval(() => {
         setProgress((prev) => (prev < 100 ? prev + 1 : 100));
       }, 10);
-      timer = setTimeout(() => {
+      timer = setTimeout(async () => {
         setIsAction(true);
         state && state();
         if (keyCombination) {
           if (window.electronAPI) {
+            document.getElementById("whatsapp-webview")?.focus();
             window.electronAPI.sendKeyCombination(keyCombination);
           } else {
             console.log("No se puede usar keySender");
           }
         } else if (keyPress) {
           if (window.electronAPI) {
-            window.electronAPI.sendKey(keyPress);
+            if (
+              keyPress === "ñ" ||
+              keyPress === "Ñ" ||
+              keyPress === "@" ||
+              keyPress === "%" ||
+              keyPress === "/" ||
+              keyPress === "=" ||
+              keyPress === ";" ||
+              keyPress === "?"
+            ) {
+              try {
+                window.focus();
+                document.getElementById("teclado-global")?.focus();
+                await new Promise((resolve) => setTimeout(resolve, 50));
+                await navigator.clipboard.writeText(keyPress);
+                document.getElementById("whatsapp-webview")?.focus();
+                window.electronAPI.sendKeyCombination(["control", "v"]);
+              } catch (err) {
+                console.error("Failed to copy: ", err);
+              }
+            } else {
+              document.getElementById("whatsapp-webview")?.focus();
+              window.electronAPI.sendLetter(keyPress);
+            }
           } else {
             console.log("No se puede usar keySender");
           }
         }
+        if (speakText) {
+          if (window.electronAPI) {
+            window.electronAPI.speak(speakText)
+          } else {
+            const utterance = new SpeechSynthesisUtterance(speakText);
+            window.speechSynthesis.speak(utterance);
+          }
+        }
         functionKeyboard?.state(functionKeyboard.funct);
-        const utterance = new SpeechSynthesisUtterance(speakText);
-        window.speechSynthesis.speak(utterance);
         navigation != null && navigate.push(navigation);
         clearInterval(progressInterval);
         setProgress(0);
@@ -95,9 +125,45 @@ const ButtonAnimation = ({
   }, [isActive]);
 
   return (
-    <button id='myButton' disabled={disabled ? true : false} onMouseEnter={() => { setIsActive(true) }} onMouseLeave={() => { setIsActive(false); setIsAction(false) }} className={`border-2 ${!isAction ? color : "bg-charge"} ${isActive ? "border-charge" : buttonBorder ? buttonBorder : 'border-white'} ${propClass} ${innerText && "relative"} z-10 rounded-lg font-semibold ${textColor ? textColor : 'text-white'}`}>
+    <button
+      id="myButton"
+      disabled={disabled ? true : false}
+      onMouseEnter={() => {
+        setIsActive(true);
+      }}
+      onMouseLeave={() => {
+        setIsActive(false);
+        setIsAction(false);
+      }}
+      className={`border-2 ${!isAction ? color : "bg-charge"} ${isActive
+          ? "border-charge" && "scale-105"
+          : buttonBorder
+            ? buttonBorder
+            : "border-white"
+        } ${propClass} ${innerText && "relative"
+        } z-10 rounded-lg transition-all animate-in animate-out font-semibold ${textColor ? textColor : "text-white"
+        }`}
+    >
       <div className="relative h-full w-full flex items-center justify-center">
-        {imagen != null ? <Image src={imagen.src} width={imagen.width} height={imagen.height} alt='dynamic image' className={`rounded-lg object-contain relative ${imagen.add && imagen.add} ${innerText && "opacity-85 brightness-75"}`} /> : text ? text : svg && <div className='bg-white' dangerouslySetInnerHTML={{ __html: svg }} />}
+        {imagen != null ? (
+          <Image
+            src={imagen.src}
+            width={imagen.width}
+            height={imagen.height}
+            alt="dynamic image"
+            className={`rounded-lg object-contain relative ${imagen.add && imagen.add
+              } ${innerText && "opacity-85 brightness-75"}`}
+          />
+        ) : text ? (
+          text
+        ) : (
+          svg && (
+            <div
+              className="bg-white"
+              dangerouslySetInnerHTML={{ __html: svg }}
+            />
+          )
+        )}
         {isActive && (
           <div
             className="absolute top-0 left-0 h-2 bg-charge"
@@ -114,8 +180,17 @@ const ButtonAnimation = ({
             style={{ width: `${progress}%`, transition: "width 0.1s linear" }}
           ></div>
         )}
-        {svg && <div className='flex items-center justify-center w-[50px] h-[50px] z-[-1]' dangerouslySetInnerHTML={{ __html: svg }} />}
-        {innerText && <h3 className='absolute font-bold text-3xl flex text-center items-center justify-center'>{innerText}</h3>}
+        {svg && (
+          <div
+            className="flex items-center justify-center w-[50px] h-[50px] z-[-1]"
+            dangerouslySetInnerHTML={{ __html: svg }}
+          />
+        )}
+        {innerText && (
+          <h3 className="absolute font-bold text-3xl flex text-center items-center justify-center">
+            {innerText}
+          </h3>
+        )}
       </div>
     </button>
   );

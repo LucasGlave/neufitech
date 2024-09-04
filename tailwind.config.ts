@@ -22,7 +22,7 @@ const config = {
         border: "hsl(var(--border))",
         keybackground: "#011820",
         keyboardHeader: "#576280",
-        charge: "#743ce6",
+        charge: "#4ade80",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",

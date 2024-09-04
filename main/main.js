@@ -3,6 +3,20 @@ const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 const keySender = require("node-key-sender");
 
+var accentsMap = {
+  á: ["dead_acute", "a"],
+  é: ["dead_acute", "e"],
+  í: ["dead_acute", "i"],
+  ó: ["dead_acute", "o"],
+  ú: ["dead_acute", "u"],
+  Á: ["dead_acute", "A"],
+  É: ["dead_acute", "E"],
+  Í: ["dead_acute", "I"],
+  Ó: ["dead_acute", "O"],
+  Ú: ["dead_acute", "U"],
+};
+keySender.aggregateKeyboardLayout(accentsMap);
+
 // const appServe = app.isPackaged
 //   ? serve({
 //       directory: join(__dirname, "../out"),
@@ -38,6 +52,7 @@ const createWindow = () => {
 
 app.on("ready", () => {
   createWindow();
+
 });
 
 app.on("window-all-closed", () => {
@@ -53,3 +68,17 @@ ipcMain.on("send-key-combination", (event, keys) => {
 ipcMain.on("send-key", (event, key) => {
   keySender.sendKey(key);
 });
+
+
+ipcMain.on("send-letter", (event, key) => {
+  if (accentsMap[key]) {
+    keySender.sendCombination(accentsMap[key]);
+  } else {
+    keySender.sendLetter(key);
+  }
+});
+
+ipcMain.on("speak", (event, text) => {
+  event.sender.send("perform-tts", text);
+});
+
