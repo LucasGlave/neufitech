@@ -3,16 +3,17 @@ import flechaArriba from "../../../public/flechaArriba.png";
 import flechaAbajo from "../../../public/flechaAbajo.png";
 import eliminar from "../../../public/eliminar.svg";
 import ButtonAnimation from "../ButtonAnimation";
-import { useParams } from "next/navigation";
+// import { useParams } from "next/navigation";
 import { mockActivities } from "./mockArray";
 import { useEffect, useState } from "react";
 
-const Activities = () => {
-  const params = useParams();
-  const categoria = params.categoria
-    .toString()
-    .toUpperCase()
-    .replace("%C3%B1", "Ñ");
+type PropsActivity = {
+  categoria: string
+}
+
+const Activities = ({ categoria }: PropsActivity) => {
+  // const params = useParams();
+  categoria = categoria.toUpperCase().replace("%C3%B1", "Ñ");
 
   const [isAllow, setIsAllow] = useState(false);
   const [ejecFunction, setEjecFunction] = useState("");

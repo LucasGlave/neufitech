@@ -8,17 +8,16 @@
   "description": "Electron + NextJS",
   "scripts": {
     "dev": "concurrently -n \"NEXT,ELECTRON\" -c \"yellow,blue\" --kill-others \"next dev\" \"electron .\"",
-    "build": "next build && electron-builder",
+    "build": "set NODE_ENV=production & next build && electron-builder",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
-    "@radix-ui/react-scroll-area": "^1.1.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "electron-serve": "^2.0.0",
     "lucide-react": "^0.407.0",
-    "next": "14.2.5",
+    "next": "^14.2.5",
     "offline-tts": "^1.1.4",
     "react": "^18",
     "react-animated-cursor": "^2.11.2",
