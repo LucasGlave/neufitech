@@ -3,7 +3,6 @@ import flechaArriba from "../../../public/flechaArriba.png";
 import flechaAbajo from "../../../public/flechaAbajo.png";
 import eliminar from "../../../public/eliminar.svg";
 import ButtonAnimation from "../ButtonAnimation";
-import { useParams } from "next/navigation";
 import { mockCategories } from "./mockArray";
 import { useEffect, useState } from "react";
 

@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import ButtonAnimation from "../ButtonAnimation";
-import trash from "../../../public/eliminar.svg";
 import VoiceRecognition from "./VoiceRecognition";
 
 const Teclado = () => {
