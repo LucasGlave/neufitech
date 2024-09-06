@@ -8,7 +8,8 @@
   "description": "Electron + NextJS",
   "scripts": {
     "dev": "concurrently -n \"NEXT,ELECTRON\" -c \"yellow,blue\" --kill-others \"next dev\" \"electron .\"",
-    "build": "set NODE_ENV=production & next build && electron-builder --win portable",
+    "deploy": "set NODE_ENV=production & next build && electron-builder --win portable",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
