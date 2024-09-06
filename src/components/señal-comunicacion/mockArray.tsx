@@ -51,7 +51,7 @@ import ayudaComunicacion from "../../../public/ayudaComunicacion.jpg";
 
 export const mockCategories = [
   { COCINA: cocina },
-  { BAÑO: bano },
+  { BANO: bano },
   { HABITACION: habitacion },
   { EMOCIONES: emociones },
   { ENTRETENIMIENTO: entretenimiento },
@@ -70,7 +70,7 @@ export const mockActivities = [
       { "QUIERO CENAR": cenar },
       { "NECESITO AYUDA PARA COMER": ayudaComer },
     ],
-    BAÑO: [
+    BANO: [
       { "QUIERO LAVAR MIS MANOS": lavarManos },
       { "QUIERO CEPILLAR MIS DIENTES": cepillarDientes },
       { "QUIERO BAÑARME": ducharse },

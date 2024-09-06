@@ -1,5 +1,4 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
-// const serve = require("electron-serve");
 const path = require("path");
 const keySender = require("node-key-sender");
 
@@ -17,42 +16,47 @@ var accentsMap = {
 };
 keySender.aggregateKeyboardLayout(accentsMap);
 
-// const appServe = app.isPackaged
-//   ? serve({
-//       directory: join(__dirname, "../out"),
-//     })
-//   : null;
+let appServe = null;
 
-const createWindow = () => {
+const loadAppServe = async () => {
+  if (app.isPackaged) {
+    const { default: serve } = await import('electron-serve');
+    appServe = serve({
+      directory: path.join(__dirname, "resources/app/dist"),
+    });
+  }
+};
+
+const createWindow = async () => {
   const win = new BrowserWindow({
     width: 1920,
     height: 1080,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
-      nodeIntegration: true, // Importante: Desactiva nodeIntegration para seguridad
+      nodeIntegration: true,
       contextIsolation: true,
       webviewTag: true,
     },
   });
+
   win.maximize();
   win.removeMenu();
-  // win.fullScreen = true
+
   if (app.isPackaged) {
-    appServe(win).then(() => {
-      win.loadURL("app://-");
-    });
+    await appServe(win);
+    win.loadURL("app://-");
   } else {
     win.loadURL("http://localhost:3000");
     win.webContents.openDevTools();
-    win.webContents.on("did-fail-load", (e, code, desc) => {
+    win.webContents.on("did-fail-load", () => {
       win.webContents.reloadIgnoringCache();
     });
   }
 };
 
-app.on("ready", () => {
+app.whenReady().then(async () => {
+  await loadAppServe();  // Asegúrate de cargar appServe antes de crear la ventana
   createWindow();
-
 });
 
 app.on("window-all-closed", () => {
@@ -69,7 +73,6 @@ ipcMain.on("send-key", (event, key) => {
   keySender.sendKey(key);
 });
 
-
 ipcMain.on("send-letter", (event, key) => {
   if (accentsMap[key]) {
     keySender.sendCombination(accentsMap[key]);
@@ -81,4 +84,3 @@ ipcMain.on("send-letter", (event, key) => {
 ipcMain.on("speak", (event, text) => {
   event.sender.send("perform-tts", text);
 });
-

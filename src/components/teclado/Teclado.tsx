@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import ButtonAnimation from "../ButtonAnimation";
-import trash from "../../../public/eliminar.svg";
 
 const Teclado = () => {
   const KeyboardLayout = [
