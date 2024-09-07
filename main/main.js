@@ -82,5 +82,6 @@ ipcMain.on("send-letter", (event, key) => {
 });
 
 ipcMain.on("speak", (event, text) => {
+  console.log(text, "MAIN")
   event.sender.send("perform-tts", text);
 });
