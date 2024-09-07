@@ -38,6 +38,7 @@ const Teclado = () => {
   const [isAllow, setIsAllow] = useState(false);
   const [ejecFunction, setEjecFunction] = useState("");
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const [isOff, setIsOff] = useState(false);
 
   const currentSymbolsLayout =
@@ -75,6 +76,10 @@ const Teclado = () => {
   };
 
   useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.focus();
+      textareaRef.current.setSelectionRange(output.length, output.length);
+    }
     isTildeActive && setIsTildeActive(false)
   }, [output])
 
@@ -174,6 +179,8 @@ const Teclado = () => {
           />
         </div>
         <textarea
+          id="textarea"
+          ref={textareaRef}
           value={output}
           onChange={(e) => setOutput(e.target.value)}
           className="w-3/4 h-[120px] p-2 border rounded resize-none"

@@ -81,7 +81,7 @@ const Activities = ({ categoria }: PropsActivity) => {
                 propClass="w-[200px] h-[80px]"
               />
               <h3 className="font-semibold text-3xl text-center">
-                {categoria}
+                {categoria === 'BANO' ? 'BAÑO' : categoria}
               </h3>
               <ButtonAnimation
                 functionKeyboard={{ funct: 'changeIsOff', state: changeState }}
