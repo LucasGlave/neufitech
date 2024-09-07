@@ -91,7 +91,7 @@ const Categories = () => {
                     disabled={isOff ? true : false}
                     key={i}
                     propClass="w-full h-[250px] flex items-center justify-center"
-                    innerText={`${Object.keys(actions)[0]}`}
+                    innerText={`${Object.keys(actions)[0] === 'BANO' ? 'BAÑO' : Object.keys(actions)[0]}`}
                     navigation={`/senal-comunicacion/${Object.keys(
                       actions
                     )[0].toLowerCase()}`}
