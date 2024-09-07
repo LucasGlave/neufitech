@@ -1,4 +1,3 @@
-"use client";
 import logoFacebook from "../../public/icon-facebook.png";
 import logoWhatsapp from "../../public/icon-whatsapp.png";
 import logoInstagram from "../../public/icon-instagram.png";
@@ -40,6 +39,11 @@ const HomePage = () => {
               comingSoon={true}
               imagen={{ src: logoEscrituraIA, add: "h-full w-full" }}
             />
+            {/* <ButtonAnimation
+              speakText="Comunicacion con Pictogramas"
+              navigation="comunicacion-pictogramas"
+              imagen={{ src: logoEscrituraIA, add: "h-full w-full" }}
+            /> */}
           </div>
           <div className="flex h-[25%] justify-around relative gap-4 w-full">
             <ButtonAnimation
