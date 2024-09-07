@@ -1,11 +1,13 @@
 "use client";
 import flechaArriba from "../../../public/flechaArriba.png";
+import plus from "../../../public/plus.svg";
 import flechaAbajo from "../../../public/flechaAbajo.png";
 import eliminar from "../../../public/eliminar.svg";
 import ButtonAnimation from "../ButtonAnimation";
 // import { useParams } from "next/navigation";
 import { mockActivities } from "./mockArray";
 import { useEffect, useState } from "react";
+
 
 type PropsActivity = {
   categoria: string
@@ -67,7 +69,7 @@ const Activities = ({ categoria }: PropsActivity) => {
 
   return (
     <div className="flex items-start justify-center p-8 w-full min-h-screen text-white bg-zinc-900">
-      <div className="flex justify-start  w-4/5">
+      <div className="flex justify-start w-4/5">
         <div className="flex flex-col justify-around gap-8 w-full text-center">
           <div className="flex flex-col relative w-full gap-8">
             <div className="flex flex-row items-center justify-between w-full">
@@ -102,7 +104,7 @@ const Activities = ({ categoria }: PropsActivity) => {
                             <ButtonAnimation
                               disabled={isOff ? true : false}
                               key={index}
-                              propClass="w-full h-[400px] flex items-center justify-center"
+                              propClass="w-full h-[250px] flex items-center justify-center"
                               innerText={`${Object.keys(action)[0]}`}
                               speakText={`${Object.keys(action)[0]}`}
                               imagen={{
@@ -128,11 +130,12 @@ const Activities = ({ categoria }: PropsActivity) => {
             disabled={isOff ? true : false}
             propClass="w-3/5 flex justify-center items-center"
             imagen={{
-              src: eliminar,
+              src: plus,
               width: 200,
               height: 200,
               add: "invert w-[70%] p-4",
             }}
+            comingSoon={true}
           />
           <ButtonAnimation
             disabled={isOff ? true : false}
@@ -155,6 +158,7 @@ const Activities = ({ categoria }: PropsActivity) => {
               height: 200,
               add: "invert w-[70%] p-4",
             }}
+            comingSoon={true}
           />
         </div>
       </div>
