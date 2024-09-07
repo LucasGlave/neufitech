@@ -12,6 +12,9 @@ const whatsappRoutes = [{
     "Chat-anterior": {
         keyCombination: ["control", "alt", "shift", "tab"],
         buttons: {
+            "Chat-anterior": {
+                keyCombination: ["control", "alt", "shift", "tab"],
+            },
             "Buscar-en-chat": {
                 keyCombination: ["control", "alt", "shift", "f"]
             },
@@ -30,6 +33,9 @@ const whatsappRoutes = [{
         buttons: {
             "Buscar-en-chat": {
                 keyCombination: ["control", "alt", "shift", "f"]
+            },
+            "Chat-siguiente": {
+                keyCombination: ["control", "alt", "tab"],
             },
             "Fijar-chat": {
                 keyCombination: ["control", "alt", "shift", "p"]
