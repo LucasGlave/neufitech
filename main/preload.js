@@ -1,7 +1,6 @@
 const { contextBridge, ipcRenderer } = require("electron/renderer");
 
 contextBridge.exposeInMainWorld("electronAPI", {
-
   on: (channel, callback) => {
     ipcRenderer.on(channel, callback);
   },
@@ -10,8 +9,24 @@ contextBridge.exposeInMainWorld("electronAPI", {
   },
   sendKeyCombination: (keys) => ipcRenderer.send("send-key-combination", keys),
   sendKey: (key) => ipcRenderer.send("send-key", key),
-  speak: (text) => {
-    ipcRenderer.send("speak", text);
-  },
-});
 
+  sendLetter: (key) => ipcRenderer.send("send-letter", key),
+
+  speak: (text) => {
+    console.log(text)
+    try {
+      ipcRenderer.send("speak", text);
+    } catch (e) {
+      console.error(e)
+    }
+  },
+  onPerformTTS: (callback) => ipcRenderer.on("perform-tts", (event, text) => {
+    console.log(text, "onPerform")
+    try {
+      const utterance = new SpeechSynthesisUtterance(text);
+      window.speechSynthesis.speak(utterance);
+    } catch (err) {
+      console.error("Error en la síntesis de voz:", err);
+    }
+  })
+});

@@ -16,6 +16,7 @@ type buttonProps = {
   disabled?: boolean;
   svg?: string;
   state?: () => void;
+  comingSoon?: boolean;
   functionKeyboard?: {
     funct: string;
     state: (functionToEjec: string) => void;
@@ -46,54 +47,86 @@ const ButtonAnimation = ({
   svg,
   keyCombination,
   keyPress,
+  comingSoon
 }: buttonProps) => {
   const navigate = useRouter();
   const [isActive, setIsActive] = useState(false);
   const [isAction, setIsAction] = useState(false);
   const [progress, setProgress] = useState(0);
+
   useEffect(() => {
     let timer: NodeJS.Timeout;
     let progressInterval: NodeJS.Timeout;
+
     if (isActive) {
-      setProgress(0);
-      progressInterval = setInterval(() => {
-        setProgress((prev) => (prev < 100 ? prev + 1 : 100));
-      }, 10);
-      timer = setTimeout(() => {
-        setIsAction(true);
-        state && state();
-        if (keyCombination) {
-          if (window.electronAPI) {
-            window.electronAPI.sendKeyCombination(keyCombination);
-          } else {
-            console.log("No se puede usar keySender");
-          }
-        } else if (keyPress) {
-          if (window.electronAPI) {
-            window.electronAPI.sendKey(keyPress);
-          } else {
-            console.log("No se puede usar keySender");
-          }
-        }
-        // if (speakText) {
-        //   if (window.electronAPI) {
-        //     console.log("electron")
-        //     window.electronAPI.speak(speakText)
-        //   } else {
-        //     console.log("web")
-        //     const utterance = new SpeechSynthesisUtterance(speakText);
-        //     window.speechSynthesis.speak(utterance);
-        //   }
-        // }
-        functionKeyboard?.state(functionKeyboard.funct);
-        navigation != null && navigate.push(navigation);
-        clearInterval(progressInterval);
+      const startTimer = () => {
         setProgress(0);
-        setTimeout(() => {
-          setIsActive(false);
-        }, 100);
-      }, 1000);
+        progressInterval = setInterval(() => {
+          setProgress((prev) => (prev < 100 ? prev + 1 : 100));
+        }, 10);
+        timer = setTimeout(async () => {
+          setIsAction(true);
+          state && state();
+          if (keyCombination) {
+            if (window.electronAPI) {
+              document.getElementById("whatsapp-webview")?.focus();
+              window.electronAPI.sendKeyCombination(keyCombination);
+            } else {
+              console.log("No se puede usar keySender");
+            }
+          } else if (keyPress) {
+            if (window.electronAPI) {
+              if (
+                keyPress === "ñ" ||
+                keyPress === "Ñ" ||
+                keyPress === "@" ||
+                keyPress === "%" ||
+                keyPress === "/" ||
+                keyPress === "=" ||
+                keyPress === ";" ||
+                keyPress === "?"
+              ) {
+                try {
+                  window.focus();
+                  document.getElementById("teclado-global")?.focus();
+                  await new Promise((resolve) => setTimeout(resolve, 50));
+                  await navigator.clipboard.writeText(keyPress);
+                  document.getElementById("whatsapp-webview")?.focus();
+                  window.electronAPI.sendKeyCombination(["control", "v"]);
+                } catch (err) {
+                  console.error("Failed to copy: ", err);
+                }
+              } else {
+                document.getElementById("whatsapp-webview")?.focus();
+                window.electronAPI.sendLetter(keyPress);
+              }
+            } else {
+              console.log("No se puede usar keySender");
+            }
+          }
+          if (speakText) {
+            if (window.electronAPI) {
+              window.electronAPI.speak(speakText)
+            } else {
+              const utterance = new SpeechSynthesisUtterance(speakText);
+              window.speechSynthesis.speak(utterance);
+            }
+          }
+          functionKeyboard?.state(functionKeyboard.funct);
+          navigation != null && navigate.push(navigation);
+
+          clearInterval(progressInterval);
+          setProgress(0);
+
+          if (isActive) {
+            startTimer();
+          }
+        }, 1000);
+      };
+
+      startTimer();
     }
+
     return () => {
       setIsAction(false);
       clearTimeout(timer);
@@ -103,9 +136,42 @@ const ButtonAnimation = ({
   }, [isActive]);
 
   return (
-    <button id='myButton' disabled={disabled ? true : false} onMouseEnter={() => { setIsActive(true) }} onMouseLeave={() => { setIsActive(false); setIsAction(false) }} className={`border-2 ${!isAction ? color : "bg-charge"} ${isActive ? "border-charge" && 'scale-105' : buttonBorder ? buttonBorder : 'border-white'} ${propClass} ${innerText && "relative"} z-10 rounded-lg transition-all animate-in animate-out font-semibold ${textColor ? textColor : 'text-white'}`}>
-      <div className="relative h-full w-full flex items-center justify-center">
-        {imagen != null ? <Image src={imagen.src} width={imagen.width} height={imagen.height} alt='dynamic image' className={`rounded-lg object-contain relative ${imagen.add && imagen.add} ${innerText && "opacity-85 brightness-75"}`} /> : text ? text : svg && <div className='bg-white' dangerouslySetInnerHTML={{ __html: svg }} />}
+    <button
+      id="myButton"
+      disabled={comingSoon ? true : disabled ? true : false}
+      onMouseEnter={() => {
+        setIsActive(true);
+      }}
+      onMouseLeave={() => {
+        setIsActive(false);
+        setIsAction(false);
+      }}
+      className={`border-2 ${!isAction ? color : "bg-charge"} ${isActive
+        ? "border-charge" && "scale-105"
+        : buttonBorder
+          ? buttonBorder
+          : "border-white"
+        } ${propClass} ${innerText && "relative"
+        } z-10 rounded-lg transition-all animate-in animate-out font-semibold ${textColor ? textColor : "text-white"
+        } ${comingSoon && "grayscale-[50%] overflow-hidden"}`}
+    >
+      <div className={`relative h-full w-full flex items-center justify-center ${svg && "p-5"}`}>
+        {imagen != null ? (
+          <Image
+            src={imagen.src}
+            width={imagen.width}
+            height={imagen.height}
+            alt="dynamic image"
+            className={`rounded-lg object-contain relative ${imagen.add && imagen.add
+              } ${innerText && "opacity-85 brightness-75"}`}
+          />
+        ) : text ? (
+          text
+        ) : (
+          svg && (
+            <div dangerouslySetInnerHTML={{ __html: svg }} />
+          )
+        )}
         {isActive && (
           <div
             className="absolute top-0 left-0 h-2 bg-charge"
@@ -122,8 +188,22 @@ const ButtonAnimation = ({
             style={{ width: `${progress}%`, transition: "width 0.1s linear" }}
           ></div>
         )}
-        {svg && <div className='flex items-center justify-center w-[50px] h-[50px] z-[-1]' dangerouslySetInnerHTML={{ __html: svg }} />}
-        {innerText && <h3 className='absolute font-bold text-3xl flex text-center items-center justify-center'>{innerText}</h3>}
+        {svg && (
+          <div
+            className="flex items-center justify-center w-[50px] h-[50px] z-[-1]"
+            dangerouslySetInnerHTML={{ __html: svg }}
+          />
+        )}
+        {innerText && (
+          <h3 className="absolute font-bold text-3xl flex text-center items-center justify-center">
+            {innerText}
+          </h3>
+        )}
+        {comingSoon && (
+          <div className="absolute flex rotate-[-6deg] items-center justify-center w-full h-full z-20 backdrop-blur-[1.5px]">
+            <h3 className="w-[120%] mx-[-20px] bg-black py-2 opacity-80 font-bold">PROXIMAMENTE</h3>
+          </div>
+        )}
       </div>
     </button>
   );
