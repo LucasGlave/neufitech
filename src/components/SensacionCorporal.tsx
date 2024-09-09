@@ -75,7 +75,7 @@ const SensacionCorporal = () => {
           <Image
             src={position && sex ? cuerpoHombreEspalda : cuerpoMujerEspalda}
             alt="cuerpoHumanoFrontal"
-            className="w-full h-full object-contain z-5"
+            className="w-full h-full object-contain z-[5]"
           />
         ) : (
           <Image
@@ -146,18 +146,10 @@ const SensacionCorporal = () => {
       </div>
       <div className="flex flex-col justify-between gap-2 items-center w-[40%] bg-zinc-900">
         <div className="flex flex-row gap-2">
-          {/* <ButtonAnimation
-            disabled={isOff ? true : false}
-            speakText="Localizacion rapida"
-            text="LOCALIZACION RAPIDA"
-            propClass="w-44 h-28"
-            state={spawnSVG}
-          /> */}
           <Crosshair
             isOff={isOff}
             xDisplacement={xDisplacement}
             yDisplacement={yDisplacement}
-            animate={animate}
             setAnimate={setAnimate}
             setXDisplacement={setXDisplacement}
             setYDisplacement={setYDisplacement}

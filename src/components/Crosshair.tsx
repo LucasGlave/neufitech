@@ -1,4 +1,4 @@
-import { useState, useEffect, Dispatch, SetStateAction } from "react";
+import { useState, Dispatch, SetStateAction } from "react";
 import ButtonAnimation from "./ButtonAnimation";
 
 type buttonProps = {
@@ -7,7 +7,6 @@ type buttonProps = {
   yDisplacement: number;
   setXDisplacement: Dispatch<SetStateAction<number>>;
   setYDisplacement: Dispatch<SetStateAction<number>>;
-  animate: boolean;
   setAnimate: Dispatch<SetStateAction<boolean>>;
 };
 
@@ -17,7 +16,6 @@ const Crosshair = ({
   yDisplacement,
   setXDisplacement,
   setYDisplacement,
-  animate,
   setAnimate,
 }: buttonProps) => {
   const [mousePosition, setMousePosition] = useState<{
