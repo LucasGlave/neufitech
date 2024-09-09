@@ -113,6 +113,7 @@ const ButtonAnimation = ({
             } else {
               const utterance = new SpeechSynthesisUtterance(speakText);
               window.speechSynthesis.speak(utterance);
+              console.log(window.speechSynthesis.getVoices())
             }
           }
           functionKeyboard?.state(functionKeyboard.funct);
