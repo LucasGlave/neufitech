@@ -11,17 +11,14 @@ contextBridge.exposeInMainWorld("electronAPI", {
   sendKey: (key) => ipcRenderer.send("send-key", key),
   sendLetter: (key) => ipcRenderer.send("send-letter", key),
   speak: (speakText) => {
-    console.log("hola")
-    const speakNow = () => {
-      const speech = new SpeechSynthesisUtterance(speakText);
-      speech.lang = "es-ES";
-      const voices = window.speechSynthesis.getVoices();
-      if (voices.length > 0) {
-        speech.voice = voices.find(voice => voice.lang.startsWith("es")) || voices[0];
-        window.speechSynthesis.speak(speech);
-      } else {
-        console.log("No voices available");
-      }
-    };
+    const speech = new SpeechSynthesisUtterance(speakText);
+    speech.lang = "es-ES";
+    const voices = window.speechSynthesis.getVoices();
+    if (voices.length > 0) {
+      speech.voice = voices.find(voice => voice.lang.startsWith("es")) || voices[0];
+      window.speechSynthesis.speak(speech);
+    } else {
+      console.log("No voices available");
+    }
   },
 });
