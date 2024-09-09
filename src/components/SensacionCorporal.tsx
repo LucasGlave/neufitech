@@ -4,8 +4,6 @@ import flechaAbajo from "../../public/flechaAbajo.png";
 import flechaArriba from "../../public/flechaArriba.png";
 import flechaDerecha from "../../public/flechaDerecha.png";
 import flechaIzquierda from "../../public/flechaIzquierda.png";
-import bodyMujer from "../../public/frente-body-mujer.svg";
-import bodyHombre from "../../public/frente-body-hombre.svg";
 import { useState } from "react";
 import ButtonAnimation from "./ButtonAnimation";
 import Crosshair from "./Crosshair";
@@ -18,7 +16,6 @@ const SensacionCorporal = () => {
   const [xDisplacement, setXDisplacement] = useState(0);
   const [yDisplacement, setYDisplacement] = useState(0);
   const [animate, setAnimate] = useState(false);
-
   const getBodyImage = () => {
     const gender = sex ? "hombre" : "mujer";
     const orientation = position ? "atras" : "frente";
@@ -41,16 +38,16 @@ const SensacionCorporal = () => {
     let displacement = 10;
     switch (direction) {
       case "Arriba":
-        setYDisplacement(yDisplacement + displacement);
+        setYDisplacement((prev) => prev + displacement);
         break;
       case "Abajo":
-        setYDisplacement(yDisplacement - displacement);
+        setYDisplacement((prev) => prev - displacement);
         break;
       case "Derecha":
-        setXDisplacement(xDisplacement - displacement);
+        setXDisplacement((prev) => prev - displacement);
         break;
       case "Izquierda":
-        setXDisplacement(xDisplacement + displacement);
+        setXDisplacement((prev) => prev + displacement);
         break;
     }
   };
@@ -84,10 +81,10 @@ const SensacionCorporal = () => {
       <div className="relative h-full w-[40%] bg-white rounded-lg flex justify-center items-center">
         <Image
           src={getBodyImage()}
-          width={300}
-          height={300}
+          width={part === "body" ? 330 : 450}
+          height={part === "body" ? 330 : 450}
           alt="cuerpoHumanoFrontal"
-          className="w-full h-full object-contain z-[5]"
+          className="object-contain z-[5]"
         />
         <ButtonAnimation
           disabled={isOff ? true : false}
@@ -150,9 +147,9 @@ const SensacionCorporal = () => {
           textColor="text-zinc-900"
         />
         <div
-          className={`absolute bottom-0 left-0 h-full w-full bg-green-500 transition-all z-[1] ${
-            animate ? "animate-grow-bar" : ""
-          }`}
+          className={`absolute bottom-0 left-0 h-full w-full  transition-all z-[1] 
+            ${animate ? "bg-green-500 animate-grow-bar" : ""}
+            `}
         />
       </div>
       <div className="flex flex-col justify-between gap-2 items-center w-[40%] bg-zinc-900">

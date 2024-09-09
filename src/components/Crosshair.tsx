@@ -66,7 +66,7 @@ const Crosshair = ({
             left: `${mousePosition.x - 20 - xDisplacement}px`,
           }}
         >
-          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+          <g id="SVGRepo_bgCarrier"></g>
           <g
             id="SVGRepo_tracerCarrier"
             stroke-linecap="round"
