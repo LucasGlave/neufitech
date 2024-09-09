@@ -16,7 +16,6 @@ type buttonProps = {
   disabled?: boolean;
   svg?: string;
   state?: () => void;
-  displacementFunction?: (direction: string) => void;
   comingSoon?: boolean;
   functionKeyboard?: {
     funct: string;
@@ -48,7 +47,6 @@ const ButtonAnimation = ({
   svg,
   keyCombination,
   keyPress,
-  displacementFunction,
   comingSoon
 }: buttonProps) => {
   const navigate = useRouter();
@@ -69,7 +67,6 @@ const ButtonAnimation = ({
         timer = setTimeout(async () => {
           setIsAction(true);
           state && state();
-          displacementFunction && displacementFunction(speakText as string);
           if (keyCombination) {
             if (window.electronAPI) {
               document.getElementById("whatsapp-webview")?.focus();
@@ -165,9 +162,8 @@ const ButtonAnimation = ({
             width={imagen.width}
             height={imagen.height}
             alt="dynamic image"
-            className={`rounded-lg object-contain relative ${
-              imagen.add && imagen.add
-            } ${innerText && "opacity-85 brightness-75"}`}
+            className={`rounded-lg object-contain relative ${imagen.add && imagen.add
+              } ${innerText && "opacity-85 brightness-75"}`}
           />
         ) : text ? (
           text

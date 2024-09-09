@@ -1,12 +1,12 @@
-import type { Config } from "tailwindcss";
+import type { Config } from "tailwindcss"
 
 const config = {
   darkMode: ["class"],
   content: [
-    "./pages/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
-    "./app/**/*.{ts,tsx}",
-    "./src/**/*.{ts,tsx}",
+    './pages/**/*.{ts,tsx}',
+    './components/**/*.{ts,tsx}',
+    './app/**/*.{ts,tsx}',
+    './src/**/*.{ts,tsx}',
   ],
   prefix: "",
   theme: {
@@ -72,13 +72,8 @@ const config = {
         },
         // Añadir keyframes para la animación `flash`
         flash: {
-          "0%, 100%": { backgroundColor: "rgb(40, 40, 40)" },
-          "50%": { backgroundColor: "#4caf50" },
-        },
-        growBar: {
-          "0%": { height: "0%", opacity: "1" },
-          "99%": { height: "100%", opacity: "1" },
-          "100%": { height: "100%", opacity: "0" },
+          '0%, 100%': { backgroundColor: 'rgb(40, 40, 40)' },
+          '50%': { backgroundColor: '#4caf50' },
         },
       },
       animation: {
@@ -86,14 +81,13 @@ const config = {
         "accordion-up": "accordion-up 0.2s ease-out",
         // Añadir la animación `flash`
         flash: "flash 0.2s ease-in-out",
-        "grow-bar": "growBar 3s ease forwards",
       },
       fontSize: {
-        "5xl": "2rem",
-      },
+        "5xl": "2rem"
+      }
     },
   },
   plugins: [require("tailwindcss-animate")],
-} satisfies Config;
+} satisfies Config
 
-export default config;
+export default config
