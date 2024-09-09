@@ -17,6 +17,7 @@ type buttonProps = {
   svg?: string;
   state?: () => void;
   displacementFunction?: (direction: string) => void;
+  comingSoon?: boolean;
   functionKeyboard?: {
     funct: string;
     state: (functionToEjec: string) => void;
@@ -48,77 +49,87 @@ const ButtonAnimation = ({
   keyCombination,
   keyPress,
   displacementFunction,
+  comingSoon
 }: buttonProps) => {
   const navigate = useRouter();
   const [isActive, setIsActive] = useState(false);
   const [isAction, setIsAction] = useState(false);
   const [progress, setProgress] = useState(0);
+
   useEffect(() => {
     let timer: NodeJS.Timeout;
     let progressInterval: NodeJS.Timeout;
+
     if (isActive) {
-      setProgress(0);
-      progressInterval = setInterval(() => {
-        setProgress((prev) => (prev < 100 ? prev + 1 : 100));
-      }, 10);
-      timer = setTimeout(async () => {
-        setIsAction(true);
-        state && state();
-        displacementFunction && displacementFunction(speakText as string);
-        if (keyCombination) {
-          if (window.electronAPI) {
-            document.getElementById("whatsapp-webview")?.focus();
-            window.electronAPI.sendKeyCombination(keyCombination);
-          } else {
-            console.log("No se puede usar keySender");
-          }
-        } else if (keyPress) {
-          if (window.electronAPI) {
-            if (
-              keyPress === "ñ" ||
-              keyPress === "Ñ" ||
-              keyPress === "@" ||
-              keyPress === "%" ||
-              keyPress === "/" ||
-              keyPress === "=" ||
-              keyPress === ";" ||
-              keyPress === "?"
-            ) {
-              try {
-                window.focus();
-                document.getElementById("teclado-global")?.focus();
-                await new Promise((resolve) => setTimeout(resolve, 50));
-                await navigator.clipboard.writeText(keyPress);
+      const startTimer = () => {
+        setProgress(0);
+        progressInterval = setInterval(() => {
+          setProgress((prev) => (prev < 100 ? prev + 1 : 100));
+        }, 10);
+        timer = setTimeout(async () => {
+          setIsAction(true);
+          state && state();
+          displacementFunction && displacementFunction(speakText as string);
+          if (keyCombination) {
+            if (window.electronAPI) {
+              document.getElementById("whatsapp-webview")?.focus();
+              window.electronAPI.sendKeyCombination(keyCombination);
+            } else {
+              console.log("No se puede usar keySender");
+            }
+          } else if (keyPress) {
+            if (window.electronAPI) {
+              if (
+                keyPress === "ñ" ||
+                keyPress === "Ñ" ||
+                keyPress === "@" ||
+                keyPress === "%" ||
+                keyPress === "/" ||
+                keyPress === "=" ||
+                keyPress === ";" ||
+                keyPress === "?"
+              ) {
+                try {
+                  window.focus();
+                  document.getElementById("teclado-global")?.focus();
+                  await new Promise((resolve) => setTimeout(resolve, 50));
+                  await navigator.clipboard.writeText(keyPress);
+                  document.getElementById("whatsapp-webview")?.focus();
+                  window.electronAPI.sendKeyCombination(["control", "v"]);
+                } catch (err) {
+                  console.error("Failed to copy: ", err);
+                }
+              } else {
                 document.getElementById("whatsapp-webview")?.focus();
-                window.electronAPI.sendKeyCombination(["control", "v"]);
-              } catch (err) {
-                console.error("Failed to copy: ", err);
+                window.electronAPI.sendLetter(keyPress);
               }
             } else {
-              document.getElementById("whatsapp-webview")?.focus();
-              window.electronAPI.sendLetter(keyPress);
+              console.log("No se puede usar keySender");
             }
-          } else {
-            console.log("No se puede usar keySender");
           }
-        }
-        if (speakText) {
-          if (window.electronAPI) {
-            window.electronAPI.speak(speakText);
-          } else {
-            const utterance = new SpeechSynthesisUtterance(speakText);
-            window.speechSynthesis.speak(utterance);
+          if (speakText) {
+            if (window.electronAPI) {
+              window.electronAPI.speak(speakText)
+            } else {
+              const utterance = new SpeechSynthesisUtterance(speakText);
+              window.speechSynthesis.speak(utterance);
+            }
           }
-        }
-        functionKeyboard?.state(functionKeyboard.funct);
-        navigation != null && navigate.push(navigation);
-        clearInterval(progressInterval);
-        setProgress(0);
-        setTimeout(() => {
-          setIsActive(false);
-        }, 100);
-      }, 1000);
+          functionKeyboard?.state(functionKeyboard.funct);
+          navigation != null && navigate.push(navigation);
+
+          clearInterval(progressInterval);
+          setProgress(0);
+
+          if (isActive) {
+            startTimer();
+          }
+        }, 1000);
+      };
+
+      startTimer();
     }
+
     return () => {
       setIsAction(false);
       clearTimeout(timer);
@@ -130,7 +141,7 @@ const ButtonAnimation = ({
   return (
     <button
       id="myButton"
-      disabled={disabled ? true : false}
+      disabled={comingSoon ? true : disabled ? true : false}
       onMouseEnter={() => {
         setIsActive(true);
       }}
@@ -138,19 +149,16 @@ const ButtonAnimation = ({
         setIsActive(false);
         setIsAction(false);
       }}
-      className={`border-2 ${!isAction ? color : "bg-charge"} ${
-        isActive
-          ? "border-charge" && "scale-105"
-          : buttonBorder
+      className={`border-2 ${!isAction ? color : "bg-charge"} ${isActive
+        ? "border-charge" && "scale-105"
+        : buttonBorder
           ? buttonBorder
           : "border-white"
-      } ${propClass} ${
-        innerText && "relative"
-      } z-10 rounded-lg transition-all animate-in animate-out font-semibold ${
-        textColor ? textColor : "text-white"
-      }`}
+        } ${propClass} ${innerText && "relative"
+        } z-10 rounded-lg transition-all animate-in animate-out font-semibold ${textColor ? textColor : "text-white"
+        } ${comingSoon && "grayscale-[50%] overflow-hidden"}`}
     >
-      <div className="relative h-full w-full flex items-center justify-center">
+      <div className={`relative h-full w-full flex items-center justify-center ${svg && "p-5"}`}>
         {imagen != null ? (
           <Image
             src={imagen.src}
@@ -165,10 +173,7 @@ const ButtonAnimation = ({
           text
         ) : (
           svg && (
-            <div
-              className="bg-white"
-              dangerouslySetInnerHTML={{ __html: svg }}
-            />
+            <div dangerouslySetInnerHTML={{ __html: svg }} />
           )
         )}
         {isActive && (
@@ -197,6 +202,11 @@ const ButtonAnimation = ({
           <h3 className="absolute font-bold text-3xl flex text-center items-center justify-center">
             {innerText}
           </h3>
+        )}
+        {comingSoon && (
+          <div className="absolute flex rotate-[-6deg] items-center justify-center w-full h-full z-20 backdrop-blur-[1.5px]">
+            <h3 className="w-[120%] mx-[-20px] bg-black py-2 opacity-80 font-bold">PROXIMAMENTE</h3>
+          </div>
         )}
       </div>
     </button>

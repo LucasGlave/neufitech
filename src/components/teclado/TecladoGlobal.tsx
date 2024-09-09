@@ -89,6 +89,10 @@ const TecladoGlobal = () => {
     return layout;
   };
 
+  useEffect(() => {
+    isTildeActive && setIsTildeActive(false)
+  }, [output])
+
   const functionAction = (key?: string) => {
     ejecFunction === "deleteAll" && deleteAll();
     ejecFunction === "deleteOne" && setOutput((prev) => prev.slice(0, -1));
@@ -115,12 +119,12 @@ const TecladoGlobal = () => {
       id="teclado-global"
       tabIndex={-1}
     >
-      <div className="bg-zinc-900 flex flex-col w-full h-full gap-8 pt-4 p-2">
+      <div className="bg-zinc-900 flex flex-col w-full h-full gap-4 pt-4 p-2">
         <div className="flex flex-row justify-between items-center">
           <ButtonAnimation
             functionKeyboard={{ funct: "deleteAll", state: changeState }}
             imagen={{ src: trash, width: 50, height: 50, add: "invert" }}
-            propClass="w-[180px] h-[64px] flex justify-center items-center"
+            propClass="w-[180px] h-[60px] flex justify-center items-center"
           />
           <div className="flex gap-2">
             <ButtonAnimation
@@ -177,32 +181,32 @@ const TecladoGlobal = () => {
           <div className="flex justify-center gap-2 mt-1">
             <ButtonAnimation
               functionKeyboard={{ funct: "changeTilde", state: changeState }}
-              propClass="w-full h-full"
-              text="TILDE"
+              propClass="w-full h-[60px] text-2xl"
+              text={`${isTildeActive ? "SACAR TILDE" : "TILDE"}`}
             />
             <ButtonAnimation
               functionKeyboard={{ funct: "changeMayus", state: changeState }}
-              propClass="w-full h-full"
+              propClass="w-full h-[60px] text-2xl"
               text="MAYUS"
             />
             <ButtonAnimation
               keyPress="space"
-              propClass="w-full h-full"
+              propClass="w-full h-[60px] text-2xl"
               text="____"
               functionKeyboard={{ funct: "spaceKey", state: changeState }}
             />
             <ButtonAnimation
               functionKeyboard={{ funct: "changeSymbol", state: changeState }}
-              propClass="w-full h-full"
-              text="123.!"
+              propClass="w-full h-[60px] text-2xl"
+              text={`${showSymbols ? "ABC" : "123.!"}`}
             />
             <ButtonAnimation
-              propClass="w-full h-full"
-              text="INTRO"
+              propClass="w-full h-[60px] text-2xl"
+              text="ENTER"
               keyCombination={["shift", "enter"]}
             />
             <ButtonAnimation
-              propClass="w-full h-full"
+              propClass="w-full h-[60px] text-2xl"
               text="Enviar"
               keyPress={"enter"}
               functionKeyboard={{ funct: "deleteAll", state: changeState }}
