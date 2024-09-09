@@ -33,8 +33,8 @@ const createWindow = async () => {
     height: 1080,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
-      nodeIntegration: true,
       contextIsolation: true,
+      nodeIntegration: false,
       webviewTag: true,
     },
   });
@@ -81,7 +81,10 @@ ipcMain.on("send-letter", (event, key) => {
   }
 });
 
-ipcMain.on("speak", (event, text) => {
-  console.log(text, "MAIN")
-  event.sender.send("perform-tts", text);
+ipcMain.on("speak", async (event, text) => {
+  try {
+    event.sender.send("perform-tts", text);
+  } catch (e) {
+    console.error(e);
+  }
 });
