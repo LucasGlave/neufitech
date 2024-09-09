@@ -16,6 +16,7 @@ type buttonProps = {
   disabled?: boolean;
   svg?: string;
   state?: () => void;
+  displacementFunction?: (direction: string) => void;
   functionKeyboard?: {
     funct: string;
     state: (functionToEjec: string) => void;
@@ -46,6 +47,7 @@ const ButtonAnimation = ({
   svg,
   keyCombination,
   keyPress,
+  displacementFunction,
 }: buttonProps) => {
   const navigate = useRouter();
   const [isActive, setIsActive] = useState(false);
@@ -62,6 +64,7 @@ const ButtonAnimation = ({
       timer = setTimeout(async () => {
         setIsAction(true);
         state && state();
+        displacementFunction && displacementFunction(speakText as string);
         if (keyCombination) {
           if (window.electronAPI) {
             document.getElementById("whatsapp-webview")?.focus();
@@ -101,7 +104,7 @@ const ButtonAnimation = ({
         }
         if (speakText) {
           if (window.electronAPI) {
-            window.electronAPI.speak(speakText)
+            window.electronAPI.speak(speakText);
           } else {
             const utterance = new SpeechSynthesisUtterance(speakText);
             window.speechSynthesis.speak(utterance);
@@ -135,14 +138,17 @@ const ButtonAnimation = ({
         setIsActive(false);
         setIsAction(false);
       }}
-      className={`border-2 ${!isAction ? color : "bg-charge"} ${isActive
+      className={`border-2 ${!isAction ? color : "bg-charge"} ${
+        isActive
           ? "border-charge" && "scale-105"
           : buttonBorder
-            ? buttonBorder
-            : "border-white"
-        } ${propClass} ${innerText && "relative"
-        } z-10 rounded-lg transition-all animate-in animate-out font-semibold ${textColor ? textColor : "text-white"
-        }`}
+          ? buttonBorder
+          : "border-white"
+      } ${propClass} ${
+        innerText && "relative"
+      } z-10 rounded-lg transition-all animate-in animate-out font-semibold ${
+        textColor ? textColor : "text-white"
+      }`}
     >
       <div className="relative h-full w-full flex items-center justify-center">
         {imagen != null ? (
@@ -151,8 +157,9 @@ const ButtonAnimation = ({
             width={imagen.width}
             height={imagen.height}
             alt="dynamic image"
-            className={`rounded-lg object-contain relative ${imagen.add && imagen.add
-              } ${innerText && "opacity-85 brightness-75"}`}
+            className={`rounded-lg object-contain relative ${
+              imagen.add && imagen.add
+            } ${innerText && "opacity-85 brightness-75"}`}
           />
         ) : text ? (
           text
