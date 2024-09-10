@@ -148,7 +148,7 @@ const SensacionCorporal = () => {
         />
         <div
           className={`absolute bottom-0 left-0 h-full w-full  transition-all z-[1] 
-            ${animate ? "bg-green-500 animate-grow-bar" : ""}
+            ${animate ? "bg-green-400 animate-grow-bar" : ""}
             `}
         />
       </div>
