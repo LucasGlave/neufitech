@@ -3,6 +3,7 @@ interface Window {
     sendLetter: (keyPress: string) => void;
     sendKey: (keyPress: string) => void;
     speak: (text: string) => void;
+    onPerformTTS: (text: (text: any) => void) => void;
     sendKeyCombination: (keys: array) => void;
   };
 }

@@ -4,6 +4,8 @@ import flechaAbajo from "../../public/flechaAbajo.png";
 import flechaArriba from "../../public/flechaArriba.png";
 import flechaDerecha from "../../public/flechaDerecha.png";
 import flechaIzquierda from "../../public/flechaIzquierda.png";
+import bodyMujer from "../../public/frente-body-mujer.svg";
+import bodyHombre from "../../public/frente-body-hombre.svg";
 import { useState } from "react";
 import ButtonAnimation from "./ButtonAnimation";
 import Crosshair from "./Crosshair";
@@ -16,6 +18,7 @@ const SensacionCorporal = () => {
   const [xDisplacement, setXDisplacement] = useState(0);
   const [yDisplacement, setYDisplacement] = useState(0);
   const [animate, setAnimate] = useState(false);
+
   const getBodyImage = () => {
     const gender = sex ? "hombre" : "mujer";
     const orientation = position ? "atras" : "frente";
@@ -29,7 +32,6 @@ const SensacionCorporal = () => {
   const changePosition = () => {
     setPosition(!position);
   };
-
   const changePart = (newPart: string) => {
     setPart(newPart);
   };

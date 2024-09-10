@@ -16,7 +16,6 @@ type buttonProps = {
   disabled?: boolean;
   svg?: string;
   state?: () => void;
-  displacementFunction?: (direction: string) => void;
   comingSoon?: boolean;
   functionKeyboard?: {
     funct: string;
@@ -113,6 +112,7 @@ const ButtonAnimation = ({
             } else {
               const utterance = new SpeechSynthesisUtterance(speakText);
               window.speechSynthesis.speak(utterance);
+              console.log(window.speechSynthesis.getVoices());
             }
           }
           functionKeyboard?.state(functionKeyboard.funct);
