@@ -16,6 +16,7 @@ type buttonProps = {
   disabled?: boolean;
   svg?: string;
   state?: () => void;
+  displacementFunction?: (speakText: string) => void;
   comingSoon?: boolean;
   functionKeyboard?: {
     funct: string;
@@ -47,7 +48,8 @@ const ButtonAnimation = ({
   svg,
   keyCombination,
   keyPress,
-  comingSoon
+  displacementFunction,
+  comingSoon,
 }: buttonProps) => {
   const navigate = useRouter();
   const [isActive, setIsActive] = useState(false);
@@ -66,6 +68,7 @@ const ButtonAnimation = ({
         }, 10);
         timer = setTimeout(async () => {
           setIsAction(true);
+          displacementFunction && displacementFunction(speakText as string);
           state && state();
           if (keyCombination) {
             if (window.electronAPI) {
@@ -106,11 +109,11 @@ const ButtonAnimation = ({
           }
           if (speakText) {
             if (window.electronAPI) {
-              window.electronAPI.speak(speakText)
+              window.electronAPI.speak(speakText);
             } else {
               const utterance = new SpeechSynthesisUtterance(speakText);
               window.speechSynthesis.speak(utterance);
-              console.log(window.speechSynthesis.getVoices())
+              console.log(window.speechSynthesis.getVoices());
             }
           }
           functionKeyboard?.state(functionKeyboard.funct);
@@ -147,31 +150,37 @@ const ButtonAnimation = ({
         setIsActive(false);
         setIsAction(false);
       }}
-      className={`border-2 ${!isAction ? color : "bg-charge"} ${isActive
-        ? "border-charge" && "scale-105"
-        : buttonBorder
+      className={`border-2 ${!isAction ? color : "bg-charge"} ${
+        isActive
+          ? "border-charge" && "scale-105"
+          : buttonBorder
           ? buttonBorder
           : "border-white"
-        } ${propClass} ${innerText && "relative"
-        } z-10 rounded-lg transition-all animate-in animate-out font-semibold ${textColor ? textColor : "text-white"
-        } ${comingSoon && "grayscale-[50%] overflow-hidden"}`}
+      } ${propClass} ${
+        innerText && "relative"
+      } z-10 rounded-lg transition-all animate-in animate-out font-semibold ${
+        textColor ? textColor : "text-white"
+      } ${comingSoon && "grayscale-[50%] overflow-hidden"}`}
     >
-      <div className={`relative h-full w-full flex items-center justify-center ${svg && "p-5"}`}>
+      <div
+        className={`relative h-full w-full flex items-center justify-center ${
+          svg && "p-5"
+        }`}
+      >
         {imagen != null ? (
           <Image
             src={imagen.src}
             width={imagen.width}
             height={imagen.height}
             alt="dynamic image"
-            className={`rounded-lg object-contain relative ${imagen.add && imagen.add
-              } ${innerText && "opacity-85 brightness-75"}`}
+            className={`rounded-lg object-contain relative ${
+              imagen.add && imagen.add
+            } ${innerText && "opacity-85 brightness-75"}`}
           />
         ) : text ? (
           text
         ) : (
-          svg && (
-            <div dangerouslySetInnerHTML={{ __html: svg }} />
-          )
+          svg && <div dangerouslySetInnerHTML={{ __html: svg }} />
         )}
         {isActive && (
           <div
@@ -202,7 +211,9 @@ const ButtonAnimation = ({
         )}
         {comingSoon && (
           <div className="absolute flex rotate-[-6deg] items-center justify-center w-full h-full z-20 backdrop-blur-[1.5px]">
-            <h3 className="w-[120%] mx-[-20px] bg-black py-2 opacity-80 font-bold">PROXIMAMENTE</h3>
+            <h3 className="w-[120%] mx-[-20px] bg-black py-2 opacity-80 font-bold">
+              PROXIMAMENTE
+            </h3>
           </div>
         )}
       </div>
