@@ -9,23 +9,16 @@ contextBridge.exposeInMainWorld("electronAPI", {
   },
   sendKeyCombination: (keys) => ipcRenderer.send("send-key-combination", keys),
   sendKey: (key) => ipcRenderer.send("send-key", key),
-
   sendLetter: (key) => ipcRenderer.send("send-letter", key),
-
-  speak: (text) => {
-    try {
-      ipcRenderer.send("speak", text);
-    } catch (e) {
-      console.error(e);
+  speak: (speakText) => {
+    const speech = new SpeechSynthesisUtterance(speakText);
+    speech.lang = "es-ES";
+    const voices = window.speechSynthesis.getVoices();
+    if (voices.length > 0) {
+      speech.voice = voices.find(voice => voice.lang.startsWith("es")) || voices[0];
+      window.speechSynthesis.speak(speech);
+    } else {
+      console.log("No voices available");
     }
   },
-  onPerformTTS: (callback) =>
-    ipcRenderer.on("perform-tts", (event, text) => {
-      try {
-        const utterance = new SpeechSynthesisUtterance(text);
-        window.speechSynthesis.speak(utterance);
-      } catch (err) {
-        console.error("Error en la síntesis de voz:", err);
-      }
-    }),
 });
