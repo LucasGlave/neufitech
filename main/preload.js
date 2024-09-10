@@ -13,20 +13,19 @@ contextBridge.exposeInMainWorld("electronAPI", {
   sendLetter: (key) => ipcRenderer.send("send-letter", key),
 
   speak: (text) => {
-    console.log(text)
     try {
       ipcRenderer.send("speak", text);
     } catch (e) {
-      console.error(e)
+      console.error(e);
     }
   },
-  onPerformTTS: (callback) => ipcRenderer.on("perform-tts", (event, text) => {
-    console.log(text, "onPerform")
-    try {
-      const utterance = new SpeechSynthesisUtterance(text);
-      window.speechSynthesis.speak(utterance);
-    } catch (err) {
-      console.error("Error en la síntesis de voz:", err);
-    }
-  })
+  onPerformTTS: (callback) =>
+    ipcRenderer.on("perform-tts", (event, text) => {
+      try {
+        const utterance = new SpeechSynthesisUtterance(text);
+        window.speechSynthesis.speak(utterance);
+      } catch (err) {
+        console.error("Error en la síntesis de voz:", err);
+      }
+    }),
 });
