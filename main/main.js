@@ -20,7 +20,7 @@ let appServe = null;
 
 const loadAppServe = async () => {
   if (app.isPackaged) {
-    const { default: serve } = await import('electron-serve');
+    const { default: serve } = await import("electron-serve");
     appServe = serve({
       directory: path.join(__dirname, "resources/app/dist"),
     });
@@ -55,7 +55,7 @@ const createWindow = async () => {
 };
 
 app.whenReady().then(async () => {
-  await loadAppServe();  // Asegúrate de cargar appServe antes de crear la ventana
+  await loadAppServe(); // Asegúrate de cargar appServe antes de crear la ventana
   createWindow();
 });
 
