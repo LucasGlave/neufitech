@@ -16,6 +16,7 @@ type buttonProps = {
   disabled?: boolean;
   svg?: string;
   state?: () => void;
+  displacementFunction?: (speakText: string) => void;
   comingSoon?: boolean;
   functionKeyboard?: {
     funct: string;
