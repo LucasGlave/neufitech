@@ -23,7 +23,7 @@ type buttonProps = {
     state: (functionToEjec: string) => void;
   };
   imagen?: {
-    src: StaticImport;
+    src: StaticImport | string;
     width?: number;
     height?: number;
     add?: string;
@@ -51,7 +51,7 @@ const ButtonAnimation = ({
   keyPress,
   displacementFunction,
   comingSoon,
-  execute
+  execute,
 }: buttonProps) => {
   const navigate = useRouter();
   const [isActive, setIsActive] = useState(false);
@@ -118,8 +118,8 @@ const ButtonAnimation = ({
               console.log(window.speechSynthesis.getVoices());
             }
           }
-          if(execute) {
-            execute()
+          if (execute) {
+            execute();
           }
           functionKeyboard?.state(functionKeyboard.funct);
           navigation != null && navigate.push(navigation);

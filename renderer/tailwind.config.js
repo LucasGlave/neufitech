@@ -1,8 +1,8 @@
 module.exports = {
-  darkMode: ['class'],
+  darkMode: ["class"],
   content: [
-    './renderer/pages/**/*.{js,ts,jsx,tsx}',
-    './renderer/components/**/*.{js,ts,jsx,tsx}',
+    "./renderer/pages/**/*.{js,ts,jsx,tsx}",
+    "./renderer/components/**/*.{js,ts,jsx,tsx}",
   ],
   prefix: "",
   theme: {
@@ -68,8 +68,13 @@ module.exports = {
         },
         // Añadir keyframes para la animación `flash`
         flash: {
-          '0%, 100%': { backgroundColor: 'rgb(40, 40, 40)' },
-          '50%': { backgroundColor: '#4caf50' },
+          "0%, 100%": { backgroundColor: "rgb(40, 40, 40)" },
+          "50%": { backgroundColor: "#4caf50" },
+        },
+        growBar: {
+          "0%": { height: "0%", opacity: "1" },
+          "99%": { height: "100%", opacity: "1" },
+          "100%": { height: "100%", opacity: "0" },
         },
       },
       animation: {
@@ -77,11 +82,12 @@ module.exports = {
         "accordion-up": "accordion-up 0.2s ease-out",
         // Añadir la animación `flash`
         flash: "flash 0.2s ease-in-out",
+        "grow-bar": "growBar 3s ease forwards",
       },
       fontSize: {
-        "5xl": "2rem"
-      }
+        "5xl": "2rem",
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],
-}
+};
