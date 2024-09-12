@@ -17,12 +17,18 @@ const Home = () => {
     <div id="home" className="flex justify-between w-full h-screen bg-zinc-900">
       <div className="flex justify-start w-full px-20 py-10 relative">
         
-        <div className="absolute left-4 top-4">
+        <div className="absolute left-4 top-4 flex items-center gap-4">
           <ButtonAnimation
             speakText="Salir"
             text="Salir"
-            propClass="w-[100px] h-[60px] text-2xl"
+            propClass="w-[100px] h-[40px] text-xl"
             execute={() => window.ipc.send('close', null)}
+          />
+          <ButtonAnimation
+            speakText="Minimizar"
+            text="Minimizar"
+            propClass="w-[160px] h-[40px] text-xl"
+            execute={() => window.ipc.send('minimize', null)}
           />
         </div>
         

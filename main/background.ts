@@ -1,5 +1,5 @@
 import path from 'path'
-import { app, ipcMain } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
 import serve from 'electron-serve'
 import { createWindow } from './helpers'
 import keySender from 'node-key-sender'
@@ -32,7 +32,7 @@ if (isProd) {
   const mainWindow = createWindow('main', {
     width: 1920,
     height: 1080,
-    fullscreen: true,
+    // fullscreen: true,
     frame: false,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
@@ -57,6 +57,10 @@ app.on('window-all-closed', () => {
 
 ipcMain.on('close', () => {
   app.quit()
+})
+
+ipcMain.on('minimize', () => {
+  BrowserWindow.getFocusedWindow().minimize()
 })
 
 ipcMain.on('message', async (event, arg) => {
