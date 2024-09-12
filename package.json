@@ -1,9 +1,9 @@
 {
   "private": true,
-  "name": "my-nextron-app",
-  "description": "My application description",
+  "name": "neufitech-app",
+  "description": "Neufitech App",
   "version": "1.0.0",
-  "author": "Yoshihide Shiono <shiono.yoshihide@gmail.com>",
+  "author": "Neufitech SRL",
   "main": "app/background.js",
   "scripts": {
     "dev": "nextron",

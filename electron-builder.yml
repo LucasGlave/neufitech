@@ -1,6 +1,6 @@
-appId: com.example.nextron
-productName: My Nextron App
-copyright: Copyright © 2018 Yoshihide Shiono
+appId: com.neufitech.app
+productName: Neufitech App
+copyright: Copyright © 2024 Neufitech
 directories:
   output: dist
   buildResources: resources
