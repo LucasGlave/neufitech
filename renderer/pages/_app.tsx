@@ -23,6 +23,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           border: '3px solid rgb(193, 11, 111)',
           mixBlendMode: 'exclusion'
         }}
+        trailingSpeed={18}
       />
 
       <Component {...pageProps} />
