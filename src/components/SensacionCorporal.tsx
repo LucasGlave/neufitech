@@ -1,22 +1,15 @@
 "use client";
 import Image from "next/image";
-import flechaAbajo from "../../public/flechaAbajo.png";
-import flechaArriba from "../../public/flechaArriba.png";
-import flechaDerecha from "../../public/flechaDerecha.png";
-import flechaIzquierda from "../../public/flechaIzquierda.png";
-import bodyMujer from "../../public/frente-body-mujer.svg";
-import bodyHombre from "../../public/frente-body-hombre.svg";
 import { useState } from "react";
 import ButtonAnimation from "./ButtonAnimation";
-import Crosshair from "./Crosshair";
+import LocalizacionRapida from "./LocalizacionRapida";
 
 const SensacionCorporal = () => {
   const [sex, setSex] = useState(false); // false = mujer, true = hombre
   const [position, setPosition] = useState(false); // false = frente, true = espalda
   const [part, setPart] = useState("body"); // Parte del cuerpo seleccionada
   const [isOff, setIsOff] = useState(false);
-  const [xDisplacement, setXDisplacement] = useState(0);
-  const [yDisplacement, setYDisplacement] = useState(0);
+
   const [animate, setAnimate] = useState(false);
 
   const getBodyImage = () => {
@@ -34,24 +27,6 @@ const SensacionCorporal = () => {
   };
   const changePart = (newPart: string) => {
     setPart(newPart);
-  };
-
-  const displaceCrosshair = (direction: string) => {
-    let displacement = 10;
-    switch (direction) {
-      case "Arriba":
-        setYDisplacement((prev) => prev + displacement);
-        break;
-      case "Abajo":
-        setYDisplacement((prev) => prev - displacement);
-        break;
-      case "Derecha":
-        setXDisplacement((prev) => prev - displacement);
-        break;
-      case "Izquierda":
-        setXDisplacement((prev) => prev + displacement);
-        break;
-    }
   };
 
   return (
@@ -156,14 +131,6 @@ const SensacionCorporal = () => {
       </div>
       <div className="flex flex-col justify-between gap-2 items-center w-[40%] bg-zinc-900">
         <div className="flex flex-row gap-2">
-          <Crosshair
-            isOff={isOff}
-            xDisplacement={xDisplacement}
-            yDisplacement={yDisplacement}
-            setAnimate={setAnimate}
-            setXDisplacement={setXDisplacement}
-            setYDisplacement={setYDisplacement}
-          />
           <ButtonAnimation
             disabled={isOff ? true : false}
             state={changePosition}
@@ -171,6 +138,7 @@ const SensacionCorporal = () => {
             text="GIRAR"
             propClass="w-44 h-28"
           />
+          <div className="w-44 h-28" />
           <ButtonAnimation
             functionKeyboard={{
               funct: "changeIsOff",
@@ -185,42 +153,7 @@ const SensacionCorporal = () => {
             propClass="w-44 h-28"
           />
         </div>
-        <div className="flex flex-col gap-2">
-          <div className="flex flex-row gap-2">
-            <div className="w-44 h-28 "></div>
-            <ButtonAnimation
-              disabled={isOff ? true : false}
-              displacementFunction={displaceCrosshair}
-              speakText="Arriba"
-              propClass="w-44 h-28 flex justify-center items-center"
-              imagen={{ src: flechaArriba, width: 60, height: 60 }}
-            />
-            <div className="w-44 h-28 "></div>
-          </div>
-          <div className="flex flex-row gap-2">
-            <ButtonAnimation
-              displacementFunction={displaceCrosshair}
-              disabled={isOff ? true : false}
-              speakText="Izquierda"
-              propClass="w-44 h-28 flex justify-center items-center"
-              imagen={{ src: flechaIzquierda, width: 60, height: 60 }}
-            />
-            <ButtonAnimation
-              disabled={isOff ? true : false}
-              displacementFunction={displaceCrosshair}
-              speakText="Abajo"
-              propClass="w-44 h-28 flex justify-center items-center"
-              imagen={{ src: flechaAbajo, width: 60, height: 60 }}
-            />
-            <ButtonAnimation
-              disabled={isOff ? true : false}
-              displacementFunction={displaceCrosshair}
-              speakText="Derecha"
-              propClass="w-44 h-28 flex justify-center items-center"
-              imagen={{ src: flechaDerecha, width: 60, height: 60 }}
-            />
-          </div>
-        </div>
+        <LocalizacionRapida isOff={isOff} setAnimate={setAnimate} />
         <div className="flex flex-col gap-2">
           <div className="flex flex-row gap-2">
             <ButtonAnimation
