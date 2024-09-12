@@ -1,0 +1,12 @@
+appId: com.neufitech.app
+productName: Neufitech App
+copyright: Copyright © 2024 Neufitech
+directories:
+  output: dist
+  buildResources: resources
+files:
+  - from: .
+    filter:
+      - package.json
+      - app
+publish: null
