@@ -2,6 +2,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import ButtonAnimation from "../ButtonAnimation";
 import TestPredictor from "../TestPredictor";
+import SaveText from "./SaveText";
+import ModalTexts from "./ModalTexts";
 
 const Teclado = () => {
   const KeyboardLayout = [
@@ -42,6 +44,9 @@ const Teclado = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const [isOff, setIsOff] = useState(false);
+  const [activeModal, setActiveModal] = useState(false)
+  const [savedTexts, setSavedTexts] = useState([]);
+
 
   const currentSymbolsLayout =
     symbolPage === 1 ? SymbolsLayoutPage1 : SymbolsLayoutPage2;
@@ -91,6 +96,20 @@ const Teclado = () => {
     getLastWord()
   }, [output])
 
+  const handleSaveText = () => {
+    if (output.length > 0) {
+      const existingTexts = JSON.parse(localStorage.getItem('texts')) || [];
+      existingTexts.push(output);
+      localStorage.setItem('texts', JSON.stringify(existingTexts));
+    }
+  };
+
+  const handleShowTexts = () => {
+    const storedTexts = JSON.parse(localStorage.getItem('texts')) || [];
+    setSavedTexts(storedTexts);
+    setActiveModal(true)
+  };
+
   const functionAction = (key?: string) => {
     ejecFunction === "deleteAll" && setOutput("");
     ejecFunction === "deleteOne" && setOutput((prev) => prev.slice(0, -1));
@@ -101,6 +120,9 @@ const Teclado = () => {
     ejecFunction === "spaceKey" && setOutput((prev) => prev + " ");
     ejecFunction === "enterKey" && setOutput((prev) => prev + "\n");
     ejecFunction === "changeIsOff" && setIsOff(!isOff)
+    ejecFunction === "saveText" && handleSaveText()
+    ejecFunction === "getTexts" && handleShowTexts()
+    ejecFunction === "closeModal" && setActiveModal(false)
     ejecFunction.includes("pressKey") &&
       ((key = ejecFunction.split(" ")[1]), setOutput((prev) => prev + key));
     ejecFunction.includes("addWord") &&
@@ -119,6 +141,7 @@ const Teclado = () => {
       className="flex flex-col gap-8 items-center bg-keyboardHeader shadow-md h-screen"
       ref={containerRef}
     >
+      {activeModal && <ModalTexts activeTexts={savedTexts} state={changeState} />}
       <div className="w-full flex flex-row justify-between items-center p-4 h-[15%]">
         <ButtonAnimation
           disabled={isOff ? true : false}
@@ -196,21 +219,7 @@ const Teclado = () => {
           style={{ fontSize: "44px" }}
           placeholder="Tu texto aparecerá aquí..."
         />
-        <div className="flex gap-2">
-          <ButtonAnimation
-            comingSoon={true}
-            disabled={true}
-            speakText="GUARDAR FRASE"
-            svg='<svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="#ffffff" class="bi bi-save"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#FFFF" stroke-width="0.096"> <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z"></path> </g><g id="SVGRepo_iconCarrier"> <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z"></path> </g></svg>'
-            propClass="w-[150px] h-[120px] bg-keybackground"
-          />
-          <ButtonAnimation
-            comingSoon={true}
-            disabled={true}
-            text="FRASES GUARDADAS"
-            propClass="w-[150px] h-[120px] bg-keybackground"
-          />
-        </div>
+        <SaveText state={changeState} />
       </div>
       <div className="bg-zinc-900 flex flex-col w-full h-full gap-4 pt-4 p-2">
         <div className="flex flex-row justify-between items-center px-4">
