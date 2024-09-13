@@ -126,11 +126,7 @@ const ButtonAnimation = ({
 
           clearInterval(progressInterval);
           setProgress(0);
-
-          if (isActive) {
-            startTimer();
-          }
-        }, 1000);
+        }, 1000); // cambiar con config
       };
 
       startTimer();

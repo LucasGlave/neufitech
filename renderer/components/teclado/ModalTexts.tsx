@@ -17,7 +17,7 @@ const ModalTexts = ({ activeTexts, state }: ModalTextsProps) => {
                 />
             </div>
             <div className="bg-[#576280] w-full rounded-lg p-8 border">
-                {activeTexts.map((text, i) => (
+                {activeTexts.length > 0 ? activeTexts.map((text, i) => (
                     <div key={i} className="flex flex-col gap-8 items-start w-full py-3">
                         <div className="flex items-center gap-8">
                             <ButtonAnimation
@@ -29,7 +29,7 @@ const ModalTexts = ({ activeTexts, state }: ModalTextsProps) => {
                         </div>
                         {i !== activeTexts.length - 1 && <hr className="w-full h-[1px] bg-white" />}
                     </div>
-                ))}
+                )) : <h3 className="font-bold text-white text-2xl text-center">AUN NO HAY FRASES GUARDADAS</h3>}
             </div>
         </div>
     )
