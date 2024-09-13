@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import ButtonAnimation from "../ButtonAnimation";
+import TestPredictor from "../TestPredictor";
 
 const Teclado = () => {
   const KeyboardLayout = [
@@ -31,6 +32,7 @@ const Teclado = () => {
   };
 
   const [output, setOutput] = useState<string>("");
+  const [lastWord, setLastWord] = useState<string>("");
   const [isUpperCase, setIsUpperCase] = useState<boolean>(false);
   const [showSymbols, setShowSymbols] = useState<boolean>(false);
   const [symbolPage, setSymbolPage] = useState<number>(1);
@@ -57,6 +59,11 @@ const Teclado = () => {
     setOutput(output.substring(0, lastSpaceIndex));
   };
 
+  const getLastWord = () => {
+    const lastSpaceIndex = output.lastIndexOf(" ");
+    setLastWord(output.substring(lastSpaceIndex + 1));
+  };
+
   const getUpdatedKeyboardLayout = () => {
     let layout = KeyboardLayout;
 
@@ -81,6 +88,7 @@ const Teclado = () => {
       textareaRef.current.setSelectionRange(output.length, output.length);
     }
     isTildeActive && setIsTildeActive(false)
+    getLastWord()
   }, [output])
 
   const functionAction = (key?: string) => {
@@ -92,9 +100,11 @@ const Teclado = () => {
     ejecFunction === "changeSymbol" && setShowSymbols(!showSymbols);
     ejecFunction === "spaceKey" && setOutput((prev) => prev + " ");
     ejecFunction === "enterKey" && setOutput((prev) => prev + "\n");
+    ejecFunction === "changeIsOff" && setIsOff(!isOff)
     ejecFunction.includes("pressKey") &&
       ((key = ejecFunction.split(" ")[1]), setOutput((prev) => prev + key));
-    ejecFunction === "changeIsOff" && setIsOff(!isOff)
+    ejecFunction.includes("addWord") &&
+      ((deleteLastWord(), key = ejecFunction.split(" ")[1]), setOutput((prev) => !prev ? key + " " : prev + " " + key + " "))
 
   };
 
@@ -165,7 +175,6 @@ const Teclado = () => {
         <div className="flex gap-2">
           <ButtonAnimation
             comingSoon={true}
-
             disabled={isOff ? true : false}
             speakText="Reemplazar"
             svg="<svg id='Capa_1' data-name='Capa 1' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 511.93 511.97'><defs><style>.cls-1{fill:#fff;}</style></defs><title>Ãcono reemplazar</title><path class='cls-1' d='M63.4,2.4C48.6,6.3,37.2,12.8,25.7,23.9A81.67,81.67,0,0,0,7.5,49.3C.6,63.9.6,63.6.2,114.7c-.3,43.5-.2,46.7,1.7,54.7,7.2,30.3,30.1,53.9,60.7,62.8,7.7,2.3,8.9,2.3,54.4,2.3,52.7,0,52.9,0,69.6-8a83.18,83.18,0,0,0,39.8-39.8c8.1-17,8.1-17,8.1-69.7,0-42.1-.2-47.1-1.8-53-9-31.5-32.5-54.7-63-62C162.2.2,157.9,0,117,.1,73.6.1,72.3.2,63.4,2.4Zm93.8,41.7a42.85,42.85,0,0,1,33.8,37c1.2,9.6,1.2,63.2,0,72.8-1.3,9.8-4.7,16.9-11.6,24.2A40.57,40.57,0,0,1,154,191c-9.9,1.2-64.6,1.2-73.5,0-18.3-2.7-32.6-15.9-36.4-33.8-1.4-6.7-1.5-71.8-.1-79.3,2.9-15.5,15.6-29.2,31-33.3C82,42.7,148.8,42.3,157.2,44.1Z' transform='translate(-0.07 -0.04)'/><path class='cls-1' d='M353.3,1.5c-1.7.7-15.5,13-30.6,27.4-29,27.5-34.1,33.5-39.8,46.9a85.08,85.08,0,0,0-5.9,31,72.39,72.39,0,0,0,5.1,28.4c6.1,15.7,12.5,23.1,51.7,59.7,9,8.4,17.9,15.9,19.8,16.7,7.2,3,18.8,1.2,24.2-3.9,7.3-6.8,8.7-20.6,2.9-28.4-1.2-1.6-13.7-13.7-27.7-26.9l-25.4-23.9,39.4-.3c23.7-.1,41.6.2,44.9.8A42.87,42.87,0,0,1,447,166c.5,4.1,1,17.8,1,30.3,0,20.5.2,23.2,1.9,26.6a21.58,21.58,0,0,0,34.8,5.5c2.3-2.3,4.7-5.9,5.3-8.1.8-2.7,1.1-13.1.8-34.8-.4-28.2-.7-31.7-2.7-38.3-8.2-27.7-28.5-48.8-55.9-58.3l-9.7-3.4L375.1,85l-47.4-.5,16.9-16c40.6-38.4,39.9-37.5,39.7-48.1A20.86,20.86,0,0,0,372.8,1.9C368.3-.4,358.1-.6,353.3,1.5Z' transform='translate(-0.07 -0.04)'/><path class='cls-1' d='M34.6,278.5a22.6,22.6,0,0,0-11.8,10.9c-1.8,3.6-1.9,5.5-1.6,36.5l.4,32.6,3.2,9.5a82,82,0,0,0,21.1,34.1A83.26,83.26,0,0,0,80,423.3l9.5,3.2,46.8.3c25.7.2,46.7.7,46.7,1.2s-11.1,11.2-24.7,23.9-26,25-27.5,27.3a21.46,21.46,0,0,0,8.3,30.9c4.6,2.3,14.4,2.6,19.3.5,3.5-1.4,53.7-48.3,59.2-55.2a81.08,81.08,0,0,0,16-34.8c2-9.5,1.4-25.5-1.2-35.1-2.3-8.6-8.4-21-13.8-28.2s-54.8-53.8-59.8-56.4c-4.7-2.5-14.7-2.5-19.7.1a21.7,21.7,0,0,0-9,30c1.2,2,13.5,14.4,27.5,27.4S183,382.6,183,383.1c0,1.4-77.7,1.1-84.2-.2a44.2,44.2,0,0,1-33.7-33.7c-.6-3.1-1.1-15.6-1.1-30.5,0-28.6-.5-30.7-7.6-36.5A21.51,21.51,0,0,0,34.6,278.5Z' transform='translate(-0.07 -0.04)'/><path class='cls-1' d='M343.8,278.9c-24.9,5.4-47.3,23.2-58.4,46.6-7.8,16.5-7.7,15.6-8.1,65.4-.4,38.2-.2,45.5,1.2,52.5A85.81,85.81,0,0,0,342.3,510c7.5,1.8,11.9,2,52.2,2,40.5,0,44.7-.2,52.3-2A85.73,85.73,0,0,0,510,446.8c1.8-7.6,2-11.8,2-52.3,0-40.3-.2-44.7-2-52.2-7.2-30.3-30.1-53.6-61.5-62.9-5.3-1.5-11.5-1.8-51-2C356.7,277.1,351.7,277.3,343.8,278.9ZM431.5,321A42.8,42.8,0,0,1,468,355.5c.8,4.1,1,17.5.8,43-.3,35.5-.4,37.2-2.6,42.5A46.46,46.46,0,0,1,441,466.2c-5.3,2.2-7,2.3-42.5,2.6-25.4.2-38.9,0-43-.8-18.5-3.6-32-18.1-34.5-37.1-1.2-9.6-1.2-63.2,0-72.8,1.3-9.8,4.7-16.9,11.6-24.2a42.14,42.14,0,0,1,23.9-12.8C365,319.9,423.1,319.8,431.5,321Z' transform='translate(-0.07 -0.04)'/></svg>"
@@ -213,26 +222,7 @@ const Teclado = () => {
             propClass="w-[80px] h-[60px] flex justify-center items-center"
           />
           <div className="flex gap-2">
-            <ButtonAnimation
-              disabled={isOff ? true : false}
-              propClass="min-w-[150px] h-[60px]"
-              text="Sug. palabra"
-            />
-            <ButtonAnimation
-              disabled={isOff ? true : false}
-              propClass="min-w-[150px] h-[60px]"
-              text="Sug. palabra"
-            />
-            <ButtonAnimation
-              disabled={isOff ? true : false}
-              propClass="min-w-[150px] h-[60px]"
-              text="Sug. palabra"
-            />
-            <ButtonAnimation
-              disabled={isOff ? true : false}
-              propClass="min-w-[150px] h-[60px]"
-              text="Sug. palabra"
-            />
+            <TestPredictor keys={`${lastWord}`} isOff={isOff} state={changeState} />
           </div>
           <div className="flex gap-2">
             <ButtonAnimation

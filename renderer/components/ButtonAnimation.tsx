@@ -71,7 +71,7 @@ const ButtonAnimation = ({
         timer = setTimeout(async () => {
           setIsAction(true);
           displacementFunction && displacementFunction(speakText as string);
-          state && state();
+          state && state()
           if (keyCombination) {
             if (window.ipc) {
               document.getElementById("whatsapp-webview")?.focus();
@@ -155,22 +155,18 @@ const ButtonAnimation = ({
         setIsActive(false);
         setIsAction(false);
       }}
-      className={`border-2 ${!isAction ? color : "bg-charge"} ${
-        isActive
-          ? "border-chargescale-105"
-          : buttonBorder
+      className={`border-2 ${!isAction ? color : "bg-charge"} ${isActive
+        ? "border-chargescale-105"
+        : buttonBorder
           ? buttonBorder
           : "border-white"
-      } ${propClass} ${
-        innerText && "relative"
-      } z-10 rounded-lg transition-all animate-in animate-out font-semibold ${
-        textColor ? textColor : "text-white"
-      } ${comingSoon && "grayscale-[50%] overflow-hidden"}`}
+        } ${propClass} ${innerText && "relative"
+        } z-10 rounded-lg transition-all animate-in animate-out font-semibold ${textColor ? textColor : "text-white"
+        } ${comingSoon && "grayscale-[50%] overflow-hidden"}`}
     >
       <div
-        className={`relative h-full w-full flex items-center justify-center ${
-          svg && "p-5"
-        }`}
+        className={`relative h-full w-full flex items-center justify-center ${svg && "p-5"
+          }`}
       >
         {imagen != null ? (
           <Image
@@ -178,9 +174,8 @@ const ButtonAnimation = ({
             width={imagen.width}
             height={imagen.height}
             alt="dynamic image"
-            className={`rounded-lg object-contain relative ${
-              imagen.add && imagen.add
-            } ${innerText && "opacity-85 brightness-75"}`}
+            className={`rounded-lg object-contain relative ${imagen.add && imagen.add
+              } ${innerText && "opacity-85 brightness-75"}`}
           />
         ) : text ? (
           text
