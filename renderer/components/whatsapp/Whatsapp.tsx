@@ -19,9 +19,7 @@ const Whatsapp = () => {
   const [activeButtons, setActiveButtons] = useState([
     "Chat-anterior",
     "Chat-siguiente",
-    // "Buscar-chat",
     "Nuevo-chat",
-    // "Seleccionar",
     "Perfil",
   ]);
   const [activeButtonConfigs, setActiveButtonConfigs] = useState<Record<string, RouteConfig>>({});
@@ -35,9 +33,7 @@ const Whatsapp = () => {
       setActiveButtons([
         "Chat-anterior",
         "Chat-siguiente",
-        // "Buscar-chat",
         "Nuevo-chat",
-        // "Seleccionar",
         "Perfil",
       ]);
       setActiveButtonConfigs({});
@@ -59,9 +55,7 @@ const Whatsapp = () => {
         setActiveButtons([
           "Chat-anterior",
           "Chat-siguiente",
-          // "Buscar-chat",
           "Nuevo-chat",
-          // "Seleccionar",
           "Perfil",
         ]);
         setActiveButtonConfigs({});
@@ -81,8 +75,8 @@ const Whatsapp = () => {
       <div
         className="w-full flex items-center justify-center"
       >
-        <div className="flex flex-col items-center justify-between w-full h-full">
-          <div className="flex w-full justify-between items-center gap-2 p-2">
+        <div className="flex flex-col items-center justify-between w-[20%] h-full">
+          <div className="flex flex-col w-full justify-between items-center gap-2 p-2">
             <ButtonAnimation
               disabled={isOff ? true : false}
               speakText="Volver"
@@ -100,12 +94,7 @@ const Whatsapp = () => {
             />
           </div>
           <div
-            className="p-2 gap-2 grid w-full"
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(45%, 1fr))",
-              gridAutoRows: "auto",
-            }}
+            className="p-2 flex flex-col gap-2 w-full"
           >
             {activeButtons.map((buttonName, index) => {
               const buttonConfig = activeButtonConfigs[buttonName] || {};
@@ -129,7 +118,7 @@ const Whatsapp = () => {
         </div>
         <div className="flex flex-col w-full h-full">
           <Webview url="https://web.whatsapp.com" />
-          <TecladoGlobal />
+          <TecladoGlobal isOff={isOff} />
         </div>
       </div>
     </div>

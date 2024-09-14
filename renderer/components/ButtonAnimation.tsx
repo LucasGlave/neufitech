@@ -143,7 +143,11 @@ const ButtonAnimation = ({
       setProgress(0);
     };
   }, [isActive]);
-
+  let wordCount: number
+  if (innerText || text) {
+    let textToUse = innerText ? innerText : text
+    wordCount = textToUse.split(/\s+/).filter(word => word.length > 0).length
+  }
   return (
     <button
       id="myButton"
@@ -161,7 +165,7 @@ const ButtonAnimation = ({
           ? buttonBorder
           : "border-white"
         } ${propClass} ${innerText && "relative"
-        } z-10 rounded-lg transition-all animate-in animate-out font-semibold ${textColor ? textColor : "text-white"
+        } z-10 rounded-lg transition-all animate-in animate-out font-semibold ${wordCount > 1 ? "whitespace-pre-line" : "break-all"}   ${textColor ? textColor : "text-white"
         } ${comingSoon && "grayscale-[50%] overflow-hidden"}`}
     >
       <div
@@ -205,7 +209,7 @@ const ButtonAnimation = ({
           />
         )}
         {innerText && (
-          <h3 className="absolute font-bold text-3xl flex text-center items-center justify-center">
+          <h3 className="absolute font-bold text-3xl flex text-center items-center justify-center whitespace-pre-line">
             {innerText}
           </h3>
         )}
