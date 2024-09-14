@@ -1,4 +1,4 @@
-import SensacionCorporal from "../../components/SensacionCorporal";
+import SensacionCorporal from "../../components/sensacion-corporal/SensacionCorporal";
 
 const Page = () => {
   return (

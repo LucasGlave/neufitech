@@ -60,7 +60,7 @@ const Categories = () => {
 
   return (
     <div className="flex items-start justify-center p-8 w-full min-h-screen text-white bg-zinc-900">
-      <div className="flex justify-start w-4/5">
+      <div className="flex justify-start w-[85%]">
         <div className="flex flex-col justify-around gap-8 w-full text-center">
           <div className="flex flex-col relative w-full gap-8">
             <div className="flex flex-row items-center justify-between w-full">
@@ -85,7 +85,7 @@ const Categories = () => {
           </div>
           <div className="flex flex-row justify-between gap-8 w-full h-full">
             <div className="w-full h-full flex flex-col gap-8">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 w-full">
                 {Object.entries(mockCategories).map(([i, actions]) => (
                   <ButtonAnimation
                     disabled={isOff ? true : false}
@@ -95,7 +95,25 @@ const Categories = () => {
                     navigation={`/senal-comunicacion/${Object.keys(
                       actions
                     )[0].toLowerCase()}`}
-                    speakText={`${Object.keys(actions)[0]}`}
+                    speakText={`${Object.keys(actions)[0] === 'BANO' ? 'BAÑO' : Object.keys(actions)[0]}`}
+                    imagen={{
+                      src: Object.values(actions)[0],
+                      width: 400,
+                      height: 400,
+                      add: "h-full w-full object-cover",
+                    }}
+                  />
+                ))}
+                {Object.entries(mockCategories).map(([i, actions]) => (
+                  <ButtonAnimation
+                    disabled={isOff ? true : false}
+                    key={i}
+                    propClass="w-full h-[250px] flex items-center justify-center"
+                    innerText={`${Object.keys(actions)[0] === 'BANO' ? 'BAÑO' : Object.keys(actions)[0]}`}
+                    navigation={`/senal-comunicacion/${Object.keys(
+                      actions
+                    )[0].toLowerCase()}`}
+                    speakText={`${Object.keys(actions)[0] === 'BANO' ? 'BAÑO' : Object.keys(actions)[0]}`}
                     imagen={{
                       src: Object.values(actions)[0],
                       width: 400,
@@ -109,7 +127,7 @@ const Categories = () => {
           </div>
         </div>
       </div>
-      <div className="flex w-1/5 pt-[7rem] h-full items-start justify-start flex-col relative">
+      <div className="flex w-[15%] pt-[7rem] h-full items-start justify-start flex-col relative">
         <div className="fixed flex flex-col justify-center items-center gap-8">
           <ButtonAnimation
             disabled={isOff ? true : false}

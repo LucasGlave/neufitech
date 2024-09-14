@@ -1,22 +1,22 @@
-import logoFacebook from "../public/icon-facebook.png";
-import logoWhatsapp from "../public/icon-whatsapp.png";
-import logoInstagram from "../public/icon-instagram.png";
-import logoTikTok from "../public/icon-tiktok.png";
-import logoNetflix from "../public/icon-netflix.png";
-import logoMax from "../public/icon-max.png";
-import logoYoutube from "../public/icon-youtube.png";
-import logoPrimeVideo from "../public/icon-primevideo.png";
-import logoSensacionCorp from "../public/icon-sens-corporal.png";
-import logoComunicacion from "../public/icon-comunicacion.png";
-import logoEscritura from "../public/icon-escritura.png";
-import logoEscrituraIA from "../public/icon-escritura-ia.png";
-import ButtonAnimation from "./ButtonAnimation";
+import logoFacebook from "../../public/icon-facebook.png";
+import logoWhatsapp from "../../public/icon-whatsapp.png";
+import logoInstagram from "../../public/icon-instagram.png";
+import logoTikTok from "../../public/icon-tiktok.png";
+import logoNetflix from "../../public/icon-netflix.png";
+import logoMax from "../../public/icon-max.png";
+import logoYoutube from "../../public/icon-youtube.png";
+import logoPrimeVideo from "../../public/icon-primevideo.png";
+import logoSensacionCorp from "../../public/icon-sens-corporal.png";
+import logoComunicacion from "../../public/icon-comunicacion.png";
+import logoEscritura from "../../public/icon-escritura.png";
+import logoEscrituraIA from "../../public/icon-escritura-ia.png";
+import ButtonAnimation from "../ButtonAnimation";
 
 const Home = () => {
   return (
     <div id="home" className="flex justify-between w-full h-screen bg-zinc-900">
       <div className="flex justify-start w-full px-20 py-10 relative">
-        
+
         <div className="absolute left-4 top-4 flex items-center gap-4">
           <ButtonAnimation
             speakText="Salir"
@@ -31,7 +31,7 @@ const Home = () => {
             execute={() => window.ipc.send('minimize', null)}
           />
         </div>
-        
+
         <div className="flex flex-col justify-around gap-4 w-full">
           <div className="flex h-[25%] justify-around relative gap-4 w-full">
             <ButtonAnimation

@@ -2,8 +2,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import ButtonAnimation from "../ButtonAnimation";
 import trash from "../../public/eliminar.svg";
+// import TestPredictor from "../TestPredictor";
 
-const TecladoGlobal = () => {
+type TecladoGlobalProps = {
+  isOff: boolean
+}
+
+const TecladoGlobal = ({ isOff }: TecladoGlobalProps) => {
   const KeyboardLayout = [
     ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
     ["a", "s", "d", "f", "g", "h", "j", "k", "l", "ñ"],
@@ -122,36 +127,24 @@ const TecladoGlobal = () => {
       <div className="bg-zinc-900 flex flex-col w-full h-full gap-4 pt-4 p-2">
         <div className="flex flex-row justify-between items-center">
           <ButtonAnimation
+            disabled={isOff}
             functionKeyboard={{ funct: "deleteAll", state: changeState }}
             imagen={{ src: trash, width: 50, height: 50, add: "invert" }}
             propClass="w-[180px] h-[60px] flex justify-center items-center"
           />
           <div className="flex gap-2">
-            <ButtonAnimation
-              propClass="min-w-[150px] h-[60px]"
-              text="Sug. palabra"
-            />
-            <ButtonAnimation
-              propClass="min-w-[150px] h-[60px]"
-              text="Sug. palabra"
-            />
-            <ButtonAnimation
-              propClass="min-w-[150px] h-[60px]"
-              text="Sug. palabra"
-            />
-            <ButtonAnimation
-              propClass="min-w-[150px] h-[60px]"
-              text="Sug. palabra"
-            />
+            {/* <TestPredictor /> */}
           </div>
           <div className="flex gap-2">
             <ButtonAnimation
+              disabled={isOff}
               functionKeyboard={{ funct: "deleteOne", state: changeState }}
               keyPress="back_space"
               propClass="min-w-[150px] h-[60px]"
               text="Borrar letra"
             />
             <ButtonAnimation
+              disabled={isOff}
               functionKeyboard={{ funct: "deleteLastWord", state: changeState }}
               propClass="min-w-[150px] h-[60px]"
               text="Borrar palabra"
@@ -166,6 +159,7 @@ const TecladoGlobal = () => {
             <div key={rowIndex} className="flex justify-center gap-2">
               {row.map((key, index) => (
                 <ButtonAnimation
+                  disabled={isOff}
                   key={`${rowIndex}-${index}`}
                   text={key}
                   propClass="w-full h-full text-5xl"
@@ -180,32 +174,38 @@ const TecladoGlobal = () => {
           ))}
           <div className="flex justify-center gap-2 mt-1">
             <ButtonAnimation
+              disabled={isOff}
               functionKeyboard={{ funct: "changeTilde", state: changeState }}
               propClass="w-full h-[60px] text-2xl"
               text={`${isTildeActive ? "SACAR TILDE" : "TILDE"}`}
             />
             <ButtonAnimation
+              disabled={isOff}
               functionKeyboard={{ funct: "changeMayus", state: changeState }}
               propClass="w-full h-[60px] text-2xl"
               text="MAYUS"
             />
             <ButtonAnimation
+              disabled={isOff}
               keyPress="space"
               propClass="w-full h-[60px] text-2xl"
               text="____"
               functionKeyboard={{ funct: "spaceKey", state: changeState }}
             />
             <ButtonAnimation
+              disabled={isOff}
               functionKeyboard={{ funct: "changeSymbol", state: changeState }}
               propClass="w-full h-[60px] text-2xl"
               text={`${showSymbols ? "ABC" : "123.!"}`}
             />
             <ButtonAnimation
+              disabled={isOff}
               propClass="w-full h-[60px] text-2xl"
               text="ENTER"
               keyCombination={["shift", "enter"]}
             />
             <ButtonAnimation
+              disabled={isOff}
               propClass="w-full h-[60px] text-2xl"
               text="Enviar"
               keyPress={"enter"}

@@ -1,5 +1,5 @@
 import { useState, Dispatch, SetStateAction } from "react";
-import ButtonAnimation from "./ButtonAnimation";
+import ButtonAnimation from "../ButtonAnimation";
 
 type buttonProps = {
   isOff: boolean;

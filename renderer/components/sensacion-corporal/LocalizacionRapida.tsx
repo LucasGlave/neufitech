@@ -1,5 +1,9 @@
 import { useState, Dispatch, SetStateAction } from "react";
-import ButtonAnimation from "./ButtonAnimation";
+import ButtonAnimation from "../ButtonAnimation";
+import flechaArriba from "../../public/flechaArriba.png"
+import flechaAbajo from "../../public/flechaAbajo.png"
+import flechaIzquierda from "../../public/flechaIzquierda.png"
+import flechaDerecha from "../../public/flechaDerecha.png"
 
 type buttonProps = {
   isOff: boolean;
@@ -54,14 +58,14 @@ const LocalizacionRapida = ({ isOff, setAnimate }: buttonProps) => {
     }
   };
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex flex-row gap-2">
-        <div className="w-44 h-28">
+    <div className="flex flex-col gap-2 w-full">
+      <div className="flex flex-row gap-2 w-full">
+        <div className="w-full h-28">
           <ButtonAnimation
             disabled={isOff ? true : false}
             speakText="Localizacion rapida"
             text="LOCALIZACION RAPIDA"
-            propClass="w-44 h-28"
+            propClass="w-full h-28"
             state={spawnSVG}
           />
           {showSVG && mousePosition && (
@@ -100,16 +104,15 @@ const LocalizacionRapida = ({ isOff, setAnimate }: buttonProps) => {
           disabled={isOff ? true : false}
           displacementFunction={displaceCrosshair}
           speakText="Arriba"
-          propClass="w-44 h-28 flex justify-center items-center"
-          imagen={{ src: "../public/flechaArriba.png", width: 60, height: 60 }}
+          propClass="w-full h-28 flex justify-center items-center"
+          imagen={{ src: flechaArriba, width: 60, height: 60 }}
         />
         <ButtonAnimation
           disabled={showSVG ? (isOff ? true : false) : true}
           speakText="Borrar localizacion"
           text="BORRAR LOCALIZACION"
-          propClass={`w-44 h-28 ${
-            showSVG ? "" : "text-gray-400 border-gray-500"
-          }`}
+          propClass={`w-full h-28 ${showSVG ? "" : "text-gray-400 border-gray-500"
+            }`}
           state={hideSVG}
         />
       </div>
@@ -118,9 +121,9 @@ const LocalizacionRapida = ({ isOff, setAnimate }: buttonProps) => {
           displacementFunction={displaceCrosshair}
           disabled={isOff ? true : false}
           speakText="Izquierda"
-          propClass="w-44 h-28 flex justify-center items-center"
+          propClass="w-full h-28 flex justify-center items-center"
           imagen={{
-            src: "../public/flechaIzquierda.png",
+            src: flechaIzquierda,
             width: 60,
             height: 60,
           }}
@@ -129,15 +132,15 @@ const LocalizacionRapida = ({ isOff, setAnimate }: buttonProps) => {
           disabled={isOff ? true : false}
           displacementFunction={displaceCrosshair}
           speakText="Abajo"
-          propClass="w-44 h-28 flex justify-center items-center"
-          imagen={{ src: "../public/flechaAbajo.png", width: 60, height: 60 }}
+          propClass="w-full h-28 flex justify-center items-center"
+          imagen={{ src: flechaAbajo, width: 60, height: 60 }}
         />
         <ButtonAnimation
           disabled={isOff ? true : false}
           displacementFunction={displaceCrosshair}
           speakText="Derecha"
-          propClass="w-44 h-28 flex justify-center items-center"
-          imagen={{ src: "../public/flechaDerecha.png", width: 60, height: 60 }}
+          propClass="w-full h-28 flex justify-center items-center"
+          imagen={{ src: flechaDerecha, width: 60, height: 60 }}
         />
       </div>
     </div>
