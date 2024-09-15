@@ -1,9 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
-import Webview from "../Webview";
-import ButtonAnimation from "../ButtonAnimation";
+import Webview from "../../Webview";
+import ButtonAnimation from "../../ButtonAnimation";
 import whatsappRoutes from "./routeWhatsapp";
-import TecladoGlobal from "../teclado/TecladoGlobal";
+import TecladoGlobal from "../../teclado/TecladoGlobal";
 
 type RouteConfig = {
   keyCombination?: string[];
@@ -105,6 +105,7 @@ const Whatsapp = () => {
                   functionKeyboard={{ funct: buttonName, state: changeState }}
                   keyCombination={!buttonConfig.keyCombination ? route && route[buttonName].keyCombination : buttonConfig.keyCombination}
                   keyPress={!buttonConfig.keyPress ? route && route[buttonName].keyPress : buttonConfig.keyPress}
+                  app="whatsapp-webview"
                   key={index}
                   textColor="black"
                   text={`${buttonName.replace("-", " ").replace("-", " ")}`}
@@ -117,7 +118,7 @@ const Whatsapp = () => {
           <div />
         </div>
         <div className="flex flex-col w-full h-full">
-          <Webview url="https://web.whatsapp.com" />
+          <Webview url="https://web.whatsapp.com" app="whatsapp-webview" />
           <TecladoGlobal isOff={isOff} />
         </div>
       </div>

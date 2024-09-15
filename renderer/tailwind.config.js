@@ -15,6 +15,7 @@ module.exports = {
     },
     extend: {
       colors: {
+        tiktok: "#ff3b5c",
         border: "hsl(var(--border))",
         keybackground: "#011820",
         keyboardHeader: "#576280",

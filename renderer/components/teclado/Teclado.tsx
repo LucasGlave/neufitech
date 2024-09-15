@@ -4,6 +4,7 @@ import ButtonAnimation from "../ButtonAnimation";
 import TestPredictor from "../TestPredictor";
 import SaveText from "./SaveText";
 import ModalTexts from "./ModalTexts";
+import CarrouselEstados from "../CarrouselEstados";
 
 const Teclado = () => {
   const KeyboardLayout = [
@@ -99,7 +100,7 @@ const Teclado = () => {
   const handleSaveText = () => {
     if (output.length > 0) {
       const existingTexts = JSON.parse(localStorage.getItem('texts')) || [];
-      existingTexts.push(output);
+      existingTexts.push(output.trim());
       localStorage.setItem('texts', JSON.stringify(existingTexts));
     }
   };
@@ -108,6 +109,12 @@ const Teclado = () => {
     const storedTexts = JSON.parse(localStorage.getItem('texts')) || [];
     setSavedTexts(storedTexts);
     setActiveModal(true)
+  };
+
+  const handleDeleteText = (textToDelete: string) => {
+    const updatedPhrases = savedTexts.filter(text => text === textToDelete);
+    localStorage.setItem('texts', JSON.stringify(updatedPhrases));
+    setSavedTexts(updatedPhrases);
   };
 
   const functionAction = (key?: string) => {
@@ -127,7 +134,7 @@ const Teclado = () => {
       ((key = ejecFunction.split(" ")[1]), setOutput((prev) => prev + key));
     ejecFunction.includes("addWord") &&
       ((deleteLastWord(), key = ejecFunction.split(" ")[1]), setOutput((prev) => !prev ? key + " " : prev + " " + key + " "))
-
+    ejecFunction.includes("deleteText") && handleDeleteText(ejecFunction.slice(11, ejecFunction.length - 1))
   };
 
   useEffect(() => {
@@ -164,19 +171,8 @@ const Teclado = () => {
             propClass="min-w-[100px] h-[80px]"
           />
         </div>
-        <div className="flex gap-2">
-          <ButtonAnimation
-            disabled={isOff ? true : false}
-            speakText="Estoy escribiendo"
-            text="Estoy escribiendo"
-            propClass="min-w-[190px] h-[80px]"
-          />
-          <ButtonAnimation
-            disabled={isOff ? true : false}
-            speakText="Necesito ayuda"
-            text="Necesito ayuda"
-            propClass="min-w-[170px] h-[80px]"
-          />
+        <div>
+          <CarrouselEstados estados={["Estoy escribiendo", "Necesito ayuda", "Gracias", "Puedes repetir, por favor?", "No entiendo", "Por favor, espere un momento"]} />
         </div>
         <div className="flex gap-2">
           <ButtonAnimation
