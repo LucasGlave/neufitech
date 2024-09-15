@@ -28,6 +28,7 @@ type buttonProps = {
     height?: number;
     add?: string;
   };
+  app?: string;
   keyCombination?: string[];
   keyPress?: string;
   execute?: () => void;
@@ -47,6 +48,7 @@ const ButtonAnimation = ({
   disabled,
   functionKeyboard,
   svg,
+  app,
   keyCombination,
   keyPress,
   displacementFunction,
@@ -74,7 +76,7 @@ const ButtonAnimation = ({
           state && state()
           if (keyCombination) {
             if (window.ipc) {
-              document.getElementById("whatsapp-webview")?.focus();
+              document.getElementById(app)?.focus(); // whatsapp-web por ej
               window.ipc.sendKeyCombination(keyCombination);
             } else {
               console.log("No se puede usar keySender");
@@ -96,13 +98,13 @@ const ButtonAnimation = ({
                   document.getElementById("teclado-global")?.focus();
                   await new Promise((resolve) => setTimeout(resolve, 50));
                   await navigator.clipboard.writeText(keyPress);
-                  document.getElementById("whatsapp-webview")?.focus();
+                  document.getElementById(app)?.focus();
                   window.ipc.sendKeyCombination(["control", "v"]);
                 } catch (err) {
                   console.error("Failed to copy: ", err);
                 }
               } else {
-                document.getElementById("whatsapp-webview")?.focus();
+                document.getElementById(app)?.focus();
                 window.ipc.sendLetter(keyPress);
               }
             } else {
@@ -115,7 +117,7 @@ const ButtonAnimation = ({
             } else {
               const utterance = new SpeechSynthesisUtterance(speakText);
               window.speechSynthesis.speak(utterance);
-              console.log(window.speechSynthesis.getVoices());
+              // console.log(window.speechSynthesis.getVoices());
             }
           }
           if (execute) {
