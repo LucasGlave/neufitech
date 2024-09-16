@@ -18,17 +18,18 @@ import ModalConfig from "./ModalConfig";
 const Home = () => {
   const [isOff, setIsOff] = useState(false)
   const [showModal, setShowModal] = useState(false)
-
   const defaultConfig = {
     volume: 3,
     activation: 3,
     voices: "mujer"
   };
+  const [config, setConfig] = useState({ ...defaultConfig });
 
-  const [config, setConfig] = useState(() => {
-    const savedConfig = localStorage.getItem('config');
-    return savedConfig ? JSON.parse(savedConfig) : defaultConfig;
-  });
+  useEffect(() => {
+    if (localStorage.getItem('config')) {
+      setConfig(JSON.parse(localStorage.getItem('config')))
+    }
+  }, [])
 
   useEffect(() => {
     if (!localStorage.getItem('config')) {

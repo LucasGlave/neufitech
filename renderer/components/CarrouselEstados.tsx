@@ -9,20 +9,20 @@ import ButtonAnimation from "./ButtonAnimation";
 
 type CarrouselProps = {
   estados: string[]
+  isOff: boolean
 }
 
 let uniqueIdCounter = Date.now();
 
-const CarrouselEstados = ({ estados }: CarrouselProps) => {
+const CarrouselEstados = ({ estados, isOff }: CarrouselProps) => {
   const [swiperRef, setSwiperRef] = useState(null);
 
   const changeState = (functionToEjec: string): void | null => {
-    if (functionToEjec !== "handleNext" || functionToEjec !== "handleNext") return null
-    functionToEjec === "handleNext" ? handleNext() : handlePrev()
+    if (functionToEjec !== "handleNext" && functionToEjec !== "handlePrev") return null
+    functionToEjec === "handleNext" ? handleNext() : functionToEjec === "handlePrev" && handlePrev()
   }
   const handleNext = () => {
     if (!swiperRef) return;
-
     const newIndex = swiperRef.activeIndex + 2;
     if (newIndex >= estados.length) {
       swiperRef.slideTo(0);
@@ -44,7 +44,7 @@ const CarrouselEstados = ({ estados }: CarrouselProps) => {
   return (
     <div className="w-[550px] relative text-white flex items-center justify-center">
       <ButtonAnimation
-        // disabled={isOff ? true : false}
+        disabled={isOff}
         functionKeyboard={{ funct: "handlePrev", state: changeState }}
         buttonBorder="border-transparent"
         propClass="swiper-button-prev p-6 after:text-white"
@@ -67,7 +67,7 @@ const CarrouselEstados = ({ estados }: CarrouselProps) => {
           return (
             <SwiperSlide key={uniqueKey}>
               <ButtonAnimation
-                // disabled={isOff ? true : false}
+                disabled={isOff}
                 functionKeyboard={{ funct: "handlePrev", state: changeState }}
                 speakText={`${slideContent}`}
                 text={`${slideContent}`}
@@ -79,7 +79,7 @@ const CarrouselEstados = ({ estados }: CarrouselProps) => {
       </Swiper>
       <ButtonAnimation
         functionKeyboard={{ funct: "handleNext", state: changeState }}
-        // disabled={isOff ? true : false}
+        disabled={isOff}
         buttonBorder="border-transparent"
         propClass="swiper-button-next p-6 after:text-white"
       />

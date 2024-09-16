@@ -69,7 +69,7 @@ const Activities = ({ categoria }: PropsActivity) => {
 
   return (
     <div className="flex items-start justify-center p-8 w-full min-h-screen text-white bg-zinc-900">
-      <div className="flex justify-start w-4/5">
+      <div className="flex justify-start w-[85%]">
         <div className="flex flex-col justify-around gap-8 w-full text-center">
           <div className="flex flex-col relative w-full gap-8">
             <div className="flex flex-row items-center justify-between w-full">
@@ -80,7 +80,7 @@ const Activities = ({ categoria }: PropsActivity) => {
                 navigation="/senal-comunicacion"
                 propClass="w-[200px] h-[80px]"
               />
-              <h3 className="font-semibold text-3xl text-center">
+              <h3 className="font-semibold text-3xl w-full text-center">
                 {categoria === 'BANO' ? 'BAÑO' : categoria}
               </h3>
               <ButtonAnimation
@@ -99,7 +99,7 @@ const Activities = ({ categoria }: PropsActivity) => {
                   ([activity, actions], i) =>
                     activity === categoria ? (
                       <div key={i} className="w-full flex">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 w-full">
                           {actions.map((action, index) => (
                             <ButtonAnimation
                               disabled={isOff ? true : false}
@@ -124,7 +124,7 @@ const Activities = ({ categoria }: PropsActivity) => {
           </div>
         </div>
       </div>
-      <div className="flex w-1/5 pt-[7rem] h-full items-start justify-start flex-col relative">
+      <div className="flex w-[15%] pt-[7rem] h-full items-start justify-start flex-col relative">
         <div className="fixed flex flex-col justify-center items-center gap-8">
           <ButtonAnimation
             disabled={isOff ? true : false}

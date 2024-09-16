@@ -104,24 +104,6 @@ const Categories = () => {
                     }}
                   />
                 ))}
-                {Object.entries(mockCategories).map(([i, actions]) => (
-                  <ButtonAnimation
-                    disabled={isOff ? true : false}
-                    key={i}
-                    propClass="w-full h-[250px] flex items-center justify-center"
-                    innerText={`${Object.keys(actions)[0] === 'BANO' ? 'BAÑO' : Object.keys(actions)[0]}`}
-                    navigation={`/senal-comunicacion/${Object.keys(
-                      actions
-                    )[0].toLowerCase()}`}
-                    speakText={`${Object.keys(actions)[0] === 'BANO' ? 'BAÑO' : Object.keys(actions)[0]}`}
-                    imagen={{
-                      src: Object.values(actions)[0],
-                      width: 400,
-                      height: 400,
-                      add: "h-full w-full object-cover",
-                    }}
-                  />
-                ))}
               </div>
             </div>
           </div>

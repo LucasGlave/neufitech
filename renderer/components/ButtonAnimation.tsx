@@ -28,7 +28,6 @@ type buttonProps = {
     height?: number;
     add?: string;
   };
-  app?: string;
   keyCombination?: string[];
   keyPress?: string;
   execute?: () => void;
@@ -48,7 +47,6 @@ const ButtonAnimation = ({
   disabled,
   functionKeyboard,
   svg,
-  app,
   keyCombination,
   keyPress,
   displacementFunction,
@@ -63,26 +61,42 @@ const ButtonAnimation = ({
   useEffect(() => {
     let timer: NodeJS.Timeout;
     let progressInterval: NodeJS.Timeout;
-
+    let config = JSON.parse(localStorage.getItem('config') || '{}');
+    const volumeMap = {
+      1: 0.2,
+      2: 0.4,
+      3: 0.6,
+      4: 0.8,
+      5: 1.0
+    };
+    const activationHover = {
+      1: 500,
+      2: 750,
+      3: 1000,
+      4: 1500,
+      5: 1750
+    };
     if (isActive) {
       const startTimer = () => {
         setProgress(0);
         progressInterval = setInterval(() => {
           setProgress((prev) => (prev < 100 ? prev + 1 : 100));
-        }, 10);
+        }, activationHover[config.activation] / 100);
         timer = setTimeout(async () => {
           setIsAction(true);
           displacementFunction && displacementFunction(speakText as string);
           state && state()
           if (keyCombination) {
             if (window.ipc) {
-              document.getElementById(app)?.focus(); // whatsapp-web por ej
+              document.getElementById("app")?.focus();
               window.ipc.sendKeyCombination(keyCombination);
             } else {
               console.log("No se puede usar keySender");
             }
           } else if (keyPress) {
             if (window.ipc) {
+              console.log(document.getElementById("app")?.focus())
+              document.getElementById("myButton").focus()
               if (
                 keyPress === "ñ" ||
                 keyPress === "Ñ" ||
@@ -98,13 +112,13 @@ const ButtonAnimation = ({
                   document.getElementById("teclado-global")?.focus();
                   await new Promise((resolve) => setTimeout(resolve, 50));
                   await navigator.clipboard.writeText(keyPress);
-                  document.getElementById(app)?.focus();
+                  document.getElementById("app")?.focus();
                   window.ipc.sendKeyCombination(["control", "v"]);
                 } catch (err) {
                   console.error("Failed to copy: ", err);
                 }
               } else {
-                document.getElementById(app)?.focus();
+                document.getElementById("app")?.focus();
                 window.ipc.sendLetter(keyPress);
               }
             } else {
@@ -115,9 +129,17 @@ const ButtonAnimation = ({
             if (window.ipc) {
               window.ipc.speak(speakText);
             } else {
-              const utterance = new SpeechSynthesisUtterance(speakText);
-              window.speechSynthesis.speak(utterance);
-              // console.log(window.speechSynthesis.getVoices());
+              const speech = new SpeechSynthesisUtterance(speakText);
+              config = JSON.parse(localStorage.getItem('config') || '{}');
+              const voices = window.speechSynthesis.getVoices();
+              if (voices.length > 0) {
+                const selectedVoice = config.voices === "hombre" ? voices[9].name === "Google español" ? voices[9] : voices[0] : config.voices === "mujer" ? voices[4].name.includes("Sabina") ? voices[4] : voices[0] : voices[0]
+                speech.voice = selectedVoice;
+              } else {
+                console.log("No voices available");
+              }
+              speech.volume = volumeMap[config.volume] || 1;
+              window.speechSynthesis.speak(speech);
             }
           }
           if (execute) {
@@ -128,9 +150,8 @@ const ButtonAnimation = ({
 
           clearInterval(progressInterval);
           setProgress(0);
-        }, 1000); // cambiar con config
+        }, activationHover[config.activation]); // cambiar con config
       };
-
       startTimer();
     }
 
