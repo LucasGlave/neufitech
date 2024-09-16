@@ -31,6 +31,8 @@ type buttonProps = {
   keyCombination?: string[];
   keyPress?: string;
   execute?: () => void;
+  imageSetter?: React.Dispatch<React.SetStateAction<string>>;
+  titleSetter?: React.Dispatch<React.SetStateAction<string>>;
 };
 
 const ButtonAnimation = ({
@@ -52,6 +54,8 @@ const ButtonAnimation = ({
   displacementFunction,
   comingSoon,
   execute,
+  imageSetter,
+  titleSetter,
 }: buttonProps) => {
   const navigate = useRouter();
   const [isActive, setIsActive] = useState(false);
@@ -71,7 +75,7 @@ const ButtonAnimation = ({
         timer = setTimeout(async () => {
           setIsAction(true);
           displacementFunction && displacementFunction(speakText as string);
-          state && state()
+          state && state();
           if (keyCombination) {
             if (window.ipc) {
               document.getElementById("whatsapp-webview")?.focus();
@@ -123,6 +127,14 @@ const ButtonAnimation = ({
           }
           functionKeyboard?.state(functionKeyboard.funct);
           navigation != null && navigate.push(navigation);
+          if (imageSetter && imagen) {
+            imageSetter(imagen.src as string);
+          }
+          if (titleSetter) {
+            text == "VOLVER"
+              ? titleSetter("CATEGORIAS")
+              : titleSetter(innerText ? innerText : "");
+          }
 
           clearInterval(progressInterval);
           setProgress(0);
@@ -139,10 +151,10 @@ const ButtonAnimation = ({
       setProgress(0);
     };
   }, [isActive]);
-  let wordCount: number
+  let wordCount: number;
   if (innerText || text) {
-    let textToUse = innerText ? innerText : text
-    wordCount = textToUse.split(/\s+/).filter(word => word.length > 0).length
+    let textToUse = innerText ? innerText : text;
+    wordCount = textToUse.split(/\s+/).filter((word) => word.length > 0).length;
   }
   return (
     <button
@@ -155,18 +167,24 @@ const ButtonAnimation = ({
         setIsActive(false);
         setIsAction(false);
       }}
-      className={`border-2 ${!isAction ? color : "bg-charge"} ${isActive
-        ? "border-chargescale-105"
-        : buttonBorder
+      className={`border-2 ${!isAction ? color : "bg-charge"} ${
+        isActive
+          ? "border-chargescale-105"
+          : buttonBorder
           ? buttonBorder
           : "border-white"
-        } ${propClass} ${innerText && "relative"
-        } z-10 rounded-lg transition-all animate-in animate-out font-semibold ${wordCount > 1 ? "whitespace-pre-line" : "break-all"}   ${textColor ? textColor : "text-white"
-        } ${comingSoon && "grayscale-[50%] overflow-hidden"}`}
+      } ${propClass} ${
+        innerText && "relative"
+      } z-10 rounded-lg transition-all animate-in animate-out font-semibold ${
+        wordCount > 1 ? "whitespace-pre-line" : "break-all"
+      }   ${textColor ? textColor : "text-white"} ${
+        comingSoon && "grayscale-[50%] overflow-hidden"
+      }`}
     >
       <div
-        className={`relative h-full w-full flex items-center justify-center ${svg && "p-5"
-          }`}
+        className={`relative h-full w-full flex items-center justify-center ${
+          svg && "p-5"
+        }`}
       >
         {imagen != null ? (
           <Image
@@ -174,8 +192,9 @@ const ButtonAnimation = ({
             width={imagen.width}
             height={imagen.height}
             alt="dynamic image"
-            className={`rounded-lg object-contain relative ${imagen.add && imagen.add
-              } ${innerText && "opacity-85 brightness-75"}`}
+            className={`rounded-lg object-contain relative ${
+              imagen.add && imagen.add
+            } ${innerText && "opacity-85 brightness-75"}`}
           />
         ) : text ? (
           text

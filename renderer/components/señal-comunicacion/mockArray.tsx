@@ -57,54 +57,98 @@ export const mockCategories = [
   { ENTRETENIMIENTO: entretenimiento },
   { COMUNICACION: comunicacion },
 ];
-export const mockActivities = [
+export const arrayModel = [
   {
-    COCINA: [
-      { "QUIERO COMER": comer },
-      { "TENGO SED": beberAgua },
-      { "QUIERO TOMAR AGUA": beberAgua },
-      { "QUIERO TOMAR JUGO": jugo },
-      { "QUIERO DESAYUNAR": desayunar },
-      { "QUIERO ALMORZAR": almorzar },
-      { "QUIERO MERENDAR": merendar },
-      { "QUIERO CENAR": cenar },
-      { "NECESITO AYUDA PARA COMER": ayudaComer },
+    title: "BANO",
+    url: "almuerzo.jpg",
+    entries: [
+      {
+        frase: "Quiero ir al baño",
+        url: "bano.jpg",
+      },
+      {
+        frase: "Quiero ir al baño",
+        url: "bano.jpg",
+      },
+      {
+        frase: "Quiero ir al baño",
+        url: "../../public/bano.jpg",
+      },
     ],
-    BANO: [
-      { "QUIERO LAVAR MIS MANOS": lavarManos },
-      { "QUIERO CEPILLAR MIS DIENTES": cepillarDientes },
-      { "QUIERO BAÑARME": ducharse },
-      { "NECESITO IR AL BAÑO": necesitoBano },
-    ],
-    HABITACION: [
-      { "QUIERO DESCANSAR": descansar },
-      { "ENCIENDE LA LUZ": prenderLuz },
-      { "DESEO MIRAR UNA PELICULA": mirarPelicula },
-      { "APAGA LA LUZ": apagarLuz },
-    ],
-    ENTRETENIMIENTO: [
-      { "QUIERO ESCUCHAR MUSICA": escucharMusica },
-      { "DESEO MIRAR UNA PELICULA": mirarPelicula },
-      { "DESEO MIRAR UNA SERIE": mirarSerie },
-      { "QUIERO LEER UN LIBRO": leer },
-    ],
-    EMOCIONES: [
-      { "ESTOY TRISTE": triste },
-      { "ESTOY FELIZ": feliz },
-      { "ESTOY ENOJADO": enojado },
-      { "ESTOY ASUSTADO": asustado },
-      { "ME SIENTO SOLO": soledad },
-      { "NECESITO UN ABRAZO": abrazo },
-      { "TE QUIERO": teQuiero },
-      { "GRACIAS POR TU AYUDA": graciasAyuda },
-    ],
-    COMUNICACION: [
-      { SI: si },
-      { NO: no },
-      { "NO LO SE": noLoSe },
-      { GRACIAS: gracias },
-      { "POR FAVOR": porFavor },
-      { "NECESITO AYUDA PARA COMUNICARME": ayudaComunicacion },
+  },
+  {
+    title: "cocina",
+    url: "../cocina.jpg",
+    entries: [
+      {
+        frase: "Quiero comer",
+        url: "../desayuno.jpg",
+      },
+      {
+        frase: "Quiero comer",
+        url: "../../public/merienda.jpg",
+      },
+      {
+        frase: "Quiero ir al baño",
+        url: "../../public/bano.jpg",
+      },
     ],
   },
 ];
+export const mockActivities = {
+  CATEGORIAS: [
+    { COCINA: cocina },
+    { BAÑO: bano },
+    { HABITACION: habitacion },
+    { EMOCIONES: emociones },
+    { ENTRETENIMIENTO: entretenimiento },
+    { COMUNICACION: comunicacion },
+  ],
+  COCINA: [
+    { "QUIERO COMER": comer },
+    { "TENGO SED": beberAgua },
+    { "QUIERO TOMAR AGUA": beberAgua },
+    { "QUIERO TOMAR JUGO": jugo },
+    { "QUIERO DESAYUNAR": desayunar },
+    { "QUIERO ALMORZAR": almorzar },
+    { "QUIERO MERENDAR": merendar },
+    { "QUIERO CENAR": cenar },
+    { "NECESITO AYUDA PARA COMER": ayudaComer },
+  ],
+  BAÑO: [
+    { "QUIERO LAVAR MIS MANOS": lavarManos },
+    { "QUIERO CEPILLAR MIS DIENTES": cepillarDientes },
+    { "QUIERO BAÑARME": ducharse },
+    { "NECESITO IR AL BAÑO": necesitoBano },
+  ],
+  HABITACION: [
+    { "QUIERO DESCANSAR": descansar },
+    { "ENCIENDE LA LUZ": prenderLuz },
+    { "DESEO MIRAR UNA PELICULA": mirarPelicula },
+    { "APAGA LA LUZ": apagarLuz },
+  ],
+  ENTRETENIMIENTO: [
+    { "QUIERO ESCUCHAR MUSICA": escucharMusica },
+    { "DESEO MIRAR UNA PELICULA": mirarPelicula },
+    { "DESEO MIRAR UNA SERIE": mirarSerie },
+    { "QUIERO LEER UN LIBRO": leer },
+  ],
+  EMOCIONES: [
+    { "ESTOY TRISTE": triste },
+    { "ESTOY FELIZ": feliz },
+    { "ESTOY ENOJADO": enojado },
+    { "ESTOY ASUSTADO": asustado },
+    { "ME SIENTO SOLO": soledad },
+    { "NECESITO UN ABRAZO": abrazo },
+    { "TE QUIERO": teQuiero },
+    { "GRACIAS POR TU AYUDA": graciasAyuda },
+  ],
+  COMUNICACION: [
+    { SI: si },
+    { NO: no },
+    { "NO LO SE": noLoSe },
+    { GRACIAS: gracias },
+    { "POR FAVOR": porFavor },
+    { "NECESITO AYUDA PARA COMUNICARME": ayudaComunicacion },
+  ],
+};
