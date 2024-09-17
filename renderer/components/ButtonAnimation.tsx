@@ -3,6 +3,10 @@ import React, { ReactEventHandler, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
+import { WebviewTag } from "electron";
+import { Comentar, Pausar } from "./apps/tiktok/tiktokFunctions"
+import AppManagement from "./apps";
+
 
 type buttonProps = {
   text?: string;
@@ -15,6 +19,7 @@ type buttonProps = {
   innerText?: string;
   disabled?: boolean;
   svg?: string;
+  focus?: string;
   state?: () => void;
   displacementFunction?: (speakText: string) => void;
   comingSoon?: boolean;
@@ -31,6 +36,8 @@ type buttonProps = {
   keyCombination?: string[];
   keyPress?: string;
   execute?: () => void;
+  command?: string;
+  app?: string;
 };
 
 const ButtonAnimation = ({
@@ -42,6 +49,7 @@ const ButtonAnimation = ({
   imagen,
   color,
   speakText,
+  command,
   state,
   innerText,
   disabled,
@@ -52,6 +60,8 @@ const ButtonAnimation = ({
   displacementFunction,
   comingSoon,
   execute,
+  focus,
+  app
 }: buttonProps) => {
   const navigate = useRouter();
   const [isActive, setIsActive] = useState(false);
@@ -83,9 +93,12 @@ const ButtonAnimation = ({
           setProgress((prev) => (prev < 100 ? prev + 1 : 100));
         }, activationHover[config.activation] / 100);
         timer = setTimeout(async () => {
+          const webview = document.getElementById('app') as WebviewTag;
           setIsAction(true);
           displacementFunction && displacementFunction(speakText as string);
           state && state()
+          command && AppManagement(app, command)
+          focus && webview.focus()
           if (keyCombination) {
             if (window.ipc) {
               document.getElementById("app")?.focus();
@@ -95,8 +108,6 @@ const ButtonAnimation = ({
             }
           } else if (keyPress) {
             if (window.ipc) {
-              console.log(document.getElementById("app")?.focus())
-              document.getElementById("myButton").focus()
               if (
                 keyPress === "ñ" ||
                 keyPress === "Ñ" ||
