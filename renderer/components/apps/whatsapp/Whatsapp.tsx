@@ -111,6 +111,7 @@ const Whatsapp = () => {
                   keyPress={!buttonConfig.keyPress ? route && route[buttonName].keyPress : buttonConfig.keyPress}
                   key={index}
                   textColor="black"
+                  app="whatsapp"
                   text={`${buttonName.replace("-", " ").replace("-", " ")}`}
                   buttonBorder="border-green-700"
                   propClass="w-full h-[80px]"

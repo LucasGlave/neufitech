@@ -12,7 +12,6 @@ const TikTok = () => {
     const changeState = (func: string) => {
         handleFunct(func);
     };
-
     return (
         <div className="h-[100vh] flex flex-row bg-white">
             <div
@@ -46,6 +45,7 @@ const TikTok = () => {
                                     disabled={isOff ? true : false}
                                     functionKeyboard={{ funct: route, state: changeState }}
                                     keyPress={Object.values(buttonName)[0].keySender}
+                                    app="tiktok"
                                     key={index}
                                     svg={route}
                                     buttonBorder="border-tiktok"
@@ -53,6 +53,36 @@ const TikTok = () => {
                                 />
                             );
                         })}
+                        {/* <ButtonAnimation
+                            functionKeyboard={{ funct: "test", state: changeState }}
+                            buttonBorder="border-tiktok"
+                            command="comentar"
+                            app="tiktok"
+                            text="Comentar"
+                            textColor="black"
+                            propClass="w-full h-[80px]"
+                            focus="[role='button']"
+                        />
+                        <ButtonAnimation
+                            functionKeyboard={{ funct: "test", state: changeState }}
+                            buttonBorder="border-tiktok"
+                            command="CerrarComentarios"
+                            app="tiktok"
+                            text="Cerrar comentarios"
+                            textColor="black"
+                            propClass="w-full h-[80px]"
+                            focus="[role='button']"
+                        /> */}
+                        <ButtonAnimation
+                            functionKeyboard={{ funct: "test", state: changeState }}
+                            buttonBorder="border-tiktok"
+                            command="pausar"
+                            app="tiktok"
+                            text="Pausar/Reanudar"
+                            textColor="text-tiktok"
+                            propClass="w-full h-[80px] font-bold"
+                            focus="[role='button']"
+                        />
                     </div>
                     <div />
                 </div>
