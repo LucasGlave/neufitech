@@ -33,6 +33,7 @@ type buttonProps = {
   execute?: () => void;
   imageSetter?: React.Dispatch<React.SetStateAction<string>>;
   titleSetter?: React.Dispatch<React.SetStateAction<string>>;
+  interactionDeleter?: (text) => void;
 };
 
 const ButtonAnimation = ({
@@ -56,6 +57,7 @@ const ButtonAnimation = ({
   execute,
   imageSetter,
   titleSetter,
+  interactionDeleter,
 }: buttonProps) => {
   const navigate = useRouter();
   const [isActive, setIsActive] = useState(false);
@@ -135,6 +137,7 @@ const ButtonAnimation = ({
               ? titleSetter("CATEGORIAS")
               : titleSetter(innerText ? innerText : "");
           }
+          interactionDeleter && interactionDeleter(innerText);
 
           clearInterval(progressInterval);
           setProgress(0);

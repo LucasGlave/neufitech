@@ -1,10 +1,22 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import ButtonAnimation from "../ButtonAnimation";
 import { useState, useEffect } from "react";
 import ImagesMapper from "./ImagesMapper";
 import ModalKeyboard from "./ModalKeyboard";
 
-const ModalNewInteraction = ({ state }) => {
+interface modalNewInteractionProps {
+  state: (functionToEjec: string) => void;
+  category: string;
+  setActiveModal: Dispatch<SetStateAction<boolean>>;
+  setArraySeñales: Dispatch<SetStateAction<InteractionsArray>>;
+}
+
+const ModalNewInteraction = ({
+  state,
+  category,
+  setActiveModal,
+  setArraySeñales,
+}: modalNewInteractionProps) => {
   const [interactionText, setInteractionText] = useState("");
   const [images, setImages] = useState([]);
   const [imageRoute, setImageRoute] = useState("");
@@ -22,7 +34,7 @@ const ModalNewInteraction = ({ state }) => {
   }, []);
 
   const handleKeyboard = () => {
-    setStep("image");
+    imageRoute ? setStep("check") : setStep("image");
   };
 
   const handleImage = () => {
@@ -31,6 +43,31 @@ const ModalNewInteraction = ({ state }) => {
 
   const handleReset = () => {
     setStep("title");
+  };
+  const handleAccept = () => {
+    let señales = JSON.parse(localStorage.getItem("senal-comunicacion"));
+    let object;
+    if (category == "CATEGORIAS") {
+      object = {
+        title: interactionText.toUpperCase(),
+        url: imageRoute,
+        entries: [],
+      };
+      señales.push(object);
+    } else {
+      object = {
+        frase: interactionText.toUpperCase(),
+        url: imageRoute,
+      };
+      señales.forEach((categoria) => {
+        if (categoria.title == category) {
+          categoria.entries.push(object);
+        }
+      });
+    }
+    localStorage.setItem("senal-comunicacion", JSON.stringify(señales));
+    setArraySeñales(señales);
+    setActiveModal(false);
   };
 
   return (
@@ -99,6 +136,18 @@ const ModalNewInteraction = ({ state }) => {
               add: "h-full w-full object-cover",
             }}
             state={handleReset}
+          />
+          <ButtonAnimation
+            propClass="w-full h-[250px] flex items-center justify-center"
+            innerText={"ACEPTAR"}
+            speakText={"ACEPTAR"}
+            imagen={{
+              src: "si.jpg",
+              width: 400,
+              height: 400,
+              add: "h-full w-full object-cover",
+            }}
+            state={handleAccept}
           />
         </div>
       )}

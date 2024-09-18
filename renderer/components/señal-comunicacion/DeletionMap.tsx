@@ -6,14 +6,38 @@ type mapProps = {
   disableState: boolean;
   pageTitle: string;
   setPageTitle: Dispatch<SetStateAction<string>>;
+  setArraySeñales: Dispatch<SetStateAction<InteractionsArray>>;
+  setDeleteInteraction: Dispatch<SetStateAction<boolean>>;
 };
 
-const InteractiveMap = ({
+const DeletionMap = ({
   array,
   disableState,
   pageTitle,
-  setPageTitle,
+  setArraySeñales,
+  setDeleteInteraction,
 }: mapProps) => {
+  const handleDelete = (titulo) => {
+    let señales = JSON.parse(
+      localStorage.getItem("senal-comunicacion")
+    ) as InteractionsArray;
+    if (pageTitle == "CATEGORIAS") {
+      const index = señales.findIndex((category) => category.title === titulo);
+      señales.splice(index, 1);
+    } else {
+      const indexCategoria = señales.findIndex(
+        (category) => category.title === pageTitle
+      );
+      const indexEntry = señales[indexCategoria].entries.findIndex(
+        (entry) => entry.frase === titulo
+      );
+      señales[indexCategoria].entries.splice(indexEntry, 1);
+    }
+    localStorage.setItem("senal-comunicacion", JSON.stringify(señales));
+    setArraySeñales(señales);
+    setDeleteInteraction(false);
+  };
+
   return (
     <div className="flex flex-row justify-between gap-8 w-full h-full">
       <div className="w-full h-full flex flex-col gap-8">
@@ -27,7 +51,8 @@ const InteractiveMap = ({
                     key={index}
                     innerText={category.title}
                     speakText={category.title}
-                    titleSetter={setPageTitle}
+                    interactionDeleter={handleDelete}
+                    buttonBorder="border-red-500"
                     imagen={{
                       src: `${category.url}`,
                       width: 400,
@@ -54,6 +79,8 @@ const InteractiveMap = ({
                           height: 400,
                           add: "h-full w-full object-cover",
                         }}
+                        interactionDeleter={handleDelete}
+                        buttonBorder="border-red-500"
                       />
                     ))
                   : null
@@ -66,4 +93,4 @@ const InteractiveMap = ({
   );
 };
 
-export default InteractiveMap;
+export default DeletionMap;

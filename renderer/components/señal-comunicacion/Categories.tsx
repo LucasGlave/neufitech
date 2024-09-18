@@ -4,11 +4,11 @@ import flechaAbajo from "../../public/flechaAbajo.png";
 import eliminar from "../../public/eliminar.svg";
 import plus from "../../public/plus.svg";
 import ButtonAnimation from "../ButtonAnimation";
-import { mockCategories } from "./mockArray";
 import { useEffect, useState } from "react";
 import ModalNewInteraction from "./ModalNewInteraction";
 import InteractiveMap from "./InteractiveMap";
 import { arrayModel } from "./mockArray";
+import DeletionMap from "./DeletionMap";
 
 const Categories = () => {
   const [isAllow, setIsAllow] = useState(false);
@@ -18,6 +18,8 @@ const Categories = () => {
   const [isOff, setIsOff] = useState(false);
   const [activeModal, setActiveModal] = useState(false);
   const [screenType, setScreenType] = useState("CATEGORIAS");
+  const [arraySeñales, setArraySeñales] = useState([]);
+  const [deleteInteraction, setDeleteInteraction] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -26,6 +28,20 @@ const Categories = () => {
       setScrollY(maxScrollValue);
     }
   }, []);
+
+  useEffect(() => {
+    let array = JSON.parse(localStorage.getItem("senal-comunicacion"));
+    if (array) {
+      setArraySeñales(array);
+    }
+  }, []);
+
+  useEffect(() => {
+    let array = localStorage.getItem("senal-comunicacion");
+    if (!array) {
+      localStorage.setItem("senal-comunicacion", JSON.stringify(arrayModel));
+    }
+  }, [arraySeñales]);
 
   const changeState = (functionToEjec: string) => {
     setIsAllow(true);
@@ -68,6 +84,10 @@ const Categories = () => {
     setActiveModal(true);
   };
 
+  const toggleDelete = () => {
+    setDeleteInteraction(!deleteInteraction);
+  };
+
   useEffect(() => {
     functionAction();
     setIsAllow(false);
@@ -76,7 +96,14 @@ const Categories = () => {
 
   return (
     <div className="flex items-start justify-center p-8 w-full min-h-screen text-white bg-zinc-900">
-      {activeModal && <ModalNewInteraction state={changeState} />}
+      {activeModal && (
+        <ModalNewInteraction
+          state={changeState}
+          category={screenType}
+          setActiveModal={setActiveModal}
+          setArraySeñales={setArraySeñales}
+        />
+      )}
       <div className="flex justify-start  w-4/5">
         <div className="flex flex-col justify-around gap-8 w-full text-center">
           <div className="flex flex-col relative w-full gap-8">
@@ -110,13 +137,23 @@ const Categories = () => {
             </div>
             <hr className="bg-white w-full h-[0.5]" />
           </div>
-
-          <InteractiveMap
-            array={arrayModel}
-            disableState={isOff}
-            pageTitle={screenType}
-            setPageTitle={setScreenType}
-          />
+          {!deleteInteraction ? (
+            <InteractiveMap
+              array={arraySeñales}
+              disableState={isOff}
+              pageTitle={screenType}
+              setPageTitle={setScreenType}
+            />
+          ) : (
+            <DeletionMap
+              array={arraySeñales}
+              disableState={isOff}
+              pageTitle={screenType}
+              setPageTitle={setScreenType}
+              setArraySeñales={setArraySeñales}
+              setDeleteInteraction={setDeleteInteraction}
+            />
+          )}
         </div>
       </div>
       <div className="flex w-1/5 pt-[7rem] h-full items-start justify-start flex-col relative">
@@ -153,6 +190,7 @@ const Categories = () => {
               height: 200,
               add: "invert w-[70%] p-4",
             }}
+            state={toggleDelete}
           />
         </div>
       </div>
