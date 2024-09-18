@@ -1,4 +1,4 @@
-import Whatsapp from "../../components/whatsapp/Whatsapp";
+import Whatsapp from "../../components/apps/whatsapp/Whatsapp";
 
 const Page = () => {
   return <Whatsapp />;

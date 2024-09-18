@@ -1,9 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
-import Webview from "../Webview";
-import ButtonAnimation from "../ButtonAnimation";
+import Webview from "../../Webview";
+import ButtonAnimation from "../../ButtonAnimation";
 import whatsappRoutes from "./routeWhatsapp";
-import TecladoGlobal from "../teclado/TecladoGlobal";
+import TecladoGlobal from "../../teclado/TecladoGlobal";
 
 type RouteConfig = {
   keyCombination?: string[];
@@ -15,6 +15,7 @@ type WhatsappRoute = Record<string, RouteConfig>;
 
 const Whatsapp = () => {
   const [funcToEjec, setFuncToEjec] = useState("");
+  const [showKeyboard, setShowKeyboard] = useState(false)
   const [isOff, setIsOff] = useState(false);
   const [activeButtons, setActiveButtons] = useState([
     "Chat-anterior",
@@ -41,6 +42,9 @@ const Whatsapp = () => {
     }
     if (func === "changeIsOff") {
       setIsOff(!isOff)
+    }
+    if (func === "changeKeyboard") {
+      setShowKeyboard(!showKeyboard)
     }
 
     const route = whatsappRoutes.find((route) => Object.keys(route)[0] === func) as WhatsappRoute | undefined;
@@ -75,8 +79,8 @@ const Whatsapp = () => {
       <div
         className="w-full flex items-center justify-center"
       >
-        <div className="flex flex-col items-center justify-between w-[20%] h-full">
-          <div className="flex flex-col w-full justify-between items-center gap-2 p-2">
+        <div className="flex flex-col items-center justify-between p-2 w-[20%] h-full">
+          <div className="flex flex-col w-full justify-between items-center gap-2 ">
             <ButtonAnimation
               disabled={isOff ? true : false}
               speakText="Volver"
@@ -107,6 +111,7 @@ const Whatsapp = () => {
                   keyPress={!buttonConfig.keyPress ? route && route[buttonName].keyPress : buttonConfig.keyPress}
                   key={index}
                   textColor="black"
+                  app="whatsapp"
                   text={`${buttonName.replace("-", " ").replace("-", " ")}`}
                   buttonBorder="border-green-700"
                   propClass="w-full h-[80px]"
@@ -115,10 +120,18 @@ const Whatsapp = () => {
             })}
           </div>
           <div />
+          <ButtonAnimation
+            functionKeyboard={{ funct: 'changeKeyboard', state: changeState }}
+            speakText={showKeyboard ? "Ocultar teclado" : "Escribir"}
+            text={showKeyboard ? "Ocultar teclado" : "Escribir"}
+            buttonBorder="border-green-700"
+            textColor="black"
+            propClass="w-full h-[80px]"
+          />
         </div>
         <div className="flex flex-col w-full h-full">
           <Webview url="https://web.whatsapp.com" />
-          <TecladoGlobal isOff={isOff} />
+          {showKeyboard && <TecladoGlobal isOff={isOff} />}
         </div>
       </div>
     </div>
