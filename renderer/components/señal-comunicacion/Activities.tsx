@@ -16,7 +16,6 @@ const Activities = ({ categoria }: PropsActivity) => {
 
   useEffect(() => {
     const calculateScrollMax = () => {
-      const newScrollMax = document.documentElement.scrollHeight - window.innerHeight;
       setScrollMax(innerHeight);
     };
     setTimeout(calculateScrollMax, 500);

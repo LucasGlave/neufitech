@@ -7,9 +7,11 @@ import ButtonAnimation from "./ButtonAnimation";
 
 type ScrollProps = {
     maxScrollValue: number
+    bgcolor?: boolean
+    uniqueScroll?: boolean
 }
 
-const Scroll = ({ maxScrollValue }: ScrollProps) => {
+const Scroll = ({ maxScrollValue, bgcolor, uniqueScroll }: ScrollProps) => {
     const [scrollActual, setScrollActual] = useState(0);
     const [isOff, setIsOff] = useState(false);
 
@@ -47,18 +49,20 @@ const Scroll = ({ maxScrollValue }: ScrollProps) => {
 
     return (
         <div className="flex w-[15%] pt-[7rem] h-full items-start justify-start flex-col relative">
-            <div className="fixed flex flex-col justify-center items-center gap-8">
-                <ButtonAnimation
-                    disabled={isOff}
-                    propClass="w-3/5 flex justify-center items-center"
-                    imagen={{
-                        src: plus,
-                        width: 200,
-                        height: 200,
-                        add: "invert w-[70%] p-4",
-                    }}
-                    comingSoon={true}
-                />
+            <div className={`fixed flex flex-col justify-center items-center gap-8 ${bgcolor && "bg-[#576280] py-8 border rounded-lg"}`}>
+                {!uniqueScroll &&
+                    <ButtonAnimation
+                        disabled={isOff}
+                        propClass="w-3/5 flex justify-center items-center"
+                        imagen={{
+                            src: plus,
+                            width: 200,
+                            height: 200,
+                            add: "invert w-[70%] p-4",
+                        }}
+                        comingSoon={true}
+                    />
+                }
                 <ButtonAnimation
                     disabled={isOff}
                     propClass="w-3/5 flex justify-center items-center"
@@ -71,17 +75,19 @@ const Scroll = ({ maxScrollValue }: ScrollProps) => {
                     imagen={{ src: flechaAbajo, add: "w-[70%]" }}
                     functionKeyboard={{ funct: "scrollBottom", state: functionAction }}
                 />
-                <ButtonAnimation
-                    disabled={isOff}
-                    propClass="w-3/5 flex justify-center items-center"
-                    imagen={{
-                        src: eliminar,
-                        width: 200,
-                        height: 200,
-                        add: "invert w-[70%] p-4",
-                    }}
-                    comingSoon={true}
-                />
+                {!uniqueScroll &&
+                    <ButtonAnimation
+                        disabled={isOff}
+                        propClass="w-3/5 flex justify-center items-center"
+                        imagen={{
+                            src: eliminar,
+                            width: 200,
+                            height: 200,
+                            add: "invert w-[70%] p-4",
+                        }}
+                        comingSoon={true}
+                    />
+                }
             </div>
         </div>
     )
