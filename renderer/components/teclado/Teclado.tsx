@@ -6,6 +6,7 @@ import SaveText from "./SaveText";
 import ModalTexts from "./ModalTexts";
 import CarrouselEstados from "../CarrouselEstados";
 import ModalConfig from "../home/ModalConfig";
+// import Confirmation from "../Confirmation";
 
 const Teclado = () => {
   const KeyboardLayout = [
@@ -121,24 +122,19 @@ const Teclado = () => {
     getLastWord()
   }, [output])
 
-  const handleSaveText = () => {
-    if (output.length > 0) {
-      const existingTexts = JSON.parse(localStorage.getItem('texts')) || [];
-      existingTexts.push(output.trim());
-      localStorage.setItem('texts', JSON.stringify(existingTexts));
-    }
-  };
+  // const handleSaveText = () => {
+  //   if (output.length > 0) {
+  //     const existingTexts = JSON.parse(localStorage.getItem('texts')) || [];
+  //     existingTexts.push(output.trim());
+  //     localStorage.setItem('texts', JSON.stringify(existingTexts));
+  //     alert("subido")
+  //   }
+  // };
 
   const handleShowTexts = () => {
     const storedTexts = JSON.parse(localStorage.getItem('texts')) || [];
     setSavedTexts(storedTexts);
     setActiveModal(true)
-  };
-
-  const handleDeleteText = (textToDelete: string) => {
-    const updatedPhrases = savedTexts.filter(text => text === textToDelete);
-    localStorage.setItem('texts', JSON.stringify(updatedPhrases));
-    setSavedTexts(updatedPhrases);
   };
 
   const functionAction = (key?: string) => {
@@ -151,7 +147,7 @@ const Teclado = () => {
     ejecFunction === "spaceKey" && setOutput((prev) => prev + " ");
     ejecFunction === "enterKey" && setOutput((prev) => prev + "\n");
     ejecFunction === "changeIsOff" && setIsOff(!isOff)
-    ejecFunction === "saveText" && handleSaveText()
+    // ejecFunction === "saveText" && handleSaveText()
     ejecFunction === "getTexts" && handleShowTexts()
     ejecFunction === "closeModal" && setActiveModal(false)
     ejecFunction === "showConfig" && setShowModal(true)
@@ -159,7 +155,6 @@ const Teclado = () => {
       ((key = ejecFunction.split(" ")[1]), setOutput((prev) => prev + key));
     ejecFunction.includes("addWord") &&
       ((deleteLastWord(), key = ejecFunction.split(" ")[1]), setOutput((prev) => !prev ? key + " " : prev + " " + key + " "))
-    ejecFunction.includes("deleteText") && handleDeleteText(ejecFunction.slice(11, ejecFunction.length - 1))
   };
 
   useEffect(() => {
@@ -173,7 +168,7 @@ const Teclado = () => {
       className="flex flex-col gap-8 items-center bg-keyboardHeader shadow-md h-screen"
       ref={containerRef}
     >
-      {activeModal && <ModalTexts activeTexts={savedTexts} state={changeState} />}
+      {activeModal && <ModalTexts activeTexts={savedTexts} state={changeState} setter={setSavedTexts} />}
       {showModal && <ModalConfig configuration={config} closeModal={closeModal} />}
       <div className="w-full flex flex-row justify-between items-center p-4 h-[15%]">
         <ButtonAnimation
@@ -241,7 +236,7 @@ const Teclado = () => {
           style={{ fontSize: "44px" }}
           placeholder="Tu texto aparecerá aquí..."
         />
-        <SaveText state={changeState} isOff={isOff} />
+        <SaveText state={changeState} isOff={isOff} output={output} />
       </div>
       <div className="bg-zinc-900 flex flex-col w-full h-full gap-4 pt-4 p-2">
         <div className="flex flex-row justify-between items-center px-4">
