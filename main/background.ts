@@ -1,8 +1,9 @@
-import path from 'path'
-import { app, BrowserWindow, ipcMain } from 'electron'
-import serve from 'electron-serve'
-import { createWindow } from './helpers'
-import keySender from 'node-key-sender'
+import path from "path";
+import { app, BrowserWindow, ipcMain } from "electron";
+import serve from "electron-serve";
+import { createWindow } from "./helpers";
+import keySender from "node-key-sender";
+import fs from "fs";
 
 const accentsMap = {
   á: ["dead_acute", "a"],
@@ -18,18 +19,18 @@ const accentsMap = {
 };
 keySender.aggregateKeyboardLayout(accentsMap);
 
-const isProd = process.env.NODE_ENV === 'production'
+const isProd = process.env.NODE_ENV === "production";
 
 if (isProd) {
-  serve({ directory: 'app' })
+  serve({ directory: "app" });
 } else {
-  app.setPath('userData', `${app.getPath('userData')} (development)`)
+  app.setPath("userData", `${app.getPath("userData")} (development)`);
 }
 
-; (async () => {
-  await app.whenReady()
+(async () => {
+  await app.whenReady();
 
-  const mainWindow = createWindow('main', {
+  const mainWindow = createWindow("main", {
     width: 1920,
     height: 1080,
     // fullscreen: true,
@@ -40,32 +41,32 @@ if (isProd) {
       nodeIntegration: false,
       webviewTag: true,
     },
-  })
+  });
 
   if (isProd) {
-    await mainWindow.loadURL('app://./')
+    await mainWindow.loadURL("app://./");
   } else {
-    const port = process.argv[2]
-    await mainWindow.loadURL(`http://localhost:${port}`)
-    mainWindow.webContents.openDevTools()
+    const port = process.argv[2];
+    await mainWindow.loadURL(`http://localhost:${port}`);
+    mainWindow.webContents.openDevTools();
   }
-})()
+})();
 
-app.on('window-all-closed', () => {
-  app.quit()
-})
+app.on("window-all-closed", () => {
+  app.quit();
+});
 
-ipcMain.on('close', () => {
-  app.quit()
-})
+ipcMain.on("close", () => {
+  app.quit();
+});
 
-ipcMain.on('minimize', () => {
-  BrowserWindow.getFocusedWindow().minimize()
-})
+ipcMain.on("minimize", () => {
+  BrowserWindow.getFocusedWindow().minimize();
+});
 
-ipcMain.on('message', async (event, arg) => {
-  event.reply('message', `${arg} World!`)
-})
+ipcMain.on("message", async (event, arg) => {
+  event.reply("message", `${arg} World!`);
+});
 
 ipcMain.on("send-key-combination", (event, keys) => {
   keySender.sendCombination(keys);
@@ -88,5 +89,23 @@ ipcMain.on("speak", async (event, text) => {
     event.sender.send("perform-tts", text);
   } catch (e) {
     console.error(e);
+  }
+});
+
+ipcMain.handle("get-images", (event) => {
+  const imageDir = path.join(
+    __dirname,
+    "../renderer/public/senal-comunicacion"
+  );
+
+  try {
+    const files = fs.readdirSync(imageDir);
+    const imageFiles = files.filter((file) =>
+      /\.(jpg|jpeg|png|gif)$/i.test(file)
+    );
+    return imageFiles;
+  } catch (error) {
+    console.error("Error reading images:", error);
+    return [];
   }
 });
