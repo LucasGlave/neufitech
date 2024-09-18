@@ -14,7 +14,6 @@ const ImagesMapper = ({
 }: imagesMapperProps) => {
   return (
     <div>
-      <h1>Elija una imagen</h1>
       <div className="grid grid-cols-3 gap-4">
         {images.map((image, index) => (
           <ButtonAnimation

@@ -6,6 +6,8 @@ import ModalNewInteraction from "./ModalNewInteraction";
 import InteractiveMap from "./InteractiveMap";
 import { arrayModel } from "./mockArray";
 import DeletionMap from "./DeletionMap";
+import eliminar from "../../public/eliminar.svg";
+import plus from "../../public/plus.svg";
 
 const Categories = () => {
   const [isAllow, setIsAllow] = useState(false);
@@ -15,15 +17,7 @@ const Categories = () => {
   const [screenType, setScreenType] = useState("CATEGORIAS");
   const [arraySeñales, setArraySeñales] = useState([]);
   const [deleteInteraction, setDeleteInteraction] = useState(false);
-  const [scrollMax, setScrollMax] = useState(0)
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const maxScrollValue =
-        document.documentElement.scrollHeight - window.innerHeight;
-      setScrollY(maxScrollValue);
-    }
-  }, []);
+  const [scrollMax, setScrollMax] = useState(0);
 
   useEffect(() => {
     let array = JSON.parse(localStorage.getItem("senal-comunicacion"));
@@ -44,31 +38,6 @@ const Categories = () => {
     setEjecFunction(functionToEjec);
   };
 
-  const scrollTop = () => {
-    let nuevoScrollActual;
-    scrollActual - 200 < 0
-      ? (nuevoScrollActual = 0)
-      : (nuevoScrollActual = scrollActual - 200);
-    window.scrollTo({
-      top: nuevoScrollActual,
-      behavior: "smooth",
-    });
-    setScrollActual(nuevoScrollActual);
-  };
-
-  const scrollBottom = () => {
-    let nuevoScrollActual;
-    scrollY < scrollActual + 200
-      ? (nuevoScrollActual = scrollY)
-      : (nuevoScrollActual = scrollActual + 200);
-
-    window.scrollTo({
-      top: nuevoScrollActual,
-      behavior: "smooth",
-    });
-    setScrollActual(nuevoScrollActual);
-  };
-
   const functionAction = () => {
     ejecFunction === "closeModal" && setActiveModal(false);
   };
@@ -86,14 +55,17 @@ const Categories = () => {
       setScrollMax(innerHeight);
     };
     setTimeout(calculateScrollMax, 500);
-    window.addEventListener('resize', calculateScrollMax);
+    window.addEventListener("resize", calculateScrollMax);
     return () => {
-      window.removeEventListener('resize', calculateScrollMax);
+      window.removeEventListener("resize", calculateScrollMax);
     };
   }, []);
 
   return (
-    <div id="scrollMax" className="flex items-start justify-center p-8 w-full min-h-screen text-white bg-zinc-900">
+    <div
+      id="scrollMax"
+      className="flex items-start justify-center p-8 w-full min-h-screen text-white bg-zinc-900"
+    >
       {activeModal && (
         <ModalNewInteraction
           state={changeState}
@@ -135,7 +107,7 @@ const Categories = () => {
             </div>
             <hr className="bg-white w-full h-[0.5]" />
           </div>
-                    {!deleteInteraction ? (
+          {!deleteInteraction ? (
             <InteractiveMap
               array={arraySeñales}
               disableState={isOff}
@@ -154,30 +126,12 @@ const Categories = () => {
           )}
         </div>
       </div>
-      <div className="flex w-1/5 pt-[7rem] h-full items-start justify-start flex-col relative">
+      <div className="flex w-[15%] pt-[7rem] h-full items-start justify-start flex-col relative">
         <div className="fixed flex flex-col justify-center items-center gap-8">
-          <ButtonAnimation
-            state={handleModal}
-            disabled={isOff ? true : false}
-            propClass="w-3/5 flex justify-center items-center"
-            imagen={{
-              src: plus,
-              width: 200,
-              height: 200,
-              add: "invert w-[70%] p-4",
-            }}
-          />
-          <Scroll maxScrollValue={scrollMax} uniqueScroll={true} />
-          <ButtonAnimation
-            disabled={isOff ? true : false}
-            propClass="w-3/5 flex justify-center items-center"
-            imagen={{
-              src: eliminar,
-              width: 200,
-              height: 200,
-              add: "invert w-[70%] p-4",
-            }}
-            state={toggleDelete}
+          <Scroll
+            maxScrollValue={scrollMax}
+            addFunction={handleModal}
+            deleteFunction={toggleDelete}
           />
         </div>
       </div>

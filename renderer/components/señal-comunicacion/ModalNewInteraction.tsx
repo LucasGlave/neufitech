@@ -71,10 +71,10 @@ const ModalNewInteraction = ({
   };
 
   return (
-    <div className="absolute items-center justify-start gap-5 flex flex-col h-screen w-screen p-16 backdrop-blur-sm z-50 bg-[#000000af]">
+    <div className="absolute items-center justify-start gap-5 flex flex-col min-h-screen w-screen p-16 backdrop-blur-sm z-50 bg-zinc-900">
       <div className="w-full">
         <ButtonAnimation
-          functionKeyboard={{ funct: "closeModal", state: state }}
+          state={() => setActiveModal(false)}
           speakText="Cerrar"
           propClass="w-[150px] h-[80px] bg-keybackground"
           text="CERRAR"
@@ -89,7 +89,7 @@ const ModalNewInteraction = ({
       )}
       {step == "image" && (
         <div>
-          <div>{interactionText}</div>
+          <div>Elija una imagen para: {interactionText.toUpperCase()}</div>
           <ImagesMapper
             images={images}
             setImageRoute={setImageRoute}

@@ -164,7 +164,7 @@ const ModalKeyboard = ({
           onChange={(e) => setOutput(e.target.value)}
           className="w-3/4 h-[120px] p-2 border rounded resize-none text-black"
           style={{ fontSize: "44px" }}
-          placeholder="Tu texto aparecerá aquí..."
+          placeholder="Escriba frase para agregar..."
         />
       </div>
       <div className="bg-zinc-900 flex flex-col w-full h-full gap-4 pt-4 p-2">
