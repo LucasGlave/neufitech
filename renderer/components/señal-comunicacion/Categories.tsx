@@ -6,8 +6,6 @@ import ModalNewInteraction from "./ModalNewInteraction";
 import InteractiveMap from "./InteractiveMap";
 import { arrayModel } from "./mockArray";
 import DeletionMap from "./DeletionMap";
-import eliminar from "../../public/eliminar.svg";
-import plus from "../../public/plus.svg";
 
 const Categories = () => {
   const [isAllow, setIsAllow] = useState(false);
@@ -27,7 +25,7 @@ const Categories = () => {
   }, []);
 
   useEffect(() => {
-    let array = localStorage.getItem("senal-comunicacion");
+    let array = JSON.parse(localStorage.getItem("senal-comunicacion"));
     if (!array) {
       localStorage.setItem("senal-comunicacion", JSON.stringify(arrayModel));
     }
@@ -36,10 +34,6 @@ const Categories = () => {
   const changeState = (functionToEjec: string) => {
     setIsAllow(true);
     setEjecFunction(functionToEjec);
-  };
-
-  const functionAction = () => {
-    ejecFunction === "closeModal" && setActiveModal(false);
   };
 
   const handleModal = () => {
@@ -127,13 +121,11 @@ const Categories = () => {
         </div>
       </div>
       <div className="flex w-[15%] pt-[7rem] h-full items-start justify-start flex-col relative">
-        <div className="fixed flex flex-col justify-center items-center gap-8">
-          <Scroll
-            maxScrollValue={scrollMax}
-            addFunction={handleModal}
-            deleteFunction={toggleDelete}
-          />
-        </div>
+        <Scroll
+          maxScrollValue={scrollMax}
+          addFunction={handleModal}
+          deleteFunction={toggleDelete}
+        />
       </div>
     </div>
   );

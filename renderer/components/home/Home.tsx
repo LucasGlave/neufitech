@@ -15,6 +15,7 @@ import ButtonAnimation from "../ButtonAnimation";
 import { useEffect, useState } from "react";
 import ModalConfig from "./ModalConfig";
 import ConfirmationModal from "../confirmation/confirmationModal";
+import { arrayModel } from "../señal-comunicacion/mockArray";
 
 const Home = () => {
   const [isOff, setIsOff] = useState(false)
@@ -30,6 +31,10 @@ const Home = () => {
   useEffect(() => {
     if (localStorage.getItem('config')) {
       setConfig(JSON.parse(localStorage.getItem('config')))
+    }
+    let array = JSON.parse(localStorage.getItem("senal-comunicacion"))
+    if (!array) {
+      localStorage.setItem("senal-comunicacion", JSON.stringify(arrayModel));
     }
   }, [])
 

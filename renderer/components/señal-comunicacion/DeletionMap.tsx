@@ -41,10 +41,9 @@ const DeletionMap = ({
   return (
     <div className="flex flex-row justify-between gap-8 w-full h-full">
       <div className="w-full h-full flex flex-col gap-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
+        <div className="h-full w-full">
           {pageTitle === "CATEGORIAS" ? (
-            <div>
-              <div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 w-full">
                 {array.map((category, index) => (
                   <ButtonAnimation
                     disabled={disableState ? true : false}
@@ -61,10 +60,9 @@ const DeletionMap = ({
                     }}
                   />
                 ))}
-              </div>
             </div>
           ) : (
-            <div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 w-full">
               {array.map((category, index) =>
                 category.title == pageTitle
                   ? category.entries.map((entry, index) => (
