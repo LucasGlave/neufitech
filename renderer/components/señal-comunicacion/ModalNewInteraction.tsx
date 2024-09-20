@@ -3,6 +3,7 @@ import ButtonAnimation from "../ButtonAnimation";
 import { useState, useEffect } from "react";
 import ImagesMapper from "./ImagesMapper";
 import ModalKeyboard from "./ModalKeyboard";
+import Scroll from "../Scroll";
 
 interface modalNewInteractionProps {
   state: (functionToEjec: string) => void;
@@ -22,6 +23,7 @@ const ModalNewInteraction = ({
   const [imageRoute, setImageRoute] = useState("");
   const [step, setStep] = useState("title");
   const [isOff, setIsOff] = useState(false);
+  const [scrollMax, setScrollMax] = useState(0);
 
   useEffect(() => {
     window.ipc
@@ -35,12 +37,22 @@ const ModalNewInteraction = ({
   }, []);
 
   const handleKeyboard = (back?: boolean) => {
-    if(back){
+    if (back) {
       setStep("image")
-    } else{
+    } else {
       imageRoute ? setStep("check") : setStep("image");
     }
   };
+  useEffect(() => {
+    const calculateScrollMax = () => {
+      setScrollMax(innerHeight);
+    };
+    setTimeout(calculateScrollMax, 500);
+    window.addEventListener("resize", calculateScrollMax);
+    return () => {
+      window.removeEventListener("resize", calculateScrollMax);
+    };
+  }, []);
 
   const handleImage = () => {
     setStep("check");
@@ -76,7 +88,7 @@ const ModalNewInteraction = ({
   };
 
   return (
-    <div className="absolute items-center justify-start gap-5 flex flex-col min-h-screen w-screen p-16 backdrop-blur-sm z-50 bg-zinc-900">
+    <div className="absolute items-center justify-start gap-5 flex flex-col min-h-screen w-full p-16 z-50 bg-zinc-900">
       <div className="w-full flex justify-between items-center">
         <ButtonAnimation
           state={() => setActiveModal(false)}
@@ -105,13 +117,21 @@ const ModalNewInteraction = ({
         />
       )}
       {step == "image" && (
-        <div className="flex flex-col gap-8">
-          <h3 className="text-center font-bold text-2xl">ElIJA UNA IMAGEN PARA: "{interactionText.toUpperCase().trim()}"</h3>
-          <ImagesMapper
-            images={images}
-            setImageRoute={setImageRoute}
-            handler={handleImage}
-          />
+        <div className="flex w-full h-full">
+          <div className="flex flex-col gap-8 w-[85%]">
+            <h3 className="text-center font-bold text-2xl">ElIJA UNA IMAGEN PARA: "{interactionText.toUpperCase().trim()}"</h3>
+            <ImagesMapper
+              images={images}
+              setImageRoute={setImageRoute}
+              handler={handleImage}
+            />
+          </div>
+          <div className="flex w-[15%] pt-[7rem] h-full items-start justify-start flex-col relative">
+            <Scroll
+              maxScrollValue={scrollMax}
+              uniqueScroll={true}
+            />
+          </div>
         </div>
       )}
       {step == "check" && (
@@ -138,7 +158,7 @@ const ModalNewInteraction = ({
                 propClass="w-full h-[150px] flex items-center justify-center bg-keyboardHeader text-2xl"
                 text="CAMBIAR FOTO"
                 speakText={"cambiar foto"}
-                state={()=>handleKeyboard(true)}
+                state={() => handleKeyboard(true)}
               />
               <ButtonAnimation
                 propClass="w-full h-[150px] flex items-center justify-center bg-keyboardHeader text-2xl"
@@ -151,12 +171,14 @@ const ModalNewInteraction = ({
               <ButtonAnimation
                 propClass="w-1/4 h-[100px] flex items-center justify-center text-2xl"
                 text="CANCELAR"
+                buttonBorder="border-red-300"
                 speakText={"Cancelar"}
                 state={() => setActiveModal(false)}
               />
               <ButtonAnimation
                 propClass="w-1/4 h-[100px] flex items-center justify-center text-2xl"
                 text="ACEPTAR"
+                buttonBorder="border-green-300"
                 speakText={"ACEPTAR"}
                 state={handleAccept}
               />

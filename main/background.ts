@@ -33,7 +33,7 @@ if (isProd) {
   const mainWindow = createWindow("main", {
     width: 1920,
     height: 1080,
-    // fullscreen: true,
+    fullscreen: true,
     frame: false,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),

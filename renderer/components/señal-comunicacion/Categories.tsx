@@ -120,13 +120,15 @@ const Categories = () => {
           )}
         </div>
       </div>
-      <div className="flex w-[15%] pt-[7rem] h-full items-start justify-start flex-col relative">
-        <Scroll
-          maxScrollValue={scrollMax}
-          addFunction={handleModal}
-          deleteFunction={toggleDelete}
-        />
-      </div>
+      {!activeModal &&
+        <div className="flex w-[15%] pt-[7rem] h-full items-start justify-start flex-col relative">
+          <Scroll
+            maxScrollValue={scrollMax}
+            addFunction={handleModal}
+            deleteFunction={toggleDelete}
+          />
+        </div>
+      }
     </div>
   );
 };
