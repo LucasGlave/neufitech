@@ -19,6 +19,7 @@ type buttonProps = {
   disabled?: boolean;
   svg?: string;
   repeat?: boolean;
+  focus?: string;
   state?: () => void;
   displacementFunction?: (speakText: string) => void;
   comingSoon?: boolean;
@@ -67,6 +68,7 @@ const ButtonAnimation = ({
   interactionDeleter,
   repeat,
   app,
+  focus,
 }: buttonProps) => {
   const navigate = useRouter();
   const [isActive, setIsActive] = useState(false);
