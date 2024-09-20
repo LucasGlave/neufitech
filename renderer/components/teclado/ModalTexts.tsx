@@ -17,9 +17,9 @@ const ModalTexts = ({ activeTexts, state, setter }: ModalTextsProps) => {
             setScrollMax(innerHeight);
         };
         setTimeout(calculateScrollMax, 500);
-        window.addEventListener('resize', calculateScrollMax);
+        window.addEventListener("resize", calculateScrollMax);
         return () => {
-            window.removeEventListener('resize', calculateScrollMax);
+            window.removeEventListener("resize", calculateScrollMax);
         };
     }, []);
     const handleDeleteText = (textToDelete: string) => {
@@ -60,7 +60,7 @@ const ModalTexts = ({ activeTexts, state, setter }: ModalTextsProps) => {
             });
     };
     return (
-        <div className="absolute items-center justify-start gap-5 flex flex-col h-screen w-screen p-16 backdrop-blur-sm z-50 bg-[#000000af]">
+        <div className="absolute items-center justify-center bg-zinc-900 gap-5 flex flex-col w-full p-16 z-50">
             {modalProps !== null && (
                 <ConfirmationModal
                     question={modalProps.question}
@@ -84,7 +84,7 @@ const ModalTexts = ({ activeTexts, state, setter }: ModalTextsProps) => {
                     propClass="w-[150px] h-[80px] bg-keybackground"
                 />
             </div>
-            <div className="flex items-start justify-center w-full gap-2">
+            <div className="flex items-start justify-center h-full w-full gap-2">
                 <div className="bg-[#576280] w-[85%] rounded-lg p-8 border">
                     {activeTexts.length > 0 ? activeTexts.map((text, i) => (
                         <div key={i} className="flex flex-col justify-between gap-8 items-start w-full py-3">

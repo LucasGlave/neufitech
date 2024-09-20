@@ -122,15 +122,6 @@ const Teclado = () => {
     getLastWord()
   }, [output])
 
-  // const handleSaveText = () => {
-  //   if (output.length > 0) {
-  //     const existingTexts = JSON.parse(localStorage.getItem('texts')) || [];
-  //     existingTexts.push(output.trim());
-  //     localStorage.setItem('texts', JSON.stringify(existingTexts));
-  //     alert("subido")
-  //   }
-  // };
-
   const handleShowTexts = () => {
     const storedTexts = JSON.parse(localStorage.getItem('texts')) || [];
     setSavedTexts(storedTexts);
@@ -147,7 +138,6 @@ const Teclado = () => {
     ejecFunction === "spaceKey" && setOutput((prev) => prev + " ");
     ejecFunction === "enterKey" && setOutput((prev) => prev + "\n");
     ejecFunction === "changeIsOff" && setIsOff(!isOff)
-    // ejecFunction === "saveText" && handleSaveText()
     ejecFunction === "getTexts" && handleShowTexts()
     ejecFunction === "closeModal" && setActiveModal(false)
     ejecFunction === "showConfig" && setShowModal(true)
