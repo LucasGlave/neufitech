@@ -76,7 +76,7 @@ const ModalConfig = ({ configuration, closeModal }: ModalConfigProps) => {
     }
 
     return (
-        <div className="absolute items-center justify-start gap-5 flex flex-col h-screen w-full px-16 py-8 backdrop-blur-sm z-50 bg-[#000000af]">
+        <div className="absolute items-center justify-start gap-5 flex flex-col h-screen w-full px-16 py-8 z-50 bg-[#000000ea]">
             <div className="w-full">
                 <ButtonAnimation
                     functionKeyboard={{ funct: "closeModal", state: changeState }}

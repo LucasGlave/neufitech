@@ -68,7 +68,7 @@ const CarrouselEstados = ({ estados, isOff }: CarrouselProps) => {
             <SwiperSlide key={uniqueKey}>
               <ButtonAnimation
                 disabled={isOff}
-                functionKeyboard={{ funct: "handlePrev", state: changeState }}
+                // functionKeyboard={{ funct: "handlePrev", state: changeState }}
                 speakText={`${slideContent}`}
                 text={`${slideContent}`}
                 propClass="w-full h-[80px]"
