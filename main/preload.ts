@@ -22,29 +22,33 @@ const handler = {
     const config = JSON.parse(localStorage.getItem("config") || "{}");
     const voices = window.speechSynthesis.getVoices();
     if (voices.length > 0) {
-      const selectedVoice =
-        config.voices === "hombre"
-          ? voices[9].name === "Google español"
-            ? voices[9]
-            : voices[0]
-          : config.voices === "mujer"
-          ? voices[4].name.includes("Sabina")
-            ? voices[4]
-            : voices[0]
-          : voices[0];
-      speech.voice = selectedVoice;
+      if (voices.length === 1) {
+        window.speechSynthesis.speak(speech);
+      } else {
+        const selectedVoice =
+          config.voices === "hombre"
+            ? voices[9].name === "Google español"
+              ? voices[9]
+              : voices[0]
+            : config.voices === "mujer"
+              ? voices[4].name.includes("Sabina")
+                ? voices[4]
+                : voices[0]
+              : voices[0];
+        speech.voice = selectedVoice;
+      }
+      const volumeMap = {
+        1: 0.2,
+        2: 0.4,
+        3: 0.6,
+        4: 0.8,
+        5: 1.0,
+      };
+      speech.volume = volumeMap[config.volume] || 1;
+      window.speechSynthesis.speak(speech);
     } else {
       console.log("No voices available");
     }
-    const volumeMap = {
-      1: 0.2,
-      2: 0.4,
-      3: 0.6,
-      4: 0.8,
-      5: 1.0,
-    };
-    speech.volume = volumeMap[config.volume] || 1;
-    window.speechSynthesis.speak(speech);
   },
   getImages: () => ipcRenderer.invoke("get-images"),
 };

@@ -104,12 +104,14 @@ const LocalizacionRapida = ({ isOff, setAnimate }: buttonProps) => {
           disabled={isOff ? true : false}
           displacementFunction={displaceCrosshair}
           speakText="Arriba"
+          repeat={true}
           propClass="w-full h-28 flex justify-center items-center"
           imagen={{ src: flechaArriba, width: 60, height: 60 }}
         />
         <ButtonAnimation
           disabled={showSVG ? (isOff ? true : false) : true}
           speakText="Borrar localizacion"
+          repeat={true}
           text="BORRAR LOCALIZACION"
           propClass={`w-full h-28 ${showSVG ? "" : "text-gray-400 border-gray-500"
             }`}
@@ -121,6 +123,7 @@ const LocalizacionRapida = ({ isOff, setAnimate }: buttonProps) => {
           displacementFunction={displaceCrosshair}
           disabled={isOff ? true : false}
           speakText="Izquierda"
+          repeat={true}
           propClass="w-full h-28 flex justify-center items-center"
           imagen={{
             src: flechaIzquierda,
@@ -132,6 +135,7 @@ const LocalizacionRapida = ({ isOff, setAnimate }: buttonProps) => {
           disabled={isOff ? true : false}
           displacementFunction={displaceCrosshair}
           speakText="Abajo"
+          repeat={true}
           propClass="w-full h-28 flex justify-center items-center"
           imagen={{ src: flechaAbajo, width: 60, height: 60 }}
         />
@@ -139,6 +143,7 @@ const LocalizacionRapida = ({ isOff, setAnimate }: buttonProps) => {
           disabled={isOff ? true : false}
           displacementFunction={displaceCrosshair}
           speakText="Derecha"
+          repeat={true}
           propClass="w-full h-28 flex justify-center items-center"
           imagen={{ src: flechaDerecha, width: 60, height: 60 }}
         />

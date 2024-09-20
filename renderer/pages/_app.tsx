@@ -8,7 +8,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <React.Fragment>
       <div className="App">
-        <AnimatedCursor
+        {/* <AnimatedCursor
           innerSize={8}
           outerSize={35}
           innerScale={1}
@@ -25,7 +25,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             mixBlendMode: "exclusion",
           }}
           trailingSpeed={18}
-        />
+        /> */}
         <Component {...pageProps} />
       </div>
     </React.Fragment>

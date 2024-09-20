@@ -18,7 +18,7 @@ type buttonProps = {
   innerText?: string;
   disabled?: boolean;
   svg?: string;
-  focus?: string;
+  repeat?: boolean;
   state?: () => void;
   displacementFunction?: (speakText: string) => void;
   comingSoon?: boolean;
@@ -65,7 +65,7 @@ const ButtonAnimation = ({
   imageSetter,
   titleSetter,
   interactionDeleter,
-  focus,
+  repeat,
   app,
 }: buttonProps) => {
   const navigate = useRouter();
@@ -162,10 +162,10 @@ const ButtonAnimation = ({
                       ? voices[9]
                       : voices[0]
                     : config.voices === "mujer"
-                    ? voices[4].name.includes("Sabina")
-                      ? voices[4]
-                      : voices[0]
-                    : voices[0];
+                      ? voices[4].name.includes("Sabina")
+                        ? voices[4]
+                        : voices[0]
+                      : voices[0];
                 speech.voice = selectedVoice;
               } else {
                 console.log("No voices available");
@@ -191,6 +191,9 @@ const ButtonAnimation = ({
 
           clearInterval(progressInterval);
           setProgress(0);
+          if (isActive && repeat) {
+            startTimer();
+          }
         }, activationHover[config.activation]); // cambiar con config
       };
       startTimer();
@@ -219,24 +222,19 @@ const ButtonAnimation = ({
         setIsActive(false);
         setIsAction(false);
       }}
-      className={`border-2 ${!isAction ? color : "bg-charge"} ${
-        isActive
-          ? "border-chargescale-105"
-          : buttonBorder
+      className={`border-2 ${!isAction ? color : "bg-charge"} ${isActive
+        ? "border-chargescale-105"
+        : buttonBorder
           ? buttonBorder
           : "border-white"
-      } ${propClass} ${
-        innerText && "relative"
-      } z-10 rounded-lg transition-all animate-in animate-out font-semibold ${
-        wordCount > 1 ? "whitespace-pre-line" : "break-all"
-      }   ${textColor ? textColor : "text-white"} ${
-        comingSoon && "grayscale-[50%] overflow-hidden"
-      }`}
+        } ${propClass} ${innerText && "relative"
+        } z-10 rounded-lg transition-all animate-in animate-out font-semibold ${wordCount > 1 ? "whitespace-pre-line" : "break-all"
+        }   ${textColor ? textColor : "text-white"} ${comingSoon && "grayscale-[50%] overflow-hidden"
+        }`}
     >
       <div
-        className={`relative h-full w-full flex items-center justify-center ${
-          svg && "p-5"
-        }`}
+        className={`relative h-full w-full flex items-center justify-center ${svg && "p-5"
+          }`}
       >
         {imagen != null ? (
           <Image
@@ -244,9 +242,8 @@ const ButtonAnimation = ({
             width={imagen.width}
             height={imagen.height}
             alt="dynamic image"
-            className={`rounded-lg object-contain relative ${
-              imagen.add && imagen.add
-            } ${innerText && "opacity-85 brightness-75"}`}
+            className={`rounded-lg object-contain relative ${imagen.add && imagen.add
+              } ${innerText && "opacity-85 brightness-75"}`}
           />
         ) : text ? (
           text
