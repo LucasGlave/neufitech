@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import ImagesMapper from "./ImagesMapper";
 import ModalKeyboard from "./ModalKeyboard";
 import Scroll from "../Scroll";
+import ConfirmationModal from "../confirmation/confirmationModal";
 
 interface modalNewInteractionProps {
   state: (functionToEjec: string) => void;
@@ -24,6 +25,8 @@ const ModalNewInteraction = ({
   const [step, setStep] = useState("title");
   const [isOff, setIsOff] = useState(false);
   const [scrollMax, setScrollMax] = useState(0);
+  const [modalProps, setModalProps] = useState(null);
+
 
   useEffect(() => {
     window.ipc
@@ -43,16 +46,6 @@ const ModalNewInteraction = ({
       imageRoute ? setStep("check") : setStep("image");
     }
   };
-  useEffect(() => {
-    const calculateScrollMax = () => {
-      setScrollMax(innerHeight);
-    };
-    setTimeout(calculateScrollMax, 500);
-    window.addEventListener("resize", calculateScrollMax);
-    return () => {
-      window.removeEventListener("resize", calculateScrollMax);
-    };
-  }, []);
 
   const handleImage = () => {
     setStep("check");
@@ -61,6 +54,22 @@ const ModalNewInteraction = ({
   const handleReset = () => {
     setStep("title");
   };
+
+  const handleCancel = () => {
+    const showConfirmation = (question: string): Promise<boolean> => {
+      return new Promise((resolve) => {
+        setModalProps({ question, resolve });
+      });
+    };
+    showConfirmation("¿DESEA CANCELAR?")
+      .then((confirmed) => {
+        if (confirmed) {
+          setActiveModal(false)
+        } else {
+          setModalProps(null);
+        }
+      });
+  }
   const handleAccept = () => {
     let señales = JSON.parse(localStorage.getItem("senal-comunicacion"));
     let object: object
@@ -89,6 +98,14 @@ const ModalNewInteraction = ({
 
   return (
     <div className="absolute items-center justify-start gap-5 flex flex-col min-h-screen w-full p-16 z-50 bg-zinc-900">
+      {modalProps !== null && (
+        <ConfirmationModal
+          question={modalProps.question}
+          resolve={(result) => {
+            modalProps.resolve(result);
+          }}
+        />
+      )}
       <div className="w-full flex justify-between items-center">
         <ButtonAnimation
           state={() => setActiveModal(false)}
@@ -121,6 +138,8 @@ const ModalNewInteraction = ({
           <div className="flex flex-col gap-8 w-[85%]">
             <h3 className="text-center font-bold text-2xl">ElIJA UNA IMAGEN PARA: "{interactionText.toUpperCase().trim()}"</h3>
             <ImagesMapper
+              isOff={isOff}
+              setterHeightScroll={setScrollMax}
               images={images}
               setImageRoute={setImageRoute}
               handler={handleImage}
@@ -128,6 +147,7 @@ const ModalNewInteraction = ({
           </div>
           <div className="flex w-[15%] pt-[7rem] h-full items-start justify-start flex-col relative">
             <Scroll
+              isOff={isOff}
               maxScrollValue={scrollMax}
               uniqueScroll={true}
             />
@@ -155,12 +175,14 @@ const ModalNewInteraction = ({
             <h3 className="text-center font-bold text-2xl mt-8">Desea modificarlo?</h3>
             <div className="w-full flex flex-row justify-between items-center gap-4">
               <ButtonAnimation
+                disabled={isOff}
                 propClass="w-full h-[150px] flex items-center justify-center bg-keyboardHeader text-2xl"
                 text="CAMBIAR FOTO"
                 speakText={"cambiar foto"}
                 state={() => handleKeyboard(true)}
               />
               <ButtonAnimation
+                disabled={isOff}
                 propClass="w-full h-[150px] flex items-center justify-center bg-keyboardHeader text-2xl"
                 text="CAMBIAR TEXTO"
                 speakText={"cambiar texto"}
@@ -169,13 +191,15 @@ const ModalNewInteraction = ({
             </div>
             <div className="flex w-full justify-between items-center">
               <ButtonAnimation
+                disabled={isOff}
                 propClass="w-1/4 h-[100px] flex items-center justify-center text-2xl"
                 text="CANCELAR"
                 buttonBorder="border-red-300"
                 speakText={"Cancelar"}
-                state={() => setActiveModal(false)}
+                state={handleCancel}
               />
               <ButtonAnimation
+                disabled={isOff}
                 propClass="w-1/4 h-[100px] flex items-center justify-center text-2xl"
                 text="ACEPTAR"
                 buttonBorder="border-green-300"
