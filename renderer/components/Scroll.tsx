@@ -11,6 +11,7 @@ type ScrollProps = {
     uniqueScroll?: boolean;
     addFunction?: () => void;
     deleteFunction?: () => void;
+    isOff: boolean
 };
 
 const Scroll = ({
@@ -19,9 +20,9 @@ const Scroll = ({
     uniqueScroll,
     addFunction,
     deleteFunction,
+    isOff
 }: ScrollProps) => {
     const [scrollActual, setScrollActual] = useState(0);
-    const [isOff, setIsOff] = useState(false);
 
     useEffect(() => {
         setScrollActual(window.scrollY);
@@ -50,8 +51,6 @@ const Scroll = ({
             scrollTop();
         } else if (functionToEjec === "scrollBottom") {
             scrollBottom();
-        } else if (functionToEjec === "changeIsOff") {
-            setIsOff(!isOff);
         }
     };
 
@@ -60,7 +59,7 @@ const Scroll = ({
             <div
                 className={`fixed flex w-[15%] z-[900] flex-col justify-center items-center gap-8 ${bgcolor && "bg-[#576280] py-8 border rounded-lg"}`}
             >
-                {!uniqueScroll && (
+                {!uniqueScroll && addFunction && (
                     <ButtonAnimation
                         disabled={isOff}
                         propClass="w-3/5 flex justify-center items-center"
@@ -85,7 +84,7 @@ const Scroll = ({
                     imagen={{ src: flechaAbajo, add: "w-[70%]" }}
                     functionKeyboard={{ funct: "scrollBottom", state: functionAction }}
                 />
-                {!uniqueScroll && (
+                {!uniqueScroll && deleteFunction && (
                     <ButtonAnimation
                         disabled={isOff}
                         propClass="w-3/5 flex justify-center items-center"

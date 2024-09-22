@@ -74,6 +74,7 @@ const TikTok = () => {
                             focus="[role='button']"
                         /> */}
                         <ButtonAnimation
+                            disabled={isOff}
                             functionKeyboard={{ funct: "test", state: changeState }}
                             buttonBorder="border-tiktok"
                             command="pausar"
