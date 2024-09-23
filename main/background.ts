@@ -68,27 +68,22 @@ ipcMain.on("message", async (event, arg) => {
   event.reply("message", `${arg} World!`);
 });
 
-ipcMain.on("send-key-combination", (event, keys) => {
+ipcMain.handle("send-key-combination", (event, keys) => {
+  console.log(keys);
   keySender.sendCombination(keys);
 });
 
-ipcMain.on("send-key", (event, key) => {
+ipcMain.handle("send-key", (event, key) => {
+  console.log(key);
   keySender.sendKey(key);
 });
 
-ipcMain.on("send-letter", (event, key) => {
+ipcMain.handle("send-letter", (event, key) => {
+  console.log(key);
   if (accentsMap[key]) {
     keySender.sendCombination(accentsMap[key]);
   } else {
     keySender.sendLetter(key);
-  }
-});
-
-ipcMain.on("speak", async (event, text) => {
-  try {
-    event.sender.send("perform-tts", text);
-  } catch (e) {
-    console.error(e);
   }
 });
 
