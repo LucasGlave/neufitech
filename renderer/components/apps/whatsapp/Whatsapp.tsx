@@ -145,7 +145,8 @@ const Whatsapp = () => {
           </div>
           <div />
           <ButtonAnimation
-            functionKeyboard={{ funct: "changeKeyboard", state: changeState }}
+            disabled={isOff}
+            functionKeyboard={{ funct: 'changeKeyboard', state: changeState }}
             speakText={showKeyboard ? "Ocultar teclado" : "Escribir"}
             text={showKeyboard ? "Ocultar teclado" : "Escribir"}
             buttonBorder="border-green-700"
