@@ -86,7 +86,6 @@ const Whatsapp = () => {
     <div className="h-[100vh] flex flex-row bg-white">
       <div className="w-full flex items-center justify-center">
         <div className="flex flex-col items-center justify-between p-2 w-[20%] h-full">
-          <div className="w-0 h-0" tabIndex={0} id="dummy"></div>
           <div className="flex flex-col w-full justify-between items-center gap-2 ">
             <ButtonAnimation
               disabled={isOff ? true : false}
@@ -153,6 +152,7 @@ const Whatsapp = () => {
             textColor="black"
             propClass="w-full h-[80px]"
           />
+          <div className="w-0 h-0" tabIndex={0} id="dummy"></div>
         </div>
         <div className="flex flex-col w-full h-full">
           <Webview url="https://web.whatsapp.com" />
