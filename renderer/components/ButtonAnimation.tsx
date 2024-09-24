@@ -154,28 +154,24 @@ const ButtonAnimation = ({
           } else if (tabLoop) {
             if (window.ipc) {
               (document.getElementById("dummy") as HTMLElement).focus();
-              console.log(document.activeElement);
-              await new Promise((resolve) => setTimeout(resolve, 50));
-              for (let i = 0; i < tabLoop; i++) {
-                try {
+              const sendTabsUntilChatFocus = async (targetChatSelector: string, maxTabs: number = 6) => {
+                let chatFocused = false;
+                let tabsSent = 0;
+                while (!chatFocused && tabsSent < maxTabs) {
                   await new Promise((resolve) => setTimeout(resolve, 50));
                   window.ipc.sendLetter("tab");
-                } catch (err) {
-                  console.error("error when sending keypress: ", err);
+                  await new Promise((resolve) => setTimeout(resolve, 100));
+                  const activeElement = document.activeElement;
+                  const targetChat = document.querySelector(targetChatSelector);
+                  if (activeElement && targetChat && activeElement === targetChat) {
+                    chatFocused = true;
+                    console.log("El chat ha sido enfocado correctamente.");
+                  } else {
+                    tabsSent++;
+                  }
                 }
-              }
-              // const firstChat = document.querySelector(
-              //   "#pane-side div[role='listitem']"
-              // );
-
-              // if (firstChat) {
-              //   (firstChat as HTMLElement).focus(); // Enfocar el primer chat
-              //   (firstChat as HTMLElement).click(); // Hacer clic en el primer chat si es necesario
-              // } else {
-              //   console.log("No se encontró el primer chat");
-              // }
-
-              // window.ipc.sendLetter("enter");
+              };
+              await sendTabsUntilChatFocus("#pane-side div[role='listitem']");
             } else {
               console.log("No se puede usar keySender");
             }
@@ -194,10 +190,10 @@ const ButtonAnimation = ({
                       ? voices[9]
                       : voices[0]
                     : config.voices === "mujer"
-                    ? voices[4].name.includes("Sabina")
-                      ? voices[4]
-                      : voices[0]
-                    : voices[0];
+                      ? voices[4].name.includes("Sabina")
+                        ? voices[4]
+                        : voices[0]
+                      : voices[0];
                 speech.voice = selectedVoice;
               } else {
                 console.log("No voices available");
@@ -254,24 +250,19 @@ const ButtonAnimation = ({
         setIsActive(false);
         setIsAction(false);
       }}
-      className={`border-2 ${!isAction ? color : "bg-charge"} ${
-        isActive
-          ? "border-chargescale-105"
-          : buttonBorder
+      className={`border-2 ${!isAction ? color : "bg-charge"} ${isActive
+        ? "border-chargescale-105"
+        : buttonBorder
           ? buttonBorder
           : "border-white"
-      } ${propClass} ${
-        innerText && "relative"
-      } z-10 rounded-lg transition-all animate-in animate-out font-semibold ${
-        wordCount > 1 ? "whitespace-pre-line" : "break-all"
-      }   ${textColor ? textColor : "text-white"} ${
-        comingSoon && "grayscale-[50%] overflow-hidden"
-      }`}
+        } ${propClass} ${innerText && "relative"
+        } z-10 rounded-lg transition-all animate-in animate-out font-semibold ${wordCount > 1 ? "whitespace-pre-line" : "break-all"
+        }   ${textColor ? textColor : "text-white"} ${comingSoon && "grayscale-[50%] overflow-hidden"
+        }`}
     >
       <div
-        className={`relative h-full w-full flex items-center justify-center ${
-          svg && "p-5"
-        }`}
+        className={`relative h-full w-full flex items-center justify-center ${svg && "p-5"
+          }`}
       >
         {imagen != null ? (
           <Image
@@ -279,9 +270,8 @@ const ButtonAnimation = ({
             width={imagen.width}
             height={imagen.height}
             alt="dynamic image"
-            className={`rounded-lg object-contain relative ${
-              imagen.add && imagen.add
-            } ${innerText && "opacity-85 brightness-75"}`}
+            className={`rounded-lg object-contain relative ${imagen.add && imagen.add
+              } ${innerText && "opacity-85 brightness-75"}`}
           />
         ) : text ? (
           text
