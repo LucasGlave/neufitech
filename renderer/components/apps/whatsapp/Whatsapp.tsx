@@ -1,11 +1,12 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Webview from "../../Webview";
 import ButtonAnimation from "../../ButtonAnimation";
-import whatsappRoutes from "./routeWhatsapp";
+// import whatsappRoutes from "./routeWhatsapp";
 import TecladoGlobal from "../../teclado/TecladoGlobal";
 
 type RouteConfig = {
+  state?: () => void;
   keyCombination?: string[];
   keyPress?: string;
   tabLoop?: number;
@@ -18,9 +19,10 @@ const Whatsapp = () => {
   const [funcToEjec, setFuncToEjec] = useState("");
   const [showKeyboard, setShowKeyboard] = useState(false);
   const [isOff, setIsOff] = useState(false);
+  const [timesMoved, setTimesMoved] = useState(0);
+  const [onChat, setOnChat] = useState(false);
+  const onChatRef = useRef(onChat);
   const [activeButtons, setActiveButtons] = useState([
-    // "Chat-anterior",
-    // "Chat-siguiente",
     "Seleccionar-chat",
     "Nuevo-chat",
     "Perfil",
@@ -29,20 +31,109 @@ const Whatsapp = () => {
     Record<string, RouteConfig>
   >({});
 
+  const aceptarHandler = async () => {
+    try {
+      document.getElementById("app")?.focus();
+      await new Promise((resolve) => setTimeout(resolve, 50));
+      window.ipc.sendLetter("enter");
+    } catch (err) {
+      console.error("error when sending keypress: ", err);
+    }
+    setOnChat(true);
+    // let actButt = activeButtons;
+    // let actButtConf = activeButtonConfigs;
+
+    // setActiveButtons([]);
+    // setActiveButtonConfigs({});
+    // setActiveButtons(actButt);
+    // setActiveButtonConfigs(actButtConf);
+  };
+  const whatsappRoutes = [
+    {
+      Perfil: {
+        keyCombination: ["control", "alt", "comma"],
+        buttons: {
+          Volver: {
+            keyPress: "escape",
+          },
+        },
+      },
+    },
+    {
+      Aceptar: {
+        buttons: {
+          "Chat-anterior": {
+            state: () => {
+              moveHandler(-1);
+            },
+          },
+          "Chat-siguiente": {
+            state: () => {
+              moveHandler(1);
+            },
+          },
+          Aceptar: {
+            // keyPress: "enter",
+            state: aceptarHandler,
+          },
+          Volver: {
+            keyPress: "escape",
+          },
+        },
+      },
+    },
+    {
+      "Seleccionar-chat": {
+        tabLoop: 13,
+        buttons: {
+          "Chat-anterior": {
+            state: () => {
+              moveHandler(-1);
+            },
+          },
+          "Chat-siguiente": {
+            state: () => {
+              moveHandler(1);
+            },
+          },
+          Aceptar: {
+            // keyPress: "enter",
+            state: aceptarHandler,
+          },
+          Volver: {
+            keyPress: "escape",
+          },
+        },
+      },
+    },
+    {
+      "Nuevo-chat": {
+        keyCombination: ["control", "alt", "n"],
+        buttons: {
+          "Nuevo-grupo": {
+            keyCombination: ["control", "alt", "shift", "n"],
+            Agregar: { keyPress: "enter" },
+          },
+          "Seleccionar-persona": {
+            keyPress: "enter",
+          },
+          Volver: {
+            keyPress: "escape",
+          },
+        },
+      },
+    },
+  ];
+
   const changeState = (func: string) => {
     setFuncToEjec(func);
   };
 
   const handleActive = (func: string) => {
     if (func === "Volver") {
-      setActiveButtons([
-        // "Chat-anterior",
-        // "Chat-siguiente",
-        "Seleccionar-chat",
-        "Nuevo-chat",
-        "Perfil",
-      ]);
+      setActiveButtons(["Seleccionar-chat", "Nuevo-chat", "Perfil"]);
       setActiveButtonConfigs({});
+      setOnChat(false);
       return;
     }
     if (func === "changeIsOff") {
@@ -63,13 +154,7 @@ const Whatsapp = () => {
         setActiveButtons(newButtons);
         setActiveButtonConfigs(config.buttons);
       } else {
-        setActiveButtons([
-          // "Chat-anterior",
-          // "Chat-siguiente",
-          "Nuevo-chat",
-          "Seleccionar-chat",
-          "Perfil",
-        ]);
+        setActiveButtons(["Nuevo-chat", "Seleccionar-chat", "Perfil"]);
         setActiveButtonConfigs({});
       }
     }
@@ -81,6 +166,72 @@ const Whatsapp = () => {
       handleActive(funcToEjec);
     }
   }, [funcToEjec]);
+
+  let moveHandler = async (value) => {
+    setTimesMoved((prevTimesMoved) => prevTimesMoved + value);
+
+    setOnChat(async (currentOnchat) => {
+      if (onChatRef.current) {
+        // Log onChat value after state update
+        console.log("onChat is true", onChat);
+        (document.getElementById("dummy") as HTMLElement).focus();
+        const sendTabsUntilChatFocus = async (
+          targetChatSelector: string,
+          maxTabs: number = 6
+        ) => {
+          let chatFocused = false;
+          let tabsSent = 0;
+          while (!chatFocused && tabsSent < maxTabs) {
+            await new Promise((resolve) => setTimeout(resolve, 50));
+            window.ipc.sendLetter("tab");
+            await new Promise((resolve) => setTimeout(resolve, 100));
+            const activeElement = document.activeElement;
+            const targetChat = document.querySelector(targetChatSelector);
+            if (activeElement && targetChat && activeElement === targetChat) {
+              chatFocused = true;
+              console.log("El chat ha sido enfocado correctamente.");
+            } else {
+              tabsSent++;
+            }
+          }
+        };
+        await sendTabsUntilChatFocus("#pane-side div[role='listitem']");
+        for (let i = 0; i < timesMoved; i++) {
+          try {
+            document.getElementById("app")?.focus();
+            await new Promise((resolve) => setTimeout(resolve, 50));
+            window.ipc.sendLetter("Arrow down");
+          } catch (err) {
+            console.error("error when sending keypress: ", err);
+          }
+        }
+        // let actButt = activeButtons;
+        // let actButtConf = activeButtonConfigs;
+
+        // setActiveButtons([]);
+        // setActiveButtonConfigs({});
+        // setActiveButtons(actButt);
+        // setActiveButtonConfigs(actButtConf);
+      } else {
+        console.log("onChat is false", onChat);
+
+        try {
+          document.getElementById("app")?.focus();
+          await new Promise((resolve) => setTimeout(resolve, 50));
+          window.ipc.sendLetter(`Arrow ${value > 0 ? "down" : "up"}`);
+        } catch (err) {
+          console.error("error when sending keypress: ", err);
+        }
+      }
+
+      return currentOnchat;
+    });
+  };
+
+  // Use useEffect to monitor changes to `onChat`
+  useEffect(() => {
+    console.log("onChat state changed: ", onChat);
+  }, [onChat]);
 
   return (
     <div className="h-[100vh] flex flex-row bg-white">
@@ -132,6 +283,11 @@ const Whatsapp = () => {
                       ? route && route[buttonName].tabLoop
                       : buttonConfig.tabLoop
                   }
+                  state={
+                    !buttonConfig.state
+                      ? route && route[buttonName].state
+                      : buttonConfig.state
+                  }
                   key={index}
                   textColor="black"
                   app="whatsapp"
@@ -145,7 +301,7 @@ const Whatsapp = () => {
           <div />
           <ButtonAnimation
             disabled={isOff}
-            functionKeyboard={{ funct: 'changeKeyboard', state: changeState }}
+            functionKeyboard={{ funct: "changeKeyboard", state: changeState }}
             speakText={showKeyboard ? "Ocultar teclado" : "Escribir"}
             text={showKeyboard ? "Ocultar teclado" : "Escribir"}
             buttonBorder="border-green-700"
