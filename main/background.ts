@@ -1,9 +1,10 @@
 import path from "path";
-import { app, BrowserWindow, ipcMain } from "electron";
+import { app, BrowserWindow, ipcMain, screen, webContents } from "electron";
 import serve from "electron-serve";
 import { createWindow } from "./helpers";
 import keySender from "node-key-sender";
 import fs from "fs";
+import { mouse, Button, Point } from "@nut-tree-fork/nut-js";
 
 const accentsMap = {
   á: ["dead_acute", "a"],
@@ -27,21 +28,32 @@ if (isProd) {
   app.setPath("userData", `${app.getPath("userData")} (development)`);
 }
 
+let mainWindow, webContentWindow: any;
+
 (async () => {
   await app.whenReady();
+  // const primaryDisplay = screen.getPrimaryDisplay();
+  // const workAreaSize = primaryDisplay.size;
 
-  const mainWindow = createWindow("main", {
-    width: 1920,
-    height: 1080,
-    fullscreen: true,
+  const width = 1920 - 192;
+  const height = 1080;
+  mainWindow = createWindow("main", {
+    width: width,
+    height: height,
+    x: 0,
+    y: 0,
     frame: false,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
       nodeIntegration: false,
       webviewTag: true,
+      webSecurity: true,
+      sandbox: true
     },
   });
+
+  // mainWindow.maximize()
 
   if (isProd) {
     await mainWindow.loadURL("app://./");
@@ -51,6 +63,7 @@ if (isProd) {
     mainWindow.webContents.openDevTools();
   }
 })();
+
 
 app.on("window-all-closed", () => {
   app.quit();
@@ -102,5 +115,62 @@ ipcMain.handle("get-images", (event) => {
   } catch (error) {
     console.error("Error reading images:", error);
     return [];
+  }
+});
+
+ipcMain.handle('open-whatsapp', async () => {
+  if (!webContentWindow) {
+    webContentWindow = new BrowserWindow({
+      width: 1536,
+      height: 1080,
+      x: 192,
+      y: 0,
+      frame: false,
+      webPreferences: {
+        nodeIntegration: false,
+        contextIsolation: true,
+        preload: path.join(__dirname, "preload.js"),
+      },
+    });
+    console.log('Abriendo WhatsApp Web...');
+    const customUserAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36';
+    await webContentWindow.loadURL('https://web.whatsapp.com', {
+      userAgent: customUserAgent
+    });
+    webContentWindow.webContents.openDevTools();
+  }
+});
+
+ipcMain.handle('close-whatsapp', () => {
+  if (webContentWindow) {
+    webContentWindow.close();
+    webContentWindow = null;
+  }
+})
+
+ipcMain.handle("click-chat", async () => {
+  const webContentsWhatsapp = webContents.fromId(webContentWindow.webContents.id);
+  try {
+    const coordinates = await webContentsWhatsapp.executeJavaScript(`
+      (function() {
+        const firstChat = document.querySelector("div[aria-label='Lista de chats'] > div:nth-child(1)");
+        if (firstChat) {
+          const rect = firstChat.getBoundingClientRect();
+          return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+        } else {
+          throw new Error("No se encontró el primer chat.");
+        }
+      })();
+    `);
+    if (coordinates) {
+      const { x, y } = coordinates;
+      mouse.config.mouseSpeed = 1000;
+      await mouse.setPosition(new Point(x, y));
+      await mouse.click(Button.LEFT);
+      return { success: true, message: `Clic realizado en X: ${x}, Y: ${y}` };
+    }
+  } catch (error) {
+    console.error("Error al obtener coordenadas o hacer clic:", error);
+    return { success: false, message: error.message };
   }
 });

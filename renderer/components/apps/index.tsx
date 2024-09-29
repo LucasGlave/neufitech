@@ -1,26 +1,27 @@
-import { CerrarComentarios, Comentar, Pausar } from "./tiktok/tiktokFunctions";
+import tiktok from "./tiktok/tiktokFunctions";
+import whatsapp from "./whatsapp/whatsappFunctions";
 
 const AppManagement = (app: string, command: string) => {
     switch (app) {
         case "tiktok":
             switch (command) {
                 case "comentar":
-                    Comentar()
+                    tiktok.Comentar()
                     break;
-                case "CerrarComentarios":
-                    CerrarComentarios()
+                case "cerrarComentarios":
+                    tiktok.CerrarComentarios()
                     break;
                 case "pausar":
-                    Pausar()
+                    tiktok.Pausar()
                     break;
             }
         case "whatsapp":
             switch (command) {
-                case "comentar":
-                    Comentar()
+                case "seleccionarChat":
+                    whatsapp.SeleccionarChat()
                     break;
-                case "pausar":
-                    Pausar
+                case "close":
+                    window.ipc.closeWhatsapp()
                     break;
             }
     }

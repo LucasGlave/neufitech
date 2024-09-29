@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import { WebviewTag } from "electron";
-import { Comentar, Pausar } from "./apps/tiktok/tiktokFunctions";
 import AppManagement from "./apps";
 
 type buttonProps = {
@@ -257,7 +256,7 @@ const ButtonAnimation = ({
           : "border-white"
         } ${propClass} ${innerText && "relative"
         } z-10 rounded-lg transition-all animate-in animate-out font-semibold ${wordCount > 1 ? "whitespace-pre-line" : "break-all"
-        }   ${textColor ? textColor : "text-white"} ${comingSoon && "grayscale-[50%] overflow-hidden"
+        }   ${textColor ? textColor : "text-white"} ${comingSoon && "grayscale-[90%] overflow-hidden"
         }`}
     >
       <div
@@ -271,7 +270,7 @@ const ButtonAnimation = ({
             height={imagen.height}
             alt="dynamic image"
             className={`rounded-lg object-contain relative ${imagen.add && imagen.add
-              } ${innerText && "opacity-85 brightness-75"}`}
+              } ${innerText && "opacity-85 brightness-75"} ${comingSoon && "blur-[2px]"}`}
           />
         ) : text ? (
           text
@@ -304,13 +303,6 @@ const ButtonAnimation = ({
           <h3 className="absolute font-bold text-3xl flex text-center items-center justify-center whitespace-pre-line">
             {innerText}
           </h3>
-        )}
-        {comingSoon && (
-          <div className="absolute flex rotate-[-6deg] items-center justify-center w-full h-full z-20 backdrop-blur-[1.5px]">
-            <h3 className="w-[120%] mx-[-20px] bg-black py-2 opacity-80 font-bold">
-              PROXIMAMENTE
-            </h3>
-          </div>
         )}
       </div>
     </button>
