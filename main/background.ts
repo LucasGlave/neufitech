@@ -1,5 +1,5 @@
 import path from "path";
-import { app, BrowserWindow, ipcMain, screen, webContents } from "electron";
+import { app, BrowserWindow, ipcMain, webContents } from "electron";
 import serve from "electron-serve";
 import { createWindow } from "./helpers";
 import keySender from "node-key-sender";

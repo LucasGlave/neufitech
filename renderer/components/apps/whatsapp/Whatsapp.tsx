@@ -116,7 +116,7 @@ const Whatsapp = () => {
             command="seleccionarChat"
             app="whatsapp"
             text="Seleccionar primer chat"
-            textColor="text-tiktok"
+            textColor="text-green-700"
             propClass="w-full h-[80px] font-bold"
             focus="[role='button']"
           />
