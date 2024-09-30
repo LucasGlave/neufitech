@@ -6,11 +6,24 @@ import TecladoGlobal from "../../teclado/TecladoGlobal";
 const Whatsapp = () => {
   const [showKeyboard, setShowKeyboard] = useState(false);
   const [isOff, setIsOff] = useState(false);
-  const [isActiveSelect, setIsActiveSelect] = useState(false)
+  const [isActiveSelect, setIsActiveSelect] = useState(false);
+  const [step, setStep] = useState('base')
+  const [activeButtons, setActiveButtons] = useState({
+    'seleccionar-chat': true,
+    'perfil': true,
+    'nuevo-grupo': true,
+  })
+  // switch (step) {
+  //   case "base":
+  //       tiktok.Comentar()
+  //       break;
+  //   case "cerrarComentarios":
+  //       tiktok.CerrarComentarios()
+  //       break;
 
   useEffect(() => {
-    console.log(isActiveSelect)
-  }, [isActiveSelect])
+    console.log(isActiveSelect);
+  }, [isActiveSelect]);
 
   const changeState = (func: string) => {
     switch (func) {
@@ -21,10 +34,10 @@ const Whatsapp = () => {
         setShowKeyboard(!showKeyboard);
         break;
       case "selectChat":
-        setIsActiveSelect(true)
+        setIsActiveSelect(true);
         setTimeout(() => {
-          setIsActiveSelect(false)
-        }, 2500)
+          setIsActiveSelect(false);
+        }, 2500);
         break;
     }
   };
@@ -32,8 +45,14 @@ const Whatsapp = () => {
   return (
     <div className="h-[100vh] flex flex-row bg-white">
       <div className="w-full relative flex items-center justify-center">
-        <div className={`absolute top-0 left-0 w-[15%] border-red-400 h-full z-10 ${isActiveSelect && "bg-gradient-to-b from-green-200 via-green-400 to-green-600 animate-grow-bar-y"}`} />
-        <div className={`flex flex-col z-20 items-center justify-between p-2 w-[15%] h-full`}>
+        <div
+          className={`absolute top-0 left-0 w-[15%] border-red-400 h-full z-10 ${isActiveSelect &&
+            "bg-gradient-to-b from-green-200 via-green-400 to-green-600 animate-grow-bar-y"
+            }`}
+        />
+        <div
+          className={`flex flex-col z-20 items-center justify-between p-2 w-[15%] h-full`}
+        >
           <div className="flex flex-col w-full justify-between items-center gap-2 ">
             <ButtonAnimation
               disabled={isOff ? true : false}
@@ -61,7 +80,7 @@ const Whatsapp = () => {
           </div>
           <ButtonAnimation
             disabled={isOff}
-            functionKeyboard={{ funct: 'selectChat', state: changeState }}
+            functionKeyboard={{ funct: "selectChat", state: changeState }}
             buttonBorder="border-green-700"
             command="seleccionarChat"
             app="whatsapp"
@@ -72,11 +91,31 @@ const Whatsapp = () => {
           />
           <ButtonAnimation
             disabled={isOff}
-            functionKeyboard={{ funct: 'perfil', state: changeState }}
+            state={() => changeState}
             buttonBorder="border-green-700"
-            command="seleccionarChat"
+            command="perfil"
             app="whatsapp"
-            text="Seleccionar chat"
+            text="Perfil"
+            textColor="text-green-700"
+            color="bg-white"
+            propClass="w-full h-[80px] font-bold"
+          />
+          <ButtonAnimation
+            disabled={isOff}
+            state={() => changeState}
+            buttonBorder="border-green-700"
+            keyCombination={["control", "alt", "comma"]}
+            text="Perfil"
+            textColor="text-green-700"
+            color="bg-white"
+            propClass="w-full h-[80px] font-bold"
+          />
+          <ButtonAnimation
+            disabled={isOff}
+            state={() => changeState}
+            buttonBorder="border-green-700"
+            keyPress="escape"
+            text="volver"
             textColor="text-green-700"
             color="bg-white"
             propClass="w-full h-[80px] font-bold"
@@ -84,7 +123,7 @@ const Whatsapp = () => {
           <div />
           <ButtonAnimation
             disabled={isOff}
-            functionKeyboard={{ funct: 'changeKeyboard', state: changeState }}
+            functionKeyboard={{ funct: "changeKeyboard", state: changeState }}
             speakText={showKeyboard ? "Ocultar teclado" : "Escribir"}
             text={showKeyboard ? "Ocultar teclado" : "Escribir"}
             buttonBorder="border-green-700"

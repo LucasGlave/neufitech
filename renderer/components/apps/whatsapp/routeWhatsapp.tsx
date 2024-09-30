@@ -28,25 +28,6 @@ const whatsappRoutes = [
   //     },
   //   },
   // },
-  {
-    "Seleccionar-chat": {
-      tabLoop: 13,
-      buttons: {
-        "Chat-anterior": {
-          keyPress: "Arrow up",
-        },
-        "Chat-siguiente": {
-          keyPress: "Arrow down",
-        },
-        Aceptar: {
-          keyPress: "enter",
-        },
-        Volver: {
-          keyPress: "escape",
-        },
-      },
-    },
-  },
   // {
   //   "Chat-siguiente": {
   //     keyCombination: ["control", "alt", "shift", "]"],
