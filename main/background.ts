@@ -1,10 +1,10 @@
 import path from "path";
-import { app, BrowserWindow, ipcMain, screen, webContents } from "electron";
+import { app, BrowserWindow, ipcMain } from "electron";
 import serve from "electron-serve";
 import { createWindow } from "./helpers";
 import keySender from "node-key-sender";
 import fs from "fs";
-import { mouse, Button, Point } from "@nut-tree-fork/nut-js";
+import { mouse, Button } from "@nut-tree-fork/nut-js";
 
 const accentsMap = {
   á: ["dead_acute", "a"],
@@ -58,12 +58,11 @@ let mainWindow, webContentWindow: any;
   if (isProd) {
     await mainWindow.loadURL("app://./");
   } else {
+    mainWindow.webContents.openDevtools()
     const port = process.argv[2];
     await mainWindow.loadURL(`http://localhost:${port}`);
-    mainWindow.webContents.openDevTools();
   }
 })();
-
 
 app.on("window-all-closed", () => {
   app.quit();
@@ -137,7 +136,6 @@ ipcMain.handle('open-whatsapp', async () => {
     await webContentWindow.loadURL('https://web.whatsapp.com', {
       userAgent: customUserAgent
     });
-    webContentWindow.webContents.openDevTools();
   }
 });
 
@@ -149,26 +147,9 @@ ipcMain.handle('close-whatsapp', () => {
 })
 
 ipcMain.handle("click-chat", async () => {
-  const webContentsWhatsapp = webContents.fromId(webContentWindow.webContents.id);
   try {
-    const coordinates = await webContentsWhatsapp.executeJavaScript(`
-      (function() {
-        const firstChat = document.querySelector("div[aria-label='Lista de chats'] > div:nth-child(1)");
-        if (firstChat) {
-          const rect = firstChat.getBoundingClientRect();
-          return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
-        } else {
-          throw new Error("No se encontró el primer chat.");
-        }
-      })();
-    `);
-    if (coordinates) {
-      const { x, y } = coordinates;
-      mouse.config.mouseSpeed = 1000;
-      await mouse.setPosition(new Point(x, y));
-      await mouse.click(Button.LEFT);
-      return { success: true, message: `Clic realizado en X: ${x}, Y: ${y}` };
-    }
+    await mouse.click(Button.LEFT);
+    return { success: true, message: `Click realizado.` };
   } catch (error) {
     console.error("Error al obtener coordenadas o hacer clic:", error);
     return { success: false, message: error.message };
