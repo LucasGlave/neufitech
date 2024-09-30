@@ -123,8 +123,7 @@ const SensacionCorporal = () => {
         />
         <div
           className={`absolute bottom-0 left-0 h-full w-full  transition-all z-[1] 
-            ${animate ? "bg-green-400 animate-grow-bar" : ""}
-            `}
+            ${animate ? "bg-green-400 animate-grow-bar-y" : ""}`}
         />
       </div>
       <div className="flex flex-col justify-between gap-2 items-center w-[35%] bg-zinc-900">

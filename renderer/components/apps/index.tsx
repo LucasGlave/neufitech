@@ -18,7 +18,9 @@ const AppManagement = (app: string, command: string) => {
         case "whatsapp":
             switch (command) {
                 case "seleccionarChat":
-                    whatsapp.SeleccionarChat()
+                    setTimeout(() => {
+                        whatsapp.SeleccionarChat()
+                    }, 3000)
                     break;
                 case "close":
                     window.ipc.closeWhatsapp()
