@@ -18,17 +18,16 @@ const handler = {
   sendKey: (key: any) => ipcRenderer.invoke("send-key", key),
   sendLetter: (key: any) => ipcRenderer.invoke("send-letter", key),
   getImages: () => ipcRenderer.invoke("get-images"),
+  openWhatsapp: () => ipcRenderer.invoke("open-whatsapp"),
+  closeWhatsapp: () => ipcRenderer.invoke("close-whatsapp"),
+  clickChat: () => ipcRenderer.invoke("click-chat"),
   speak: (speakText: any) => {
     const speech = new SpeechSynthesisUtterance(speakText);
-
     const config = JSON.parse(localStorage.getItem("config") || "{}");
-
     const speakWithVoices = () => {
       const voices = window.speechSynthesis.getVoices();
-
       if (voices.length > 0) {
         let selectedVoice;
-
         if (config.voices === "hombre") {
           selectedVoice = voices.find(
             (voice) => voice.name == "Microsoft Raul - Spanish (Mexico)"
@@ -38,7 +37,6 @@ const handler = {
             (voice) => voice.name == "Microsoft Sabina - Spanish (Mexico)"
           );
         }
-
         if (!selectedVoice) {
           switch (config.voices) {
             case "hombre":
@@ -53,11 +51,8 @@ const handler = {
               break;
           }
         }
-
         selectedVoice = selectedVoice || voices[0];
-
         speech.voice = selectedVoice;
-
         const volumeMap = {
           1: 0.2,
           2: 0.4,
@@ -66,7 +61,6 @@ const handler = {
           5: 1.0,
         };
         speech.volume = volumeMap[config.volume] || 1;
-
         window.speechSynthesis.speak(speech);
       } else {
         console.log("No voices available");

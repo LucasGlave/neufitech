@@ -5,10 +5,12 @@ import { createWindow } from "./helpers";
 import keySender from "node-key-sender";
 import fs from "fs";
 import { exec } from 'child_process';
-import robot from "robotjs"
+import robot from "robotjs";
+import { mouse, Button } from "@nut-tree-fork/nut-js";
 
 global.isTobii = false;
 let mainWindow: BrowserWindow | null = null;
+let webContentWindow: any;
 let tobiiProcess: any | null = null;
 
 let exeServerPath: string;
@@ -49,11 +51,17 @@ if (isProd) {
 
 (async () => {
   await app.whenReady();
+  // const primaryDisplay = screen.getPrimaryDisplay();
+  // const workAreaSize = primaryDisplay.size;
 
+  const width = 1920 - 192;
+  const height = 1080;
+  
   mainWindow = createWindow("main", {
-    width: 1920,
-    height: 1080,
-    fullscreen: true,
+    width: width,
+    height: height,
+    x: 0,
+    y: 0,
     frame: false,
     alwaysOnTop: true,
     webPreferences: {
@@ -61,15 +69,19 @@ if (isProd) {
       contextIsolation: true,
       nodeIntegration: false,
       webviewTag: true,
+      webSecurity: true,
+      sandbox: true
     },
   });
+
+  // mainWindow.maximize()
 
   if (isProd) {
     await mainWindow.loadURL("app://./");
   } else {
+    mainWindow.webContents.openDevTools()
     const port = process.argv[2];
     await mainWindow.loadURL(`http://localhost:${port}`);
-    mainWindow.webContents.openDevTools();
   }
 
   globalShortcut.register('F10', () => {
@@ -192,4 +204,43 @@ ipcMain.on('set-tobii-in-control', (event, newConfig) => {
 
 ipcMain.handle('tobii-in-control', async () => {
   return global.isTobii;
+});
+
+ipcMain.handle('open-whatsapp', async () => {
+  if (!webContentWindow) {
+    webContentWindow = new BrowserWindow({
+      width: 1536,
+      height: 1080,
+      x: 192,
+      y: 0,
+      frame: false,
+      webPreferences: {
+        nodeIntegration: false,
+        contextIsolation: true,
+        preload: path.join(__dirname, "preload.js"),
+      },
+    });
+    console.log('Abriendo WhatsApp Web...');
+    const customUserAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36';
+    await webContentWindow.loadURL('https://web.whatsapp.com', {
+      userAgent: customUserAgent
+    });
+  }
+});
+
+ipcMain.handle('close-whatsapp', () => {
+  if (webContentWindow) {
+    webContentWindow.close();
+    webContentWindow = null;
+  }
+})
+
+ipcMain.handle("click-chat", async () => {
+  try {
+    await mouse.click(Button.LEFT);
+    return { success: true, message: `Click realizado.` };
+  } catch (error) {
+    console.error("Error al obtener coordenadas o hacer clic:", error);
+    return { success: false, message: error.message };
+  }
 });

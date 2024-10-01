@@ -208,6 +208,7 @@ const Home = () => {
           </div>
           <div className="flex h-[25%] justify-around relative gap-4 w-full">
             <ButtonAnimation
+              state={() => window.ipc.openWhatsapp()}
               disabled={isOff}
               speakText="Whatsapp"
               navigation="whatsapp"
@@ -216,6 +217,7 @@ const Home = () => {
             <ButtonAnimation
               disabled={isOff}
               speakText="Tik tok"
+              comingSoon={true}
               navigation="tiktok"
               imagen={{ src: logoTikTok, add: "h-full w-full" }}
             />

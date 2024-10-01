@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import Webview from "../../Webview";
+import Webview from "../Webview";
 import ButtonAnimation from "../../ButtonAnimation";
 import tiktokRoutes from "./routeTikTok";
 
