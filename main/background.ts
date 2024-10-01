@@ -1,9 +1,29 @@
 import path from "path";
-import { app, BrowserWindow, ipcMain } from "electron";
+import { app, BrowserWindow, ipcMain, globalShortcut } from "electron";
 import serve from "electron-serve";
 import { createWindow } from "./helpers";
 import keySender from "node-key-sender";
 import fs from "fs";
+import { exec } from 'child_process';
+import robot from "robotjs"
+
+global.isTobii = false;
+let mainWindow: BrowserWindow | null = null;
+let tobiiProcess: any | null = null;
+
+let exeServerPath: string;
+let exeCalibratePath: string;
+
+// Check if the app is packaged
+if (app.isPackaged) {
+  // In production, when the app is packaged
+  exeServerPath = path.join(process.resourcesPath, 'renderer', 'lib', 'TobiiServer', 'TobiiElectronServer.exe');
+  exeCalibratePath  = path.join(process.resourcesPath, 'renderer', 'lib', 'TobiiServer', 'TobiiCalibrate.exe');
+} else {
+  // In development
+  exeServerPath = path.join(__dirname, '../renderer/lib/TobiiServer/TobiiElectronServer.exe');
+  exeCalibratePath = path.join(__dirname, '../renderer/lib/TobiiServer/TobiiCalibrate.exe');
+}
 
 const accentsMap = {
   á: ["dead_acute", "a"],
@@ -30,11 +50,12 @@ if (isProd) {
 (async () => {
   await app.whenReady();
 
-  const mainWindow = createWindow("main", {
+  mainWindow = createWindow("main", {
     width: 1920,
     height: 1080,
     fullscreen: true,
     frame: false,
+    alwaysOnTop: true,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
@@ -50,6 +71,26 @@ if (isProd) {
     await mainWindow.loadURL(`http://localhost:${port}`);
     mainWindow.webContents.openDevTools();
   }
+
+  globalShortcut.register('F10', () => {
+    mainWindow?.webContents.send('tobii-control-updated', !global.isTobii);
+    global.isTobii = !global.isTobii;
+  });
+  
+  globalShortcut.register('F9', () => {
+    if(mainWindow.getOpacity() == 1) {
+      mainWindow.setOpacity(0);
+    } else { mainWindow.setOpacity(1); }
+  });
+
+  tobiiProcess = exec(exeServerPath);
+
+  tobiiProcess?.stdout?.on('data', (data:any) => {
+    if(global.isTobii) {
+      const eyeData = JSON.parse(data.replace(/(\d),(\d)/g, '$1.$2'))
+      robot.moveMouse(eyeData.x, eyeData.y);
+    }
+  });
 })();
 
 app.on("window-all-closed", () => {
@@ -103,4 +144,52 @@ ipcMain.handle("get-images", (event) => {
     console.error("Error reading images:", error);
     return [];
   }
+});
+
+ipcMain.handle('tobii-calibrate', async () => {
+  const calibrateProcess = exec(exeCalibratePath);
+  return true;
+});
+
+ipcMain.handle('tobii-check', async () => {
+  return !!tobiiProcess;
+});
+
+ipcMain.handle('tobii-start', async () => {
+  if(!tobiiProcess) {
+    tobiiProcess = exec(exeServerPath);
+
+    tobiiProcess?.stdout?.on('data', (data:any) => {
+      if(global.isTobii) {
+        const eyeData = JSON.parse(data.replace(/(\d),(\d)/g, '$1.$2'))
+        robot.moveMouse(eyeData.x, eyeData.y);
+      }
+    });
+  }
+
+  return true
+})
+
+ipcMain.handle('tobii-stop', async () => {
+  if(tobiiProcess) {
+    tobiiProcess.kill('SIGTERM');
+    tobiiProcess = null;
+  }
+
+  return true
+})
+
+ipcMain.handle('tobii-toggle', async () => {
+  global.isTobii = !global.isTobii;
+  mainWindow?.webContents.send('tobii-control-updated', !global.isTobii);
+  return true
+});
+
+ipcMain.on('set-tobii-in-control', (event, newConfig) => {
+  mainWindow?.webContents.send('tobii-control-updated', !global.isTobii);
+  global.isTobii = !global.isTobii;
+});
+
+ipcMain.handle('tobii-in-control', async () => {
+  return global.isTobii;
 });

@@ -79,6 +79,15 @@ const handler = {
       speakWithVoices();
     }
   },
+  tobiiCalibrate: () => ipcRenderer.invoke("tobii-calibrate"),
+  isTobiiOnline: () => ipcRenderer.invoke("tobii-check"),
+  tobiiToggle: () => ipcRenderer.invoke("tobii-toggle"),
+  setTobiiControl: (newConfig:boolean) => ipcRenderer.send('set-tobii-in-control', newConfig),
+  tobiiInControl: () => ipcRenderer.invoke("tobii-in-control"),
+  tobiiStart: () => ipcRenderer.invoke("tobii-start"),
+  tobiiStop: () => ipcRenderer.invoke("tobii-stop"),
+  onTobiiControlUpdate: (callback:any) => ipcRenderer.on('tobii-control-updated', callback),
+  offTobiiControlUpdate: (callback:any) => ipcRenderer.removeListener('tobii-control-updated', callback),
 };
 
 contextBridge.exposeInMainWorld("ipc", handler);

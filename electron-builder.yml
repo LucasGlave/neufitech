@@ -4,9 +4,11 @@ copyright: Copyright © 2024 Neufitech
 directories:
   output: dist
   buildResources: resources
+asar: true
 files:
   - from: .
     filter:
       - package.json
-      - app
+      - app/**
+      - renderer/lib/TobiiServer/**
 publish: null
