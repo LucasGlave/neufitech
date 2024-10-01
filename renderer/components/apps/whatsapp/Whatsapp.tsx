@@ -1,29 +1,130 @@
 "use client";
 import { useEffect, useState } from "react";
 import ButtonAnimation from "../../ButtonAnimation";
-import TecladoGlobal from "../../teclado/TecladoGlobal";
+// import TecladoGlobal from "../../teclado/TecladoGlobal";
 
 const Whatsapp = () => {
   const [showKeyboard, setShowKeyboard] = useState(false);
   const [isOff, setIsOff] = useState(false);
+  const [base, setBase] = useState(false)
   const [isActiveSelect, setIsActiveSelect] = useState(false);
   const [step, setStep] = useState('base')
   const [activeButtons, setActiveButtons] = useState({
     'seleccionar-chat': true,
     'perfil': true,
     'nuevo-grupo': true,
+    'nuevo-chat': true,
+    'aceptar': false,
+    'buscar-chat': true,
+    'buscar-en-chat': true,
+    'fijar-chat': false,
+    'volver': false,
+    'teclado': false
   })
-  // switch (step) {
-  //   case "base":
-  //       tiktok.Comentar()
-  //       break;
-  //   case "cerrarComentarios":
-  //       tiktok.CerrarComentarios()
-  //       break;
-
   useEffect(() => {
-    console.log(isActiveSelect);
-  }, [isActiveSelect]);
+    switch (step) {
+      case "base":
+        setActiveButtons({
+          'seleccionar-chat': true,
+          'perfil': true,
+          'nuevo-grupo': true,
+          'nuevo-chat': true,
+          'aceptar': false,
+          'buscar-chat': true,
+          'buscar-en-chat': false,
+          'fijar-chat': false,
+          'volver': false,
+          'teclado': false
+        })
+        break;
+      case "seleccionar-chat":
+        setActiveButtons({
+          'seleccionar-chat': true,
+          'perfil': false,
+          'nuevo-grupo': false,
+          'nuevo-chat': false,
+          'aceptar': false,
+          'buscar-chat': true,
+          'buscar-en-chat': true,
+          'fijar-chat': true,
+          'volver': true,
+          'teclado': true
+        })
+        break;
+      case "perfil":
+        setActiveButtons({
+          'seleccionar-chat': false,
+          'perfil': false,
+          'nuevo-grupo': false,
+          'nuevo-chat': false,
+          'aceptar': false,
+          'buscar-chat': false,
+          'buscar-en-chat': false,
+          'fijar-chat': false,
+          'volver': true,
+          'teclado': false
+        })
+        break;
+      case "nuevo-grupo":
+        setActiveButtons({
+          'seleccionar-chat': true,
+          'perfil': false,
+          'nuevo-grupo': false,
+          'nuevo-chat': false,
+          'buscar-chat': false,
+          'aceptar': true,
+          'buscar-en-chat': false,
+          'fijar-chat': false,
+          'volver': true,
+          'teclado': true
+        })
+        break;
+      case "nuevo-chat":
+        setActiveButtons({
+          'seleccionar-chat': true,
+          'perfil': false,
+          'nuevo-grupo': false,
+          'nuevo-chat': false,
+          'buscar-chat': false,
+          'aceptar': true,
+          'buscar-en-chat': false,
+          'fijar-chat': false,
+          'volver': true,
+          'teclado': true
+        })
+        break;
+      case "buscar-chat":
+        setActiveButtons({
+          'seleccionar-chat': true,
+          'perfil': false,
+          'nuevo-grupo': false,
+          'nuevo-chat': false,
+          'aceptar': false,
+          'buscar-chat': false,
+          'buscar-en-chat': false,
+          'fijar-chat': false,
+          'volver': true,
+          'teclado': true
+        })
+        break;
+      case "fijar-chat":
+        break;
+      case "volver":
+        setActiveButtons({
+          'seleccionar-chat': true,
+          'perfil': true,
+          'nuevo-grupo': true,
+          'nuevo-chat': true,
+          'aceptar': false,
+          'buscar-chat': true,
+          'buscar-en-chat': true,
+          'fijar-chat': false,
+          'volver': false,
+          'teclado': false
+        })
+        break;
+    }
+  }, [step])
 
   const changeState = (func: string) => {
     switch (func) {
@@ -38,6 +139,32 @@ const Whatsapp = () => {
         setTimeout(() => {
           setIsActiveSelect(false);
         }, 2500);
+        step === "base" && setStep("seleccionar-chat")
+        break;
+      case "profile":
+        setStep("perfil")
+        break;
+      case "newGroup":
+        setStep("nuevo-grupo")
+        break;
+      case "newChat":
+        setStep("nuevo-chat")
+        break;
+      case "findChat":
+        setStep("buscar-chat")
+        break;
+      case "findInChat":
+        setStep("buscar-en-chat")
+        break;
+      case "fixedChat":
+        setStep("fijar-chat")
+        break;
+      case "back":
+        if (step === "buscar-en-chat") {
+          base ? (setStep("base"), setBase(false)) : setBase(true)
+        } else {
+          setStep("base")
+        }
         break;
     }
   };
@@ -78,62 +205,123 @@ const Whatsapp = () => {
               propClass="w-full h-[80px]"
             />
           </div>
-          <ButtonAnimation
-            disabled={isOff}
-            functionKeyboard={{ funct: "selectChat", state: changeState }}
-            buttonBorder="border-green-700"
-            command="seleccionarChat"
-            app="whatsapp"
-            text="Seleccionar chat"
-            textColor="text-green-700"
-            color="bg-white"
-            propClass="w-full h-[80px] font-bold"
-          />
-          <ButtonAnimation
-            disabled={isOff}
-            state={() => changeState}
-            buttonBorder="border-green-700"
-            command="perfil"
-            app="whatsapp"
-            text="Perfil"
-            textColor="text-green-700"
-            color="bg-white"
-            propClass="w-full h-[80px] font-bold"
-          />
-          <ButtonAnimation
-            disabled={isOff}
-            state={() => changeState}
-            buttonBorder="border-green-700"
-            keyCombination={["control", "alt", "comma"]}
-            text="Perfil"
-            textColor="text-green-700"
-            color="bg-white"
-            propClass="w-full h-[80px] font-bold"
-          />
-          <ButtonAnimation
-            disabled={isOff}
-            state={() => changeState}
-            buttonBorder="border-green-700"
-            keyPress="escape"
-            text="volver"
-            textColor="text-green-700"
-            color="bg-white"
-            propClass="w-full h-[80px] font-bold"
-          />
+          <div className="h-full w-full flex flex-col items-center justify-center gap-6 text-xl">
+            {activeButtons["seleccionar-chat"] && (
+              <ButtonAnimation
+                disabled={isOff}
+                functionKeyboard={{ funct: "selectChat", state: changeState }}
+                buttonBorder="border-green-700"
+                command="seleccionarChat"
+                app="whatsapp"
+                text="Seleccionar chat"
+                textColor="text-green-700"
+                color="bg-white"
+                propClass="w-full h-[80px] font-bold"
+              />
+            )}
+            {activeButtons["perfil"] && (
+              <ButtonAnimation
+                disabled={isOff}
+                functionKeyboard={{ funct: "profile", state: changeState }}
+                keyCombination={["control", "alt", "comma"]}
+                buttonBorder="border-green-700"
+                command="perfil"
+                app="whatsapp"
+                text="Perfil"
+                textColor="text-green-700"
+                color="bg-white"
+                propClass="w-full h-[80px] font-bold"
+              />
+            )}
+            {activeButtons["nuevo-grupo"] && (
+              <ButtonAnimation
+                disabled={isOff}
+                functionKeyboard={{ funct: "newGroup", state: changeState }}
+                buttonBorder="border-green-700"
+                keyCombination={["control", "alt", "shift", "n"]}
+                text="Nuevo grupo"
+                textColor="text-green-700"
+                color="bg-white"
+                propClass="w-full h-[80px] font-bold"
+              />
+            )}
+            {activeButtons["nuevo-chat"] && (
+              <ButtonAnimation
+                disabled={isOff}
+                functionKeyboard={{ funct: "newChat", state: changeState }}
+                buttonBorder="border-green-700"
+                keyCombination={["control", "alt", "n"]}
+                text="Nuevo chat"
+                textColor="text-green-700"
+                color="bg-white"
+                propClass="w-full h-[80px] font-bold"
+              />
+            )}
+            {activeButtons["buscar-chat"] && (
+              <ButtonAnimation
+                disabled={isOff}
+                functionKeyboard={{ funct: "findChat", state: changeState }}
+                buttonBorder="border-green-700"
+                keyCombination={["control", "alt", "/"]}
+                text="Buscar chat"
+                textColor="text-green-700"
+                color="bg-white"
+                propClass="w-full h-[80px] font-bold"
+              />
+            )}
+            {activeButtons["buscar-en-chat"] && (
+              <ButtonAnimation
+                disabled={isOff}
+                functionKeyboard={{ funct: "findInChat", state: changeState }}
+                buttonBorder="border-green-700"
+                keyCombination={["control", "alt", "shift", "f"]}
+                text="Buscar en el chat"
+                textColor="text-green-700"
+                color="bg-white"
+                propClass="w-full h-[80px] font-bold"
+              />
+            )}
+            {activeButtons["fijar-chat"] && (
+              <ButtonAnimation
+                disabled={isOff}
+                functionKeyboard={{ funct: "fixedChat", state: changeState }}
+                buttonBorder="border-green-700"
+                keyCombination={["control", "alt", "shift", "p"]}
+                text="Fijar chat"
+                textColor="text-green-700"
+                color="bg-white"
+                propClass="w-full h-[80px] font-bold"
+              />
+            )}
+            {activeButtons["aceptar"] && (
+              <ButtonAnimation
+                disabled={isOff}
+                functionKeyboard={{ funct: "Accept", state: changeState }}
+                buttonBorder="border-green-700"
+                keyPress="enter"
+                text="Aceptar"
+                textColor="text-green-700"
+                color="bg-white"
+                propClass="w-full h-[80px] font-bold"
+              />
+            )}
+            {activeButtons["volver"] && (
+              <ButtonAnimation
+                disabled={isOff}
+                functionKeyboard={{ funct: "back", state: changeState }}
+                buttonBorder="border-green-700"
+                keyPress="escape"
+                text="Volver"
+                textColor="text-green-700"
+                color="bg-white"
+                propClass="w-full h-[80px] font-bold"
+              />
+            )}
+          </div>
           <div />
-          <ButtonAnimation
-            disabled={isOff}
-            functionKeyboard={{ funct: "changeKeyboard", state: changeState }}
-            speakText={showKeyboard ? "Ocultar teclado" : "Escribir"}
-            text={showKeyboard ? "Ocultar teclado" : "Escribir"}
-            buttonBorder="border-green-700"
-            textColor="black"
-            color="bg-white"
-            propClass="w-full h-[80px]"
-          />
         </div>
         <div className="flex flex-col w-full h-full">
-          {showKeyboard && <TecladoGlobal isOff={isOff} />}
+          {/* {activeButtons["teclado"] && <TecladoGlobal isOff={isOff} />} */}
         </div>
       </div>
     </div>

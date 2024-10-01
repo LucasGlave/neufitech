@@ -35,9 +35,6 @@ const whatsappRoutes = [
   //       "Buscar-en-chat": {
   //         keyCombination: ["control", "alt", "shift", "f"],
   //       },
-  //       "Chat-siguiente": {
-  //         keyCombination: ["control", "alt", "shift", "]"],
-  //       },
   //       "Fijar-chat": {
   //         keyCombination: ["control", "alt", "shift", "p"],
   //       },
@@ -59,9 +56,6 @@ const whatsappRoutes = [
         "Nuevo-grupo": {
           keyCombination: ["control", "alt", "shift", "n"],
           Agregar: { keyPress: "enter" },
-        },
-        "Seleccionar-persona": {
-          keyPress: "enter",
         },
         Volver: {
           keyPress: "escape",
