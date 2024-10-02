@@ -58,9 +58,9 @@ let mainWindow, webContentWindow: any;
   if (isProd) {
     await mainWindow.loadURL("app://./");
   } else {
-    mainWindow.webContents.openDevtools()
     const port = process.argv[2];
     await mainWindow.loadURL(`http://localhost:${port}`);
+    mainWindow.webContents.openDevTools();
   }
 })();
 
@@ -122,7 +122,7 @@ ipcMain.handle('open-whatsapp', async () => {
     webContentWindow = new BrowserWindow({
       width: 1536,
       height: 1080,
-      x: 192,
+      x: 230,
       y: 0,
       frame: false,
       webPreferences: {
