@@ -27,7 +27,6 @@ const ModalNewInteraction = ({
   const [scrollMax, setScrollMax] = useState(0);
   const [modalProps, setModalProps] = useState(null);
 
-
   useEffect(() => {
     window.ipc
       .getImages()
@@ -41,9 +40,23 @@ const ModalNewInteraction = ({
 
   const handleKeyboard = (back?: boolean) => {
     if (back) {
-      setStep("image")
+      setStep("image");
     } else {
-      imageRoute ? setStep("check") : setStep("image");
+      if (interactionText == "") {
+        const showConfirmation = (question: string): Promise<boolean> => {
+          return new Promise((resolve) => {
+            setModalProps({ question, resolve });
+          });
+        };
+        showConfirmation("AGREGUE UN TÍTULO").then((confirmed) => {
+          if (confirmed) {
+            setModalProps(null);
+          } else {
+          }
+        });
+      } else {
+        imageRoute ? setStep("check") : setStep("image");
+      }
     }
   };
 
@@ -61,18 +74,17 @@ const ModalNewInteraction = ({
         setModalProps({ question, resolve });
       });
     };
-    showConfirmation("¿DESEA CANCELAR?")
-      .then((confirmed) => {
-        if (confirmed) {
-          setActiveModal(false)
-        } else {
-          setModalProps(null);
-        }
-      });
-  }
+    showConfirmation("¿DESEA CANCELAR?").then((confirmed) => {
+      if (confirmed) {
+        setActiveModal(false);
+      } else {
+        setModalProps(null);
+      }
+    });
+  };
   const handleAccept = () => {
     let señales = JSON.parse(localStorage.getItem("senal-comunicacion"));
-    let object: object
+    let object: object;
     if (category == "CATEGORIAS") {
       object = {
         title: interactionText.toUpperCase(),
@@ -96,6 +108,18 @@ const ModalNewInteraction = ({
     setActiveModal(false);
   };
 
+  const addImage = () => {
+    window.ipc
+      .saveImage()
+      .then((imageFiles) => {
+        console.log(imageFiles);
+        setImages(imageFiles);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch images:", err);
+      });
+  };
+
   return (
     <div className="absolute items-center justify-start gap-5 flex flex-col min-h-screen w-full p-16 z-50 bg-zinc-900">
       {modalProps !== null && (
@@ -113,6 +137,13 @@ const ModalNewInteraction = ({
           speakText="Cerrar"
           propClass="min-w-[150px] h-[80px] bg-keybackground"
           text="CERRAR"
+        />
+        <ButtonAnimation
+          state={addImage}
+          disabled={isOff}
+          speakText="IMAGEN"
+          propClass="min-w-[150px] h-[80px] bg-keybackground"
+          text="IMAGEN"
         />
         <ButtonAnimation
           state={() => setIsOff(!isOff)}
@@ -136,7 +167,9 @@ const ModalNewInteraction = ({
       {step == "image" && (
         <div className="flex w-full h-full">
           <div className="flex flex-col gap-8 w-[85%]">
-            <h3 className="text-center font-bold text-2xl">ElIJA UNA IMAGEN PARA: "{interactionText.toUpperCase().trim()}"</h3>
+            <h3 className="text-center font-bold text-2xl">
+              ElIJA UNA IMAGEN PARA: "{interactionText.toUpperCase().trim()}"
+            </h3>
             <ImagesMapper
               isOff={isOff}
               setterHeightScroll={setScrollMax}
@@ -157,7 +190,9 @@ const ModalNewInteraction = ({
       {step == "check" && (
         <div className="w-full h-full">
           <div className="flex flex-col w-full justify-between items-center">
-            <h3 className="text-center font-bold text-2xl mb-2">Se agregará el siguiente botón:</h3>
+            <h3 className="text-center font-bold text-2xl mb-2">
+              Se agregará el siguiente botón:
+            </h3>
             <ButtonAnimation
               disabled={true}
               propClass="w-1/2 h-[250px] flex items-center justify-center"
@@ -172,7 +207,9 @@ const ModalNewInteraction = ({
             />
           </div>
           <div className="min-w-[80vw] flex flex-col justify-center items-center gap-8">
-            <h3 className="text-center font-bold text-2xl mt-8">Desea modificarlo?</h3>
+            <h3 className="text-center font-bold text-2xl mt-8">
+              Desea modificarlo?
+            </h3>
             <div className="w-full flex flex-row justify-between items-center gap-4">
               <ButtonAnimation
                 disabled={isOff}

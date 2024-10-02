@@ -1,23 +1,16 @@
 import path from "path";
-import { app, BrowserWindow, ipcMain } from "electron";
+import { app, BrowserWindow, dialog, ipcMain, net, protocol } from "electron";
 import serve from "electron-serve";
-import { createWindow } from "./helpers";
+import { createWindow, getImages } from "./helpers";
 import keySender from "node-key-sender";
 import fs from "fs";
 
-const accentsMap = {
-  á: ["dead_acute", "a"],
-  é: ["dead_acute", "e"],
-  í: ["dead_acute", "i"],
-  ó: ["dead_acute", "o"],
-  ú: ["dead_acute", "u"],
-  Á: ["dead_acute", "A"],
-  É: ["dead_acute", "E"],
-  Í: ["dead_acute", "I"],
-  Ó: ["dead_acute", "O"],
-  Ú: ["dead_acute", "U"],
-};
-keySender.aggregateKeyboardLayout(accentsMap);
+const userDataPath = app.getPath("userData");
+const userImagesDir = path.join(userDataPath, "user_images");
+
+if (!fs.existsSync(userImagesDir)) {
+  fs.mkdirSync(userImagesDir, { recursive: true });
+}
 
 const isProd = process.env.NODE_ENV === "production";
 
@@ -48,8 +41,8 @@ if (isProd) {
   } else {
     const port = process.argv[2];
     await mainWindow.loadURL(`http://localhost:${port}`);
-    mainWindow.webContents.openDevTools();
   }
+  mainWindow.webContents.openDevTools();
 })();
 
 app.on("window-all-closed", () => {
@@ -68,39 +61,50 @@ ipcMain.on("message", async (event, arg) => {
   event.reply("message", `${arg} World!`);
 });
 
+app.on("ready", () => {
+  protocol.registerFileProtocol("local", (request, callback) => {
+    const url = request.url.substr(7);
+    const decodedPath = decodeURI(url);
+    callback({ path: path.normalize(decodedPath) });
+  });
+});
+
 ipcMain.handle("send-key-combination", (event, keys) => {
-  console.log(keys);
   keySender.sendCombination(keys);
 });
 
 ipcMain.handle("send-key", (event, key) => {
-  console.log(key);
   keySender.sendKey(key);
 });
 
 ipcMain.handle("send-letter", (event, key) => {
-  console.log(key);
-  if (accentsMap[key]) {
-    keySender.sendCombination(accentsMap[key]);
-  } else {
-    keySender.sendLetter(key);
-  }
+  keySender.sendLetter(key);
 });
 
 ipcMain.handle("get-images", (event) => {
-  const imageDir = path.join(
-    __dirname,
-    "../renderer/public/senal-comunicacion"
-  );
+  return getImages();
+});
 
-  try {
-    const files = fs.readdirSync(imageDir);
-    const imageFiles = files.filter((file) =>
-      /\.(jpg|jpeg|png|gif)$/i.test(file)
-    );
-    return imageFiles;
-  } catch (error) {
-    console.error("Error reading images:", error);
-    return [];
+ipcMain.handle("save-image", async (event) => {
+  const result = await dialog.showOpenDialog({
+    properties: ["openFile"],
+    filters: [{ name: "Images", extensions: ["jpg", "jpeg", "png", "gif"] }],
+  });
+
+  if (result.canceled) return;
+
+  const userDataPath = app.getPath("userData");
+  const userImagesDir = path.join(userDataPath, "user_images");
+
+  if (!fs.existsSync(userImagesDir)) {
+    fs.mkdirSync(userImagesDir, { recursive: true });
   }
+
+  const selectedFilePath = result.filePaths[0];
+  const fileName = path.basename(selectedFilePath);
+  const destinationPath = path.join(userImagesDir, fileName);
+
+  fs.copyFileSync(selectedFilePath, destinationPath);
+
+  return getImages();
 });
