@@ -1383,10 +1383,10 @@
 "@next/env@14.2.8":
   version "14.2.8"
 
-"@next/swc-darwin-arm64@14.2.8":
+"@next/swc-win32-x64-msvc@14.2.8":
   version "14.2.8"
-  resolved "https://registry.npmjs.org/@next/swc-darwin-arm64/-/swc-darwin-arm64-14.2.8.tgz"
-  integrity sha512-1VrQlG8OzdyvvGZhGJFnaNE2P10Jjy/2FopnqbY0nSa/gr8If3iINxvOEW3cmVeoAYkmW0RsBazQecA2dBFOSw==
+  resolved "https://registry.npmjs.org/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-14.2.8.tgz"
+  integrity sha512-EnPKv0ttq02E9/1KZ/8Dn7kuutv6hy1CKc0HlNcvzOQcm4/SQtvfws5gY0zrG9tuupd3HfC2L/zcTrnBhpjTuQ==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -1456,14 +1456,6 @@
     "@nut-tree-fork/libnut-darwin" "2.7.3"
     "@nut-tree-fork/libnut-linux" "2.7.3"
     "@nut-tree-fork/libnut-win32" "2.7.3"
-
-"@nut-tree-fork/node-mac-permissions@2.2.1":
-  version "2.2.1"
-  resolved "https://registry.npmjs.org/@nut-tree-fork/node-mac-permissions/-/node-mac-permissions-2.2.1.tgz"
-  integrity sha512-iSfOTDiBZ7VDa17PoQje5rUaZSvSAaq+XEyXCmhPuQwV5XuNU02Grv6oFhsdpz89w7+UvB/8KX/cX5IYQ5o2Bw==
-  dependencies:
-    bindings "1.5.0"
-    node-addon-api "5.0.0"
 
 "@nut-tree-fork/nut-js@^4.2.2":
   version "4.2.2"
@@ -4174,11 +4166,6 @@ node-abort-controller@3.1.1:
   version "3.1.1"
   resolved "https://registry.npmjs.org/node-abort-controller/-/node-abort-controller-3.1.1.tgz"
   integrity sha512-AGK2yQKIjRuqnc6VkX2Xj5d+QW8xZ87pa1UK6yA6ouUyuxfHuMP6umE5QK7UmTeOAymo+Zx1Fxiuw9rVx8taHQ==
-
-node-addon-api@5.0.0:
-  version "5.0.0"
-  resolved "https://registry.npmjs.org/node-addon-api/-/node-addon-api-5.0.0.tgz"
-  integrity sha512-CvkDw2OEnme7ybCykJpVcKH+uAOLV2qLqiyla128dN9TkEWfrYmxG6C2boDe5KcNQqZF3orkqzGgOMvZ/JNekA==
 
 node-fetch@^2.6.1:
   version "2.7.0"
