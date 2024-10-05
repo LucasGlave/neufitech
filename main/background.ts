@@ -1,5 +1,5 @@
 import path from "path";
-import { app, BrowserWindow, ipcMain } from "electron";
+import { app, BrowserWindow, ipcMain, WebviewTag } from "electron";
 import serve from "electron-serve";
 import { createWindow } from "./helpers";
 import keySender from "node-key-sender";
@@ -104,7 +104,6 @@ ipcMain.handle("get-images", (event) => {
     __dirname,
     "../renderer/public/senal-comunicacion"
   );
-
   try {
     const files = fs.readdirSync(imageDir);
     const imageFiles = files.filter((file) =>
@@ -116,35 +115,6 @@ ipcMain.handle("get-images", (event) => {
     return [];
   }
 });
-
-ipcMain.handle('open-whatsapp', async () => {
-  if (!webContentWindow) {
-    webContentWindow = new BrowserWindow({
-      width: 1536,
-      height: 1080,
-      x: 230,
-      y: 0,
-      frame: false,
-      webPreferences: {
-        nodeIntegration: false,
-        contextIsolation: true,
-        preload: path.join(__dirname, "preload.js"),
-      },
-    });
-    console.log('Abriendo WhatsApp Web...');
-    const customUserAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36';
-    await webContentWindow.loadURL('https://web.whatsapp.com', {
-      userAgent: customUserAgent
-    });
-  }
-});
-
-ipcMain.handle('close-whatsapp', () => {
-  if (webContentWindow) {
-    webContentWindow.close();
-    webContentWindow = null;
-  }
-})
 
 ipcMain.handle("click-chat", async () => {
   try {
