@@ -35,7 +35,7 @@ let mainWindow, webContentWindow: any;
   // const primaryDisplay = screen.getPrimaryDisplay();
   // const workAreaSize = primaryDisplay.size;
 
-  const width = 1920 - 192;
+  const width = 1920 - 400;
   const height = 1080;
   mainWindow = createWindow("main", {
     width: width,
@@ -49,7 +49,7 @@ let mainWindow, webContentWindow: any;
       nodeIntegration: false,
       webviewTag: true,
       webSecurity: true,
-      sandbox: true
+      sandbox: true,
     },
   });
 
