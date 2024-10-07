@@ -5,8 +5,8 @@ import trash from "../../public/eliminar.svg";
 // import TestPredictor from "../TestPredictor";
 
 type TecladoGlobalProps = {
-  isOff: boolean
-}
+  isOff: boolean;
+};
 
 const TecladoGlobal = ({ isOff }: TecladoGlobalProps) => {
   const KeyboardLayout = [
@@ -95,8 +95,8 @@ const TecladoGlobal = ({ isOff }: TecladoGlobalProps) => {
   };
 
   useEffect(() => {
-    isTildeActive && setIsTildeActive(false)
-  }, [output])
+    isTildeActive && setIsTildeActive(false);
+  }, [output]);
 
   const functionAction = (key?: string) => {
     ejecFunction === "deleteAll" && deleteAll();
@@ -117,6 +117,10 @@ const TecladoGlobal = ({ isOff }: TecladoGlobalProps) => {
     setEjecFunction("");
   }, [isAllow === true]);
 
+  useEffect(() => {
+    console.log(output);
+  }, [output]);
+
   return (
     <div
       className="flex flex-col gap-8 items-center bg-keyboardHeader shadow-md h-[40%]"
@@ -132,9 +136,7 @@ const TecladoGlobal = ({ isOff }: TecladoGlobalProps) => {
             imagen={{ src: trash, width: 50, height: 50, add: "invert" }}
             propClass="w-[180px] h-[60px] flex justify-center items-center"
           />
-          <div className="flex gap-2">
-            {/* <TestPredictor /> */}
-          </div>
+          <div className="flex gap-2">{/* <TestPredictor /> */}</div>
           <div className="flex gap-2">
             <ButtonAnimation
               disabled={isOff}
@@ -209,7 +211,9 @@ const TecladoGlobal = ({ isOff }: TecladoGlobalProps) => {
               propClass="w-full h-[60px] text-2xl"
               text="Enviar"
               keyPress={"enter"}
-              functionKeyboard={{ funct: "deleteAll", state: changeState }}
+              state={() => {
+                setOutput("");
+              }}
             />
           </div>
         </div>

@@ -49,7 +49,7 @@ let mainWindow, webContentWindow: any;
       nodeIntegration: false,
       webviewTag: true,
       webSecurity: true,
-      sandbox: true
+      sandbox: true,
     },
   });
 
