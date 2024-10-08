@@ -20,11 +20,10 @@ export const getImages = () => {
           .readdirSync(userImagesDir)
           .filter((file) => /\.(jpg|jpeg|png|gif)$/i.test(file))
       : [];
-    console.log(userFiles);
     const userImages = userFiles.map(
       (file) => `local://${path.join(userImagesDir, file)}`
     );
-    return [...defaultImages, ...userImages];
+    return [...userImages, ...defaultImages];
   } catch (error) {
     console.error("Error reading images:", error);
     return [];

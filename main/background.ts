@@ -1,5 +1,13 @@
 import path from "path";
-import { app, BrowserWindow, dialog, ipcMain, net, protocol } from "electron";
+import {
+  app,
+  BrowserWindow,
+  dialog,
+  ipcMain,
+  net,
+  protocol,
+  session,
+} from "electron";
 import serve from "electron-serve";
 import { createWindow, getImages } from "./helpers";
 import keySender from "node-key-sender";
@@ -33,6 +41,7 @@ if (isProd) {
       contextIsolation: true,
       nodeIntegration: false,
       webviewTag: true,
+      webSecurity: true,
     },
   });
 
@@ -91,7 +100,7 @@ ipcMain.handle("save-image", async (event) => {
     filters: [{ name: "Images", extensions: ["jpg", "jpeg", "png", "gif"] }],
   });
 
-  if (result.canceled) return;
+  if (result.canceled) return getImages();
 
   const userDataPath = app.getPath("userData");
   const userImagesDir = path.join(userDataPath, "user_images");

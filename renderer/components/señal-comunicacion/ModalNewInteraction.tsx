@@ -109,15 +109,29 @@ const ModalNewInteraction = ({
   };
 
   const addImage = () => {
-    window.ipc
-      .saveImage()
-      .then((imageFiles) => {
-        console.log(imageFiles);
-        setImages(imageFiles);
-      })
-      .catch((err) => {
-        console.error("Failed to fetch images:", err);
+    const showConfirmation = (question: string): Promise<boolean> => {
+      return new Promise((resolve) => {
+        setModalProps({ question, resolve });
       });
+    };
+    showConfirmation("VAS A NECESITAR ASISTENCIA ¿DESEAS CONTINUAR?").then(
+      (confirmed) => {
+        if (confirmed) {
+          setModalProps(null);
+          window.ipc
+            .saveImage()
+            .then((imageFiles) => {
+              console.log(imageFiles);
+              setImages(imageFiles);
+            })
+            .catch((err) => {
+              console.error("Failed to fetch images:", err);
+            });
+        } else {
+          setModalProps(null);
+        }
+      }
+    );
   };
 
   return (
@@ -137,13 +151,6 @@ const ModalNewInteraction = ({
           speakText="Cerrar"
           propClass="min-w-[150px] h-[80px] bg-keybackground"
           text="CERRAR"
-        />
-        <ButtonAnimation
-          state={addImage}
-          disabled={isOff}
-          speakText="IMAGEN"
-          propClass="min-w-[150px] h-[80px] bg-keybackground"
-          text="IMAGEN"
         />
         <ButtonAnimation
           state={() => setIsOff(!isOff)}
@@ -182,7 +189,7 @@ const ModalNewInteraction = ({
             <Scroll
               isOff={isOff}
               maxScrollValue={scrollMax}
-              uniqueScroll={true}
+              addFunction={addImage}
             />
           </div>
         </div>
