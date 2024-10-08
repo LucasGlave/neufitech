@@ -63,6 +63,7 @@ const ModalConfig = ({ configuration, closeModal }: ModalConfigProps) => {
                 break;
             case "saveConfig":
                 handleSaveConfig();
+                closeModal();
                 break;
             case "cancelConfig":
                 handleCancelConfig();
