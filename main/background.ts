@@ -117,3 +117,23 @@ ipcMain.handle("save-image", async (event) => {
 
   return getImages();
 });
+
+ipcMain.handle("auth", async (event, code) => {
+  console.log("main: auth", code);
+  try {
+    const response = await fetch(
+      "https://neufitech-back-api.onrender.com/api/compare-code",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Origin: "electron://localhost",
+        },
+        body: JSON.stringify({ code }),
+      }
+    );
+    return response.status;
+  } catch (error) {
+    throw new Error(error);
+  }
+});

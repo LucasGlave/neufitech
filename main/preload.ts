@@ -19,6 +19,7 @@ const handler = {
   sendLetter: (key: any) => ipcRenderer.invoke("send-letter", key),
   getImages: () => ipcRenderer.invoke("get-images"),
   saveImage: () => ipcRenderer.invoke("save-image"),
+  auth: (code: string) => ipcRenderer.invoke("auth", code),
   speak: (speakText: any) => {
     const speech = new SpeechSynthesisUtterance(speakText);
 
