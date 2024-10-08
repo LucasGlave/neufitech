@@ -25,32 +25,37 @@ const DeletionMap = ({
         setModalProps({ question, resolve });
       });
     };
-    showConfirmation(pageTitle === "CATEGORIAS" ? "¿DESEA ELIMINAR LA CATEGORIA?" : "¿DESEA ELIMINAR LA ACTIVIDAD?")
-      .then((confirmed) => {
-        if (confirmed) {
-          let señales = JSON.parse(
-            localStorage.getItem("senal-comunicacion")
-          ) as InteractionsArray;
-          if (pageTitle == "CATEGORIAS") {
-            const index = señales.findIndex((category) => category.title === titulo);
-            señales.splice(index, 1);
-          } else {
-            const indexCategoria = señales.findIndex(
-              (category) => category.title === pageTitle
-            );
-            const indexEntry = señales[indexCategoria].entries.findIndex(
-              (entry) => entry.frase === titulo
-            );
-            señales[indexCategoria].entries.splice(indexEntry, 1);
-          }
-          localStorage.setItem("senal-comunicacion", JSON.stringify(señales));
-          setArraySeñales(señales);
-          setDeleteInteraction(false);
+    showConfirmation(
+      pageTitle === "CATEGORIAS"
+        ? "¿DESEA ELIMINAR LA CATEGORIA?"
+        : "¿DESEA ELIMINAR LA ACTIVIDAD?"
+    ).then((confirmed) => {
+      if (confirmed) {
+        let señales = JSON.parse(
+          localStorage.getItem("senal-comunicacion")
+        ) as InteractionsArray;
+        if (pageTitle == "CATEGORIAS") {
+          const index = señales.findIndex(
+            (category) => category.title === titulo
+          );
+          señales.splice(index, 1);
         } else {
-          setDeleteInteraction(false)
-          setModalProps(null)
+          const indexCategoria = señales.findIndex(
+            (category) => category.title === pageTitle
+          );
+          const indexEntry = señales[indexCategoria].entries.findIndex(
+            (entry) => entry.frase === titulo
+          );
+          señales[indexCategoria].entries.splice(indexEntry, 1);
         }
-      });
+        localStorage.setItem("senal-comunicacion", JSON.stringify(señales));
+        setArraySeñales(señales);
+        setDeleteInteraction(false);
+      } else {
+        setDeleteInteraction(false);
+        setModalProps(null);
+      }
+    });
   };
 
   return (
@@ -75,6 +80,7 @@ const DeletionMap = ({
                   speakText={category.title}
                   interactionDeleter={handleDelete}
                   buttonBorder="border-red-500"
+                  propClass="aspect-square"
                   imagen={{
                     src: `${category.url}`,
                     width: 400,
@@ -89,21 +95,22 @@ const DeletionMap = ({
               {array.map((category, index) =>
                 category.title == pageTitle
                   ? category.entries.map((entry, index) => (
-                    <ButtonAnimation
-                      disabled={disableState ? true : false}
-                      key={index}
-                      innerText={entry.frase}
-                      speakText={entry.frase}
-                      imagen={{
-                        src: `${entry.url}`,
-                        width: 400,
-                        height: 400,
-                        add: "h-full w-full object-cover",
-                      }}
-                      interactionDeleter={handleDelete}
-                      buttonBorder="border-red-500"
-                    />
-                  ))
+                      <ButtonAnimation
+                        disabled={disableState ? true : false}
+                        key={index}
+                        innerText={entry.frase}
+                        speakText={entry.frase}
+                        propClass="aspect-square"
+                        imagen={{
+                          src: `${entry.url}`,
+                          width: 400,
+                          height: 400,
+                          add: "h-full w-full object-cover",
+                        }}
+                        interactionDeleter={handleDelete}
+                        buttonBorder="border-red-500"
+                      />
+                    ))
                   : null
               )}
             </div>
