@@ -15,7 +15,7 @@ const ModalTexts = ({ activeTexts, state, setter }: ModalTextsProps) => {
     const [isOff, setIsOff] = useState(false)
     useEffect(() => {
         const calculateScrollMax = () => {
-            setScrollMax(document.getElementById("ScrollConfig").scrollHeight);
+            setScrollMax(document.getElementById("ScrollText")?.scrollHeight);
         };
         setTimeout(calculateScrollMax, 500);
         window.addEventListener("resize", calculateScrollMax);

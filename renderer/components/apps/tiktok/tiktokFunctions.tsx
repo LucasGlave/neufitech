@@ -1,10 +1,10 @@
 import { WebviewTag } from "electron";
 
-export const Comentar = () => {
-    const webview = document.getElementById('app') as WebviewTag;
-    focus && document.getElementById("app")?.focus()
-    if (webview) {
-        webview.executeJavaScript(`
+const Comentar = () => {
+  const webview = document.getElementById('app') as WebviewTag;
+  focus && document.getElementById("app")?.focus()
+  if (webview) {
+    webview.executeJavaScript(`
             try {
               const commentButtons = document.querySelectorAll("span[data-e2e='comment-icon']");
               let targetButton;
@@ -23,16 +23,16 @@ export const Comentar = () => {
               console.error("Error al intentar hacer clic en el botón de comentar en TikTok:", error);
             }
           `);
-    } else {
-        console.log("Webview no encontrado.");
-    }
+  } else {
+    console.log("Webview no encontrado.");
+  }
 }
 
-export const CerrarComentarios = () => {
-    const webview = document.getElementById('app') as WebviewTag;
-    focus && document.getElementById("app")?.focus()
-    if (webview) {
-        webview.executeJavaScript(`
+const CerrarComentarios = () => {
+  const webview = document.getElementById('app') as WebviewTag;
+  focus && document.getElementById("app")?.focus()
+  if (webview) {
+    webview.executeJavaScript(`
             try {
               const buttons = document.querySelectorAll("button");
               let closeButton;
@@ -56,17 +56,17 @@ export const CerrarComentarios = () => {
               console.error("Error al intentar hacer clic en el botón de cerrar comentarios en TikTok:", error);
             }
           `);
-    } else {
-        console.log("Webview no encontrado.");
-    }
+  } else {
+    console.log("Webview no encontrado.");
+  }
 }
 
 
-export const Pausar = () => {
-    const webview = document.getElementById('app') as WebviewTag;
-    focus && document.getElementById("app")?.focus()
-    if (webview) {
-        webview.executeJavaScript(`
+const Pausar = () => {
+  const webview = document.getElementById('app') as WebviewTag;
+  focus && document.getElementById("app")?.focus()
+  if (webview) {
+    webview.executeJavaScript(`
             try {
                 const video = document.querySelector('video');
                 if (video) {
@@ -82,7 +82,9 @@ export const Pausar = () => {
                 console.error("Error al intentar pausar el video en TikTok:", error);
             }
         `);
-    } else {
-        console.log("Webview no encontrado.");
-    }
+  } else {
+    console.log("Webview no encontrado.");
+  }
 }
+
+export default { Comentar, CerrarComentarios, Pausar }

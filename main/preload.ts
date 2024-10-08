@@ -1,4 +1,4 @@
-import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
+import { contextBridge, ipcRenderer, IpcRendererEvent, WebviewTag } from "electron";
 
 const handler = {
   send(channel: string, value: unknown) {
@@ -19,17 +19,14 @@ const handler = {
   sendLetter: (key: any) => ipcRenderer.invoke("send-letter", key),
   getImages: () => ipcRenderer.invoke("get-images"),
   saveImage: () => ipcRenderer.invoke("save-image"),
+  clickChat: () => ipcRenderer.invoke("click-chat"),
   speak: (speakText: any) => {
     const speech = new SpeechSynthesisUtterance(speakText);
-
     const config = JSON.parse(localStorage.getItem("config") || "{}");
-
     const speakWithVoices = () => {
       const voices = window.speechSynthesis.getVoices();
-
       if (voices.length > 0) {
         let selectedVoice;
-
         if (config.voices === "hombre") {
           selectedVoice = voices.find(
             (voice) => voice.name == "Microsoft Raul - Spanish (Mexico)"
@@ -39,7 +36,6 @@ const handler = {
             (voice) => voice.name == "Microsoft Sabina - Spanish (Mexico)"
           );
         }
-
         if (!selectedVoice) {
           switch (config.voices) {
             case "hombre":
@@ -54,11 +50,8 @@ const handler = {
               break;
           }
         }
-
         selectedVoice = selectedVoice || voices[0];
-
         speech.voice = selectedVoice;
-
         const volumeMap = {
           1: 0.2,
           2: 0.4,
@@ -67,7 +60,6 @@ const handler = {
           5: 1.0,
         };
         speech.volume = volumeMap[config.volume] || 1;
-
         window.speechSynthesis.speak(speech);
       } else {
         console.log("No voices available");
