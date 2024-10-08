@@ -121,7 +121,6 @@ ipcMain.handle("save-image", async (event) => {
 
   if (!fs.existsSync(userImagesDir)) {
     fs.mkdirSync(userImagesDir, { recursive: true });
-
   }
 
   const selectedFilePath = result.filePaths[0];
@@ -140,5 +139,25 @@ ipcMain.handle("click-chat", async () => {
   } catch (error) {
     console.error("Error al obtener coordenadas o hacer clic:", error);
     return { success: false, message: error.message };
+  }
+});
+
+ipcMain.handle("auth", async (event, code) => {
+  console.log("main: auth", code);
+  try {
+    const response = await fetch(
+      "https://neufitech-back-api.onrender.com/api/compare-code",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Origin: "electron://localhost",
+        },
+        body: JSON.stringify({ code }),
+      }
+    );
+    return response.status;
+  } catch (error) {
+    throw new Error(error);
   }
 });

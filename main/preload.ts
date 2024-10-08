@@ -1,4 +1,9 @@
-import { contextBridge, ipcRenderer, IpcRendererEvent, WebviewTag } from "electron";
+import {
+  contextBridge,
+  ipcRenderer,
+  IpcRendererEvent,
+  WebviewTag,
+} from "electron";
 
 const handler = {
   send(channel: string, value: unknown) {
@@ -19,6 +24,7 @@ const handler = {
   sendLetter: (key: any) => ipcRenderer.invoke("send-letter", key),
   getImages: () => ipcRenderer.invoke("get-images"),
   saveImage: () => ipcRenderer.invoke("save-image"),
+  auth: (code: string) => ipcRenderer.invoke("auth", code),
   clickChat: () => ipcRenderer.invoke("click-chat"),
   speak: (speakText: any) => {
     const speech = new SpeechSynthesisUtterance(speakText);
