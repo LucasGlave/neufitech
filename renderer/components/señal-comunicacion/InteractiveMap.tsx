@@ -16,35 +16,36 @@ const InteractiveMap = ({
 }: mapProps) => {
   return (
     <div className="flex flex-row justify-between gap-8 w-full h-full">
-      <div>
-        {pageTitle === "CATEGORIAS" ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 w-full">
-            {array.map((category, index) => (
-              <ButtonAnimation
-                disabled={disableState ? true : false}
-                key={index}
-                innerText={category.title}
-                speakText={category.title}
-                titleSetter={setPageTitle}
-                imagen={{
-                  src: `${category.url}`,
-                  width: 400,
-                  height: 400,
-                  add: "h-full w-full object-cover",
-                }}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 w-full">
-            {array.map((category, index) =>
-              category.title == pageTitle
-                ? category.entries.map((entry, index) => (
+      {pageTitle === "CATEGORIAS" ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 w-full">
+          {array.map((category, index) => (
+            <ButtonAnimation
+              disabled={disableState ? true : false}
+              key={index}
+              innerText={category.title}
+              speakText={category.title}
+              titleSetter={setPageTitle}
+              propClass="aspect-square"
+              imagen={{
+                src: `${category.url}`,
+                width: 400,
+                height: 400,
+                add: "h-full w-full object-cover",
+              }}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 w-full">
+          {array.map((category, index) =>
+            category.title == pageTitle
+              ? category.entries.map((entry, index) => (
                   <ButtonAnimation
                     disabled={disableState ? true : false}
                     key={index}
                     innerText={entry.frase}
                     speakText={entry.frase}
+                    propClass="aspect-square"
                     imagen={{
                       src: `${entry.url}`,
                       width: 400,
@@ -53,11 +54,10 @@ const InteractiveMap = ({
                     }}
                   />
                 ))
-                : null
-            )}
-          </div>
-        )}
-      </div>
+              : null
+          )}
+        </div>
+      )}
     </div>
   );
 };
