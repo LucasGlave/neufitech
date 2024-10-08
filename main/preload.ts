@@ -25,7 +25,6 @@ const handler = {
   getImages: () => ipcRenderer.invoke("get-images"),
   saveImage: () => ipcRenderer.invoke("save-image"),
   auth: (code: string) => ipcRenderer.invoke("auth", code),
-
   clickChat: () => ipcRenderer.invoke("click-chat"),
   speak: (speakText: any) => {
     const speech = new SpeechSynthesisUtterance(speakText);
