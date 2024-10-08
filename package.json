@@ -12,19 +12,14 @@
     "postinstall": "electron-builder install-app-deps"
   },
   "build": {
-    "extraResources": [
-      {
-        "from": "./public/senal-comunicacion",
-        "to": "./public/senal-comunicacion"
-      }
-    ],
     "win": {
       "target": "nsis"
     },
     "asar": true,
     "asarUnpack": [
       "node_modules/node-key-sender/**"
-    ]
+    ],
+    "afterPack": "./main/afterPack.js"
   },
   "dependencies": {
     "@nozbe/microfuzz": "^1.0.0",
