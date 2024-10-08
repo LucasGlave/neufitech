@@ -1,28 +1,40 @@
-import { CerrarComentarios, Comentar, Pausar } from "./tiktok/tiktokFunctions";
+import tiktok from "./tiktok/tiktokFunctions";
+import whatsapp from "./whatsapp/whatsappFunctions";
 
-const AppManagement = (app: string, command: string) => {
+const AppManagement = async (app: string, command: string) => {
     switch (app) {
         case "tiktok":
             switch (command) {
                 case "comentar":
-                    Comentar()
+                    tiktok.Comentar()
                     break;
-                case "CerrarComentarios":
-                    CerrarComentarios()
+                case "cerrarComentarios":
+                    tiktok.CerrarComentarios()
                     break;
                 case "pausar":
-                    Pausar()
+                    tiktok.Pausar()
                     break;
+                default:
+                    console.log(`Comando desconocido en ${app}`)
             }
+            break;
         case "whatsapp":
             switch (command) {
-                case "comentar":
-                    Comentar()
+                case "interaccionRapida":
+                    setTimeout(() => {
+                        whatsapp.InteraccionRapida()
+                    }, 2500)
                     break;
-                case "pausar":
-                    Pausar
+                case "scrollBottom":
+                    whatsapp.ScrollBottom()
                     break;
+                case "scrollTop":
+                    whatsapp.ScrollTop()
+                    break;
+                default:
+                    console.log(`Comando desconocido en ${app}`)
             }
+            break;
     }
 }
 

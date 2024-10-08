@@ -72,10 +72,15 @@ module.exports = {
           "0%, 100%": { backgroundColor: "rgb(40, 40, 40)" },
           "50%": { backgroundColor: "#4caf50" },
         },
-        growBar: {
+        growBarY: {
           "0%": { height: "0%", opacity: "1" },
           "99%": { height: "100%", opacity: "1" },
           "100%": { height: "100%", opacity: "0" },
+        },
+        growBarX: {
+          "0%": { width: "0%", opacity: "1" },
+          "99%": { width: "100%", opacity: "1" },
+          "100%": { width: "100%", opacity: "0" },
         },
       },
       animation: {
@@ -83,7 +88,8 @@ module.exports = {
         "accordion-up": "accordion-up 0.2s ease-out",
         // Añadir la animación `flash`
         flash: "flash 0.2s ease-in-out",
-        "grow-bar": "growBar 3s ease forwards",
+        "grow-bar-y": "growBarY 3s ease forwards",
+        "grow-bar-x": "growBarX 3s ease forwards",
       },
       fontSize: {
         "5xl": "2rem",

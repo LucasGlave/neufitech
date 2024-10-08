@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import { WebviewTag } from "electron";
-import { Comentar, Pausar } from "./apps/tiktok/tiktokFunctions";
 import AppManagement from "./apps";
 
 type buttonProps = {
@@ -268,7 +267,7 @@ const ButtonAnimation = ({
       } z-10 rounded-lg transition-all animate-in animate-out font-semibold ${
         wordCount > 1 ? "whitespace-pre-line" : "break-all"
       }   ${textColor ? textColor : "text-white"} ${
-        comingSoon && "grayscale-[50%] overflow-hidden"
+        comingSoon && "grayscale-[90%] overflow-hidden"
       }`}
     >
       <div
@@ -284,7 +283,9 @@ const ButtonAnimation = ({
             alt="dynamic image"
             className={`rounded-lg object-contain relative ${
               imagen.add && imagen.add
-            } ${innerText && "opacity-85 brightness-75"}`}
+            } ${innerText && "opacity-85 brightness-75"} ${
+              comingSoon && "blur-[2px]"
+            }`}
           />
         ) : text ? (
           text

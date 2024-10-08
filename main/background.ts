@@ -1,4 +1,5 @@
 import path from "path";
+
 import {
   app,
   BrowserWindow,
@@ -7,11 +8,14 @@ import {
   net,
   protocol,
   session,
+  WebviewTag,
 } from "electron";
+
 import serve from "electron-serve";
 import { createWindow, getImages } from "./helpers";
 import keySender from "node-key-sender";
 import fs from "fs";
+import { mouse, Button } from "@nut-tree-fork/nut-js";
 
 const userDataPath = app.getPath("userData");
 const userImagesDir = path.join(userDataPath, "user_images");
@@ -28,13 +32,20 @@ if (isProd) {
   app.setPath("userData", `${app.getPath("userData")} (development)`);
 }
 
+let mainWindow, webContentWindow: any;
+
 (async () => {
   await app.whenReady();
+  // const primaryDisplay = screen.getPrimaryDisplay();
+  // const workAreaSize = primaryDisplay.size;
 
-  const mainWindow = createWindow("main", {
-    width: 1920,
-    height: 1080,
-    fullscreen: true,
+  const width = 1920 - 192;
+  const height = 1080;
+  mainWindow = createWindow("main", {
+    width: width,
+    height: height,
+    x: 0,
+    y: 0,
     frame: false,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
@@ -42,8 +53,11 @@ if (isProd) {
       nodeIntegration: false,
       webviewTag: true,
       webSecurity: true,
+      sandbox: true,
     },
   });
+
+  // mainWindow.maximize()
 
   if (isProd) {
     await mainWindow.loadURL("app://./");
@@ -116,6 +130,16 @@ ipcMain.handle("save-image", async (event) => {
   fs.copyFileSync(selectedFilePath, destinationPath);
 
   return getImages();
+});
+
+ipcMain.handle("click-chat", async () => {
+  try {
+    await mouse.click(Button.LEFT);
+    return { success: true, message: `Click realizado.` };
+  } catch (error) {
+    console.error("Error al obtener coordenadas o hacer clic:", error);
+    return { success: false, message: error.message };
+  }
 });
 
 ipcMain.handle("auth", async (event, code) => {
