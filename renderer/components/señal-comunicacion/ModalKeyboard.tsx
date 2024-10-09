@@ -91,9 +91,9 @@ const ModalKeyboard = ({
 
     return layout;
   };
-  let textarea = document.getElementById('textarea');
+
   useEffect(() => {
-    textarea.scrollTop = textarea.scrollHeight;
+    textareaRef.current.scrollTop = textareaRef.current.scrollHeight;
     if (textareaRef.current) {
       textareaRef.current.focus();
       textareaRef.current.setSelectionRange(output.length, output.length);

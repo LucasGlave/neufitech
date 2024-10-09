@@ -113,14 +113,8 @@ const Teclado = () => {
     setShowModal(false)
   }
 
-  let textarea = document.getElementById('textarea');
-  textarea?.addEventListener('focus', (event) => {
-    event.preventDefault();
-    textarea.blur();
-  });
-
   useEffect(() => {
-    textarea.scrollTop = textarea.scrollHeight;
+    textareaRef.current.scrollTop = textareaRef.current.scrollHeight;
     if (textareaRef.current) {
       textareaRef.current.focus();
       textareaRef.current.setSelectionRange(output.length, output.length);

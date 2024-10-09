@@ -25,11 +25,11 @@ export default function HomePage() {
         <title>Neufitech - WebApp</title>
       </Head>
       <div className="bg-zinc-900">
-        <Home />
-        {/* {validation === "svKHOibAd2l457jh" ? (
+        {validation === "svKHOibAd2l457jh" ? (
+          <Home />
         ) : (
           <Verification setter={validationSetter} />
-        )} */}
+        )}
         {/* <Home /> */}
       </div>
     </React.Fragment>
