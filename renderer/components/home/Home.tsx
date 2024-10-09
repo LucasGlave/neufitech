@@ -208,7 +208,7 @@ const Home = () => {
           </div>
           <div className="flex h-[25%] justify-around relative gap-4 w-full">
             <ButtonAnimation
-              state={() => window.ipc.openWhatsapp()}
+              state={() => changeState}
               disabled={isOff}
               speakText="Whatsapp"
               navigation="whatsapp"

@@ -114,6 +114,7 @@ const Teclado = () => {
   }
 
   useEffect(() => {
+    textareaRef.current.scrollTop = textareaRef.current.scrollHeight;
     if (textareaRef.current) {
       textareaRef.current.focus();
       textareaRef.current.setSelectionRange(output.length, output.length);
@@ -219,6 +220,7 @@ const Teclado = () => {
         </div>
         <textarea
           id="textarea"
+          readOnly
           ref={textareaRef}
           value={output}
           onChange={(e) => setOutput(e.target.value)}
