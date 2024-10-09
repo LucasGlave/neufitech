@@ -1,5 +1,4 @@
 import path from "path";
-
 import {
   app,
   BrowserWindow,
@@ -9,14 +8,51 @@ import {
   protocol,
   session,
   WebviewTag,
+  globalShortcut,
 } from "electron";
-
 import serve from "electron-serve";
 import { createWindow, getImages } from "./helpers";
 import keySender from "node-key-sender";
 import fs from "fs";
-import { mouse, Button } from "@nut-tree-fork/nut-js";
+import { exec } from "child_process";
+import { mouse, Button, Point } from "@nut-tree-fork/nut-js";
 
+global.isTobii = false;
+let mainWindow: BrowserWindow | null = null;
+let webContentWindow: any;
+let tobiiProcess: any | null = null;
+
+let exeServerPath: string;
+let exeCalibratePath: string;
+
+// Check if the app is packaged
+if (app.isPackaged) {
+  // In production, when the app is packaged
+  exeServerPath = path.join(
+    process.resourcesPath,
+    "renderer",
+    "lib",
+    "TobiiServer",
+    "TobiiElectronServer.exe"
+  );
+  exeCalibratePath = path.join(
+    process.resourcesPath,
+    "renderer",
+    "lib",
+    "TobiiServer",
+    "TobiiCalibrate.exe"
+  );
+} else {
+  // In development
+  exeServerPath = path.join(
+    __dirname,
+    "../renderer/lib/TobiiServer/TobiiElectronServer.exe"
+  );
+  exeCalibratePath = path.join(
+    __dirname,
+    "../renderer/lib/TobiiServer/TobiiCalibrate.exe"
+  );
+}
 const userDataPath = app.getPath("userData");
 const userImagesDir = path.join(userDataPath, "user_images");
 
@@ -32,8 +68,6 @@ if (isProd) {
   app.setPath("userData", `${app.getPath("userData")} (development)`);
 }
 
-let mainWindow, webContentWindow: any;
-
 (async () => {
   await app.whenReady();
   // const primaryDisplay = screen.getPrimaryDisplay();
@@ -41,12 +75,14 @@ let mainWindow, webContentWindow: any;
 
   const width = 1920 - 192;
   const height = 1080;
+
   mainWindow = createWindow("main", {
     width: width,
     height: height,
     x: 0,
     y: 0,
     frame: false,
+    alwaysOnTop: true,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
@@ -62,10 +98,34 @@ let mainWindow, webContentWindow: any;
   if (isProd) {
     await mainWindow.loadURL("app://./");
   } else {
+    mainWindow.webContents.openDevTools();
     const port = process.argv[2];
     await mainWindow.loadURL(`http://localhost:${port}`);
   }
-  // mainWindow.webContents.openDevTools();
+
+  globalShortcut.register("F10", () => {
+    mainWindow?.webContents.send("tobii-control-updated", !global.isTobii);
+    global.isTobii = !global.isTobii;
+  });
+
+  globalShortcut.register("F9", () => {
+    if (mainWindow.getOpacity() == 1) {
+      mainWindow.setOpacity(0);
+    } else {
+      mainWindow.setOpacity(1);
+    }
+  });
+
+  tobiiProcess = exec(exeServerPath);
+
+  tobiiProcess?.stdout?.on("data", (data: any) => {
+    if (global.isTobii) {
+      const eyeData = JSON.parse(data.replace(/(\d),(\d)/g, "$1.$2"));
+      const point = new Point(eyeData.x, eyeData.y)
+      // robot.moveMouse(eyeData.x, eyeData.y);
+      mouse.setPosition(point)
+    }
+  });
 })();
 
 app.on("window-all-closed", () => {
@@ -108,6 +168,56 @@ ipcMain.handle("get-images", (event) => {
   return getImages();
 });
 
+ipcMain.handle("tobii-calibrate", async () => {
+  const calibrateProcess = exec(exeCalibratePath);
+  return true;
+});
+
+ipcMain.handle("tobii-check", async () => {
+  return !!tobiiProcess;
+});
+
+ipcMain.handle("tobii-start", async () => {
+  if (!tobiiProcess) {
+    tobiiProcess = exec(exeServerPath);
+
+    tobiiProcess?.stdout?.on("data", (data: any) => {
+      if (global.isTobii) {
+        const eyeData = JSON.parse(data.replace(/(\d),(\d)/g, "$1.$2"));
+        const point = new Point(eyeData.x, eyeData.y)
+        // robot.moveMouse(eyeData.x, eyeData.y);
+        mouse.setPosition(point)
+      }
+    });
+  }
+
+  return true;
+});
+
+ipcMain.handle("tobii-stop", async () => {
+  if (tobiiProcess) {
+    tobiiProcess.kill("SIGTERM");
+    tobiiProcess = null;
+  }
+
+  return true;
+});
+
+ipcMain.handle("tobii-toggle", async () => {
+  global.isTobii = !global.isTobii;
+  mainWindow?.webContents.send("tobii-control-updated", !global.isTobii);
+  return true;
+});
+
+ipcMain.on("set-tobii-in-control", (event, newConfig) => {
+  mainWindow?.webContents.send("tobii-control-updated", !global.isTobii);
+  global.isTobii = !global.isTobii;
+});
+
+ipcMain.handle("tobii-in-control", async () => {
+  return global.isTobii;
+});
+
 ipcMain.handle("save-image", async (event) => {
   const result = await dialog.showOpenDialog({
     properties: ["openFile"],
@@ -116,9 +226,7 @@ ipcMain.handle("save-image", async (event) => {
 
   if (result.canceled) return getImages();
 
-  const userDataPath = app.getPath("userData");
-  const userImagesDir = path.join(userDataPath, "user_images");
-
+  //revisar si es necesario repetir el existsSync
   if (!fs.existsSync(userImagesDir)) {
     fs.mkdirSync(userImagesDir, { recursive: true });
   }

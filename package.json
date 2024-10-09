@@ -12,11 +12,18 @@
     "postinstall": "electron-builder install-app-deps"
   },
   "build": {
+    "extraResources": [
+      {
+        "from": "./renderer/lib/TobiiServer",
+        "to": "./renderer/lib/TobiiServer"
+      }
+    ],
     "win": {
       "target": "nsis"
     },
     "asar": true,
     "asarUnpack": [
+      "renderer/lib/TobiiServer/**",
       "node_modules/node-key-sender/**"
     ],
     "afterPack": "./main/afterPack.js"
@@ -48,8 +55,10 @@
     "autoprefixer": "^10.4.19",
     "electron": "^31.0.1",
     "electron-builder": "^24.13.3",
+    "electron-rebuild": "^3.2.9",
     "next": "^14.2.4",
     "nextron": "^9.1.0",
+    "node-abi": "^3.68.0",
     "postcss": "^8.4.38",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

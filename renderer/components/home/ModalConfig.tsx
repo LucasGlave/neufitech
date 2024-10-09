@@ -71,10 +71,19 @@ const ModalConfig = ({ configuration, closeModal }: ModalConfigProps) => {
             case "closeModal":
                 closeModal();
                 break;
+            case "calibrateTobii":
+                calibrateTobiiEyetracker()
+                break;
             default:
                 console.warn(`Unknown action: ${action}`);
                 break;
         }
+    }
+
+    const calibrateTobiiEyetracker = () => {
+        (globalThis as any).ipc.tobiiCalibrate((event:any, data:any) => {
+            console.log(data);
+        });
     }
 
     return (
@@ -196,6 +205,18 @@ const ModalConfig = ({ configuration, closeModal }: ModalConfigProps) => {
                                     text="MUJER"
                                     disabled={config.voices === "mujer"}
                                     buttonBorder={`${config.voices === "mujer" && "border-green-400 border-4"}`}
+                                    propClass="w-[180px] h-[80px] shadow-xl"
+                                />
+                            </div>
+                        </div>
+                        <hr className="h-[1px] w-full bg-white" />
+                        <div className="flex flex-col justify-between items-center gap-8 px-20">
+                            <h3>EYETRACKING</h3>
+                            <div className="flex w-full justify-around">
+                                <ButtonAnimation
+                                    text="Calibrar Tobii"
+                                    functionKeyboard={{ funct: "calibrateTobii", state: changeState }}
+                                    buttonBorder={`${config.voices === "hombre" && "border-green-400 border-4"}`}
                                     propClass="w-[180px] h-[80px] shadow-xl"
                                 />
                             </div>
