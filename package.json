@@ -40,7 +40,6 @@
     "node-key-sender": "^1.0.11",
     "puppeteer": "^23.4.1",
     "react-animated-cursor": "^2.11.2",
-    "robotjs": "^0.6.0",
     "say": "^0.16.0",
     "sharp": "^0.33.5",
     "simpletts": "^2.6.0",

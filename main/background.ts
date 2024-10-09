@@ -15,8 +15,7 @@ import { createWindow, getImages } from "./helpers";
 import keySender from "node-key-sender";
 import fs from "fs";
 import { exec } from "child_process";
-import { mouse, Button } from "@nut-tree-fork/nut-js";
-import robot from "robotjs";
+import { mouse, Button, Point } from "@nut-tree-fork/nut-js";
 
 global.isTobii = false;
 let mainWindow: BrowserWindow | null = null;
@@ -122,7 +121,9 @@ if (isProd) {
   tobiiProcess?.stdout?.on("data", (data: any) => {
     if (global.isTobii) {
       const eyeData = JSON.parse(data.replace(/(\d),(\d)/g, "$1.$2"));
-      robot.moveMouse(eyeData.x, eyeData.y);
+      const point = new Point(eyeData.x, eyeData.y)
+      // robot.moveMouse(eyeData.x, eyeData.y);
+      mouse.setPosition(point)
     }
   });
 })();
@@ -183,7 +184,9 @@ ipcMain.handle("tobii-start", async () => {
     tobiiProcess?.stdout?.on("data", (data: any) => {
       if (global.isTobii) {
         const eyeData = JSON.parse(data.replace(/(\d),(\d)/g, "$1.$2"));
-        robot.moveMouse(eyeData.x, eyeData.y);
+        const point = new Point(eyeData.x, eyeData.y)
+        // robot.moveMouse(eyeData.x, eyeData.y);
+        mouse.setPosition(point)
       }
     });
   }
