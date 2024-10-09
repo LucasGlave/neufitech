@@ -91,8 +91,9 @@ const ModalKeyboard = ({
 
     return layout;
   };
-
+  let textarea = document.getElementById('textarea');
   useEffect(() => {
+    textarea.scrollTop = textarea.scrollHeight;
     if (textareaRef.current) {
       textareaRef.current.focus();
       textareaRef.current.setSelectionRange(output.length, output.length);
@@ -113,7 +114,7 @@ const ModalKeyboard = ({
       ((key = ejecFunction.split(" ")[1]), setOutput((prev) => prev + key));
     ejecFunction.includes("addWord") &&
       ((deleteLastWord(), (key = ejecFunction.split(" ")[1])),
-      setOutput((prev) => (!prev ? key + " " : prev + " " + key + " ")));
+        setOutput((prev) => (!prev ? key + " " : prev + " " + key + " ")));
   };
 
   useEffect(() => {
@@ -136,6 +137,7 @@ const ModalKeyboard = ({
         />
         <textarea
           id="textarea"
+          readOnly
           ref={textareaRef}
           value={output}
           onChange={(e) => setOutput(e.target.value)}
