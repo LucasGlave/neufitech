@@ -196,10 +196,10 @@ const ButtonAnimation = ({
                       ? voices[9]
                       : voices[0]
                     : config.voices === "mujer"
-                    ? voices[4].name.includes("Sabina")
-                      ? voices[4]
-                      : voices[0]
-                    : voices[0];
+                      ? voices[4].name.includes("Sabina")
+                        ? voices[4]
+                        : voices[0]
+                      : voices[0];
                 speech.voice = selectedVoice;
               } else {
                 console.log("No voices available");
@@ -256,24 +256,19 @@ const ButtonAnimation = ({
         setIsActive(false);
         setIsAction(false);
       }}
-      className={`border-2 ${!isAction ? color : "bg-charge"} ${
-        isActive
+      className={`border-2 ${!isAction ? color : "bg-charge"} ${isActive
           ? "border-chargescale-105"
           : buttonBorder
-          ? buttonBorder
-          : "border-white"
-      } ${propClass} ${
-        innerText && "relative"
-      } z-10 rounded-lg transition-all animate-in animate-out font-semibold ${
-        wordCount > 1 ? "whitespace-pre-line" : "break-all"
-      }   ${textColor ? textColor : "text-white"} ${
-        comingSoon && "grayscale-[90%] overflow-hidden"
-      }`}
+            ? buttonBorder
+            : "border-white"
+        } ${propClass} ${innerText && "relative"
+        } z-10 rounded-lg transition-all animate-in animate-out font-semibold ${wordCount > 1 ? "whitespace-pre-line" : "break-all"
+        }   ${textColor ? textColor : "text-white"} ${comingSoon && "grayscale-[90%] overflow-hidden"
+        }`}
     >
       <div
-        className={`relative h-full w-full flex items-center justify-center ${
-          svg && "p-5"
-        }`}
+        className={`relative h-full w-full flex items-center justify-center ${svg && "p-5"
+          }`}
       >
         {imagen != null ? (
           <Image
@@ -281,11 +276,9 @@ const ButtonAnimation = ({
             width={imagen.width}
             height={imagen.height}
             alt="dynamic image"
-            className={`rounded-lg object-contain relative ${
-              imagen.add && imagen.add
-            } ${innerText && "opacity-85 brightness-75"} ${
-              comingSoon && "blur-[2px]"
-            }`}
+            className={`rounded-lg object-contain relative ${imagen.add && imagen.add
+              } ${innerText && "opacity-85 brightness-75"} ${comingSoon && "blur-[2px]"
+              }`}
           />
         ) : text ? (
           text
@@ -319,13 +312,13 @@ const ButtonAnimation = ({
             {innerText}
           </h3>
         )}
-        {comingSoon && (
+        {/* {comingSoon && (
           <div className="absolute flex rotate-[-6deg] items-center justify-center w-full h-full z-20 backdrop-blur-[1.5px]">
             <h3 className="w-[120%] mx-[-20px] bg-black py-2 opacity-80 font-bold">
               PROXIMAMENTE
             </h3>
           </div>
-        )}
+        )} */}
       </div>
     </button>
   );
