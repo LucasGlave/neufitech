@@ -1,16 +1,17 @@
 import { useState, Dispatch, SetStateAction } from "react";
 import ButtonAnimation from "../ButtonAnimation";
-import flechaArriba from "../../public/flechaArriba.png"
-import flechaAbajo from "../../public/flechaAbajo.png"
-import flechaIzquierda from "../../public/flechaIzquierda.png"
-import flechaDerecha from "../../public/flechaDerecha.png"
+import flechaArriba from "../../public/flechaArriba.png";
+import flechaAbajo from "../../public/flechaAbajo.png";
+import flechaIzquierda from "../../public/flechaIzquierda.png";
+import flechaDerecha from "../../public/flechaDerecha.png";
 
 type buttonProps = {
   isOff: boolean;
   setAnimate: Dispatch<SetStateAction<boolean>>;
+  spaces: { x: number; y: number }[];
 };
 
-const LocalizacionRapida = ({ isOff, setAnimate }: buttonProps) => {
+const LocalizacionRapida = ({ isOff, setAnimate, spaces }: buttonProps) => {
   const [mousePosition, setMousePosition] = useState<{
     x: number;
     y: number;
@@ -18,9 +19,25 @@ const LocalizacionRapida = ({ isOff, setAnimate }: buttonProps) => {
   const [showSVG, setShowSVG] = useState(false);
   const [xDisplacement, setXDisplacement] = useState(0);
   const [yDisplacement, setYDisplacement] = useState(0);
+  const limitLeft = (spaces && spaces[0].x) || null;
+  const limitTop = (spaces && spaces[0].y) + 32 * 4 || null;
+  const limitRight = (spaces && spaces[1].x) || null;
+  const limitBottom = (spaces && spaces[1].y) || null;
 
   const handleMouseMove = (event: MouseEvent) => {
-    setMousePosition({ x: event.clientX, y: event.clientY });
+    let x =
+      event.clientX < limitLeft
+        ? limitLeft
+        : event.clientX > limitRight
+        ? limitRight
+        : event.clientX;
+    let y =
+      event.clientY > limitBottom
+        ? limitBottom
+        : event.clientY < limitTop
+        ? limitTop
+        : event.clientY;
+    setMousePosition({ x, y });
   };
   const spawnSVG = () => {
     setXDisplacement(0);
@@ -87,8 +104,8 @@ const LocalizacionRapida = ({ isOff, setAnimate }: buttonProps) => {
               <g id="SVGRepo_bgCarrier"></g>
               <g
                 id="SVGRepo_tracerCarrier"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               ></g>
               <g id="SVGRepo_iconCarrier">
                 <g>
@@ -113,8 +130,9 @@ const LocalizacionRapida = ({ isOff, setAnimate }: buttonProps) => {
           speakText="Borrar localizacion"
           repeat={true}
           text="BORRAR LOCALIZACION"
-          propClass={`w-full h-28 ${showSVG ? "" : "text-gray-400 border-gray-500"
-            }`}
+          propClass={`w-full h-28 ${
+            showSVG ? "" : "text-gray-400 border-gray-500"
+          }`}
           state={hideSVG}
         />
       </div>

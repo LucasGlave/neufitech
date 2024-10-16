@@ -5,6 +5,7 @@ import Verification from "../components/Verification";
 
 export default function HomePage() {
   let [validation, setValidation] = useState("");
+  const isProd = process.env.NODE_ENV;
 
   useEffect(() => {
     let validationStored = localStorage.getItem("cyh8hpfej");
@@ -25,12 +26,15 @@ export default function HomePage() {
         <title>Neufitech - WebApp</title>
       </Head>
       <div className="bg-zinc-900">
-        {validation === "svKHOibAd2l457jh" ? (
-          <Home />
+        {isProd === "production" ? (
+          validation === "svKHOibAd2l457jh" ? (
+            <Home />
+          ) : (
+            <Verification setter={validationSetter} />
+          )
         ) : (
-          <Verification setter={validationSetter} />
+          <Home />
         )}
-        {/* <Home /> */}
       </div>
     </React.Fragment>
   );

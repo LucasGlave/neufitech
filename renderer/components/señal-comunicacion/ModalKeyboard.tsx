@@ -114,7 +114,7 @@ const ModalKeyboard = ({
       ((key = ejecFunction.split(" ")[1]), setOutput((prev) => prev + key));
     ejecFunction.includes("addWord") &&
       ((deleteLastWord(), (key = ejecFunction.split(" ")[1])),
-        setOutput((prev) => (!prev ? key + " " : prev + " " + key + " ")));
+      setOutput((prev) => (!prev ? key + " " : prev + " " + key + " ")));
   };
 
   useEffect(() => {
@@ -137,7 +137,6 @@ const ModalKeyboard = ({
         />
         <textarea
           id="textarea"
-          readOnly
           ref={textareaRef}
           value={output}
           onChange={(e) => setOutput(e.target.value)}

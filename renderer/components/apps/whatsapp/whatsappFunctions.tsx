@@ -5,12 +5,12 @@ const InteraccionRapida = async () => {
 };
 
 const ScrollBottom = async () => {
-  const webview = document.getElementById('app') as WebviewTag;
+  const webview = document.getElementById("app") as WebviewTag;
   if (!webview) {
     console.error("No se encontró el webview");
     return;
   } else {
-    webview?.focus()
+    webview?.focus();
   }
   const script = `
       try {
@@ -30,22 +30,21 @@ const ScrollBottom = async () => {
       }
     `;
   await webview?.executeJavaScript(script);
-}
+};
 
 const ScrollTop = async () => {
-  const webview = document.getElementById('app') as WebviewTag;
+  const webview = document.getElementById("app") as WebviewTag;
   if (!webview) {
     console.error("No se encontró el webview");
     return;
   } else {
-    webview?.focus()
+    webview?.focus();
   }
   const script = `
       try {
         const paneSide = document.querySelector("#pane-side");
         if (paneSide) {
           const scrollActual = paneSide.scrollTop;
-          console.log(scrollActual);
           const nuevoScrollActual = scrollActual - 200;
           if (nuevoScrollActual < 0) {
             nuevoScrollActual = 0;
@@ -63,6 +62,6 @@ const ScrollTop = async () => {
       }
     `;
   await webview?.executeJavaScript(script);
-}
+};
 
-export default { InteraccionRapida, ScrollBottom, ScrollTop }
+export default { InteraccionRapida, ScrollBottom, ScrollTop };

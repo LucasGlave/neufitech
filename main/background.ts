@@ -82,7 +82,6 @@ if (isProd) {
     x: 0,
     y: 0,
     frame: false,
-    alwaysOnTop: true,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
@@ -121,9 +120,9 @@ if (isProd) {
   tobiiProcess?.stdout?.on("data", (data: any) => {
     if (global.isTobii) {
       const eyeData = JSON.parse(data.replace(/(\d),(\d)/g, "$1.$2"));
-      const point = new Point(eyeData.x, eyeData.y)
+      const point = new Point(eyeData.x, eyeData.y);
       // robot.moveMouse(eyeData.x, eyeData.y);
-      mouse.setPosition(point)
+      mouse.setPosition(point);
     }
   });
 })();
@@ -184,9 +183,9 @@ ipcMain.handle("tobii-start", async () => {
     tobiiProcess?.stdout?.on("data", (data: any) => {
       if (global.isTobii) {
         const eyeData = JSON.parse(data.replace(/(\d),(\d)/g, "$1.$2"));
-        const point = new Point(eyeData.x, eyeData.y)
+        const point = new Point(eyeData.x, eyeData.y);
         // robot.moveMouse(eyeData.x, eyeData.y);
-        mouse.setPosition(point)
+        mouse.setPosition(point);
       }
     });
   }

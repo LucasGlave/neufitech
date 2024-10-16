@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ButtonAnimation from "../ButtonAnimation";
 import LocalizacionRapida from "./LocalizacionRapida";
 
@@ -29,6 +29,18 @@ const SensacionCorporal = () => {
     setPart(newPart);
   };
 
+  const [space, setSpace] = useState(null);
+
+  useEffect(() => {
+    const divSpace = document.getElementById("image");
+    if (divSpace) {
+      const rect = divSpace.getBoundingClientRect();
+      const topLeft = { x: rect.left, y: rect.top };
+      const bottomRight = { x: rect.right, y: rect.bottom };
+      setSpace([topLeft, bottomRight]);
+    }
+  }, []);
+
   return (
     <div className="flex flex-row justify-around gap-12 w-full h-screen bg-zinc-900 p-12">
       <div className="h-full w-[10%] flex flex-col justify-between">
@@ -55,72 +67,83 @@ const SensacionCorporal = () => {
           />
         </div>
       </div>
-      <div className="relative h-full w-[45%] bg-white rounded-lg flex justify-center items-center">
+      <div
+        id="image"
+        className="relative h-full w-[45%] bg-white rounded-lg flex justify-center items-center"
+      >
         <Image
           src={getBodyImage()}
           alt="cuerpoHumanoFrontal"
-          className="object-contain z-[5] h-full w-full py-20 px-36"
+          className="object-contain z-[5] h-full w-full pt-36 pb-2 px-20"
         />
-        <ButtonAnimation
-          disabled={isOff ? true : false}
-          speakText={`${sex ? "Mujer" : "Hombre"}`}
-          state={changeSex}
-          text={`${sex ? "MUJER" : "HOMBRE"}`}
-          color="bg-white"
-          propClass="absolute w-32 h-32 top-0 left-0"
-          buttonBorder="border-zinc-900"
-          textColor="text-zinc-900"
-        />
-        <ButtonAnimation
-          disabled={isOff ? true : false}
-          speakText="Cabeza"
-          state={() => changePart("cabeza")}
-          text="CABEZA"
-          color="bg-white"
-          propClass="absolute w-32 h-32 top-0 right-0"
-          buttonBorder="border-zinc-900"
-          textColor="text-zinc-900"
-        />
-        <ButtonAnimation
-          disabled={isOff ? true : false}
-          speakText="Vientre"
-          state={() => changePart("vientre")}
-          text="VIENTRE"
-          color="bg-white"
-          propClass="absolute w-32 h-32 left-0"
-          buttonBorder="border-zinc-900"
-          textColor="text-zinc-900"
-        />
-        <ButtonAnimation
-          disabled={isOff ? true : false}
-          speakText="Mano"
-          state={() => changePart("mano")}
-          text="MANO"
-          color="bg-white"
-          propClass="absolute w-32 h-32 right-0"
-          buttonBorder="border-zinc-900"
-          textColor="text-zinc-900"
-        />
-        <ButtonAnimation
-          disabled={isOff ? true : false}
-          speakText="Pie"
-          state={() => changePart("pie")}
-          text="PIE"
-          color="bg-white"
-          propClass="absolute w-32 h-32 bottom-0 left-0"
-          buttonBorder="border-zinc-900"
-          textColor="text-zinc-900"
-        />
-        <ButtonAnimation
-          disabled={isOff ? true : false}
-          speakText="Volver"
-          state={() => changePart("body")}
-          text="VOLVER"
-          color="bg-white"
-          propClass="absolute w-32 h-32 bottom-0 right-0"
-          buttonBorder="border-zinc-900"
-          textColor="text-zinc-900"
-        />
+        <div className="flex justify-between h-full w-full items-start absolute">
+          <ButtonAnimation
+            disabled={isOff ? true : false}
+            comingSoon={animate}
+            speakText={`${sex ? "Mujer" : "Hombre"}`}
+            state={changeSex}
+            text={`${sex ? "MUJER" : "HOMBRE"}`}
+            color="bg-white"
+            propClass="w-32 h-32"
+            buttonBorder="border-zinc-900"
+            textColor="text-zinc-900"
+          />
+          <ButtonAnimation
+            disabled={isOff ? true : false}
+            comingSoon={animate}
+            speakText="Cabeza"
+            state={() => changePart("cabeza")}
+            text="CABEZA"
+            color="bg-white"
+            propClass="w-32 h-32"
+            buttonBorder="border-zinc-900"
+            textColor="text-zinc-900"
+          />
+          <ButtonAnimation
+            disabled={isOff ? true : false}
+            comingSoon={animate}
+            speakText="Vientre"
+            state={() => changePart("vientre")}
+            text="VIENTRE"
+            color="bg-white"
+            propClass="w-32 h-32"
+            buttonBorder="border-zinc-900"
+            textColor="text-zinc-900"
+          />
+          <ButtonAnimation
+            disabled={isOff ? true : false}
+            comingSoon={animate}
+            speakText="Mano"
+            state={() => changePart("mano")}
+            text="MANO"
+            color="bg-white"
+            propClass="w-32 h-32"
+            buttonBorder="border-zinc-900"
+            textColor="text-zinc-900"
+          />
+          <ButtonAnimation
+            disabled={isOff ? true : false}
+            comingSoon={animate}
+            speakText="Pie"
+            state={() => changePart("pie")}
+            text="PIE"
+            color="bg-white"
+            propClass="w-32 h-32"
+            buttonBorder="border-zinc-900"
+            textColor="text-zinc-900"
+          />
+          <ButtonAnimation
+            disabled={isOff ? true : false}
+            comingSoon={animate}
+            speakText="Volver"
+            state={() => changePart("body")}
+            text="VOLVER"
+            color="bg-white"
+            propClass="w-32 h-32"
+            buttonBorder="border-zinc-900"
+            textColor="text-zinc-900"
+          />
+        </div>
         <div
           className={`absolute bottom-0 left-0 h-full w-full  transition-all z-[1] 
             ${animate ? "bg-green-400 animate-grow-bar-y" : ""}`}
@@ -150,7 +173,11 @@ const SensacionCorporal = () => {
             propClass="w-full h-28"
           />
         </div>
-        <LocalizacionRapida isOff={isOff} setAnimate={setAnimate} />
+        <LocalizacionRapida
+          isOff={isOff}
+          setAnimate={setAnimate}
+          spaces={space}
+        />
         <div className="flex flex-col gap-2 w-full">
           <div className="flex flex-row gap-2 w-full">
             <ButtonAnimation

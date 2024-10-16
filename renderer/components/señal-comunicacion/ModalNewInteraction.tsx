@@ -121,7 +121,6 @@ const ModalNewInteraction = ({
           window.ipc
             .saveImage()
             .then((imageFiles) => {
-              console.log(imageFiles);
               setImages(imageFiles);
             })
             .catch((err) => {

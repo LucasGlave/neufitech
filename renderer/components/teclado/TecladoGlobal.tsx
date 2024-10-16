@@ -117,10 +117,6 @@ const TecladoGlobal = ({ isOff }: TecladoGlobalProps) => {
     setEjecFunction("");
   }, [isAllow === true]);
 
-  useEffect(() => {
-    console.log(output);
-  }, [output]);
-
   return (
     <div
       className="flex flex-col gap-8 items-center bg-keyboardHeader shadow-md h-[40%]"
