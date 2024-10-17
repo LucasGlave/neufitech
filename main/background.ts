@@ -117,14 +117,36 @@ if (isProd) {
 
   tobiiProcess = exec(exeServerPath);
 
+  const smoothingFactor = 18; // The number of points to average over
+  let gazeHistory: Point[] = [];
+
   tobiiProcess?.stdout?.on("data", (data: any) => {
     if (global.isTobii) {
       const eyeData = JSON.parse(data.replace(/(\d),(\d)/g, "$1.$2"));
       const point = new Point(eyeData.x, eyeData.y);
-      // robot.moveMouse(eyeData.x, eyeData.y);
-      mouse.setPosition(point);
+
+      gazeHistory.push(point);
+
+      if (gazeHistory.length > smoothingFactor) {
+        gazeHistory.shift(); // Remove the oldest point
+      }
+
+      const smoothedPoint = gazeHistory.reduce((acc, curr) => {
+        return new Point(acc.x + curr.x / gazeHistory.length, acc.y + curr.y / gazeHistory.length);
+      }, new Point(0, 0));
+
+      mouse.setPosition(smoothedPoint);
     }
   });
+
+  // tobiiProcess?.stdout?.on("data", (data: any) => {
+  //   if (global.isTobii) {
+  //     const eyeData = JSON.parse(data.replace(/(\d),(\d)/g, "$1.$2"));
+  //     const point = new Point(eyeData.x, eyeData.y);
+  //     // robot.moveMouse(eyeData.x, eyeData.y);
+  //     mouse.setPosition(point);
+  //   }
+  // });
 })();
 
 app.on("window-all-closed", () => {
