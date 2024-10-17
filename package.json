@@ -2,7 +2,7 @@
   "private": true,
   "name": "neufitech-app",
   "description": "Neufitech App",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "author": "Neufitech SRL",
   "main": "app/background.js",
   "scripts": {
@@ -14,10 +14,6 @@
   "build": {
     "extraResources": [
       {
-        "from": "./public/senal-comunicacion",
-        "to": "./public/senal-comunicacion"
-      },
-      {
         "from": "./renderer/lib/TobiiServer",
         "to": "./renderer/lib/TobiiServer"
       }
@@ -27,9 +23,10 @@
     },
     "asar": true,
     "asarUnpack": [
-      "node_modules/node-key-sender/**",
-      "renderer/lib/TobiiServer/**"
-    ]
+      "renderer/lib/TobiiServer/**",
+      "node_modules/node-key-sender/**"
+    ],
+    "afterPack": "./main/afterPack.js"
   },
   "dependencies": {
     "@nozbe/microfuzz": "^1.0.0",
@@ -43,7 +40,6 @@
     "node-key-sender": "^1.0.11",
     "puppeteer": "^23.4.1",
     "react-animated-cursor": "^2.11.2",
-    "robotjs": "^0.6.0",
     "say": "^0.16.0",
     "sharp": "^0.33.5",
     "simpletts": "^2.6.0",
@@ -62,6 +58,7 @@
     "electron-rebuild": "^3.2.9",
     "next": "^14.2.4",
     "nextron": "^9.1.0",
+    "node-abi": "^3.68.0",
     "postcss": "^8.4.38",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

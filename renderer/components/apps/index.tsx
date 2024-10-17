@@ -1,7 +1,7 @@
 import tiktok from "./tiktok/tiktokFunctions";
 import whatsapp from "./whatsapp/whatsappFunctions";
 
-const AppManagement = (app: string, command: string) => {
+const AppManagement = async (app: string, command: string) => {
     switch (app) {
         case "tiktok":
             switch (command) {
@@ -14,18 +14,27 @@ const AppManagement = (app: string, command: string) => {
                 case "pausar":
                     tiktok.Pausar()
                     break;
+                default:
+                    console.log(`Comando desconocido en ${app}`)
             }
+            break;
         case "whatsapp":
             switch (command) {
-                case "seleccionarChat":
+                case "interaccionRapida":
                     setTimeout(() => {
-                        whatsapp.SeleccionarChat()
-                    }, 3000)
+                        whatsapp.InteraccionRapida()
+                    }, 2500)
                     break;
-                case "close":
-                    window.ipc.closeWhatsapp()
+                case "scrollBottom":
+                    whatsapp.ScrollBottom()
                     break;
+                case "scrollTop":
+                    whatsapp.ScrollTop()
+                    break;
+                default:
+                    console.log(`Comando desconocido en ${app}`)
             }
+            break;
     }
 }
 
