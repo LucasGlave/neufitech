@@ -16,6 +16,7 @@ import keySender from "node-key-sender";
 import fs from "fs";
 import { exec } from "child_process";
 import { mouse, Button, Point } from "@nut-tree-fork/nut-js";
+import axios from "axios";
 
 global.isTobii = false;
 let mainWindow: BrowserWindow | null = null;
@@ -132,7 +133,10 @@ if (isProd) {
       }
 
       const smoothedPoint = gazeHistory.reduce((acc, curr) => {
-        return new Point(acc.x + curr.x / gazeHistory.length, acc.y + curr.y / gazeHistory.length);
+        return new Point(
+          acc.x + curr.x / gazeHistory.length,
+          acc.y + curr.y / gazeHistory.length
+        );
       }, new Point(0, 0));
 
       mouse.setPosition(smoothedPoint);
@@ -275,7 +279,7 @@ ipcMain.handle("auth", async (event, code) => {
   console.log("main: auth", code);
   try {
     const response = await fetch(
-      "https://neufitech-back-api.onrender.com/api/compare-code",
+      "https://neufitech-back-api.onrender.com/api/code/compare-code",
       {
         method: "POST",
         headers: {
@@ -286,6 +290,26 @@ ipcMain.handle("auth", async (event, code) => {
       }
     );
     return response.status;
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+ipcMain.handle("getResponses", async (event, text) => {
+  try {
+    console.log(text);
+    const { data } = await axios.post(
+      "https://neufitech-back-api.onrender.com/ia/generate-responses",
+      { text },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Origin: "electron://localhost",
+        },
+      }
+    );
+    console.log(data);
+    return data;
   } catch (error) {
     throw new Error(error);
   }
