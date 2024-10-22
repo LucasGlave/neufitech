@@ -25,6 +25,7 @@ const handler = {
   getImages: () => ipcRenderer.invoke("get-images"),
   saveImage: () => ipcRenderer.invoke("save-image"),
   auth: (code: string) => ipcRenderer.invoke("auth", code),
+  getResponses: (text: string) => ipcRenderer.invoke("getResponses", text),
   clickChat: () => ipcRenderer.invoke("click-chat"),
   speak: (speakText: any) => {
     const speech = new SpeechSynthesisUtterance(speakText);
@@ -81,12 +82,15 @@ const handler = {
   tobiiCalibrate: () => ipcRenderer.invoke("tobii-calibrate"),
   isTobiiOnline: () => ipcRenderer.invoke("tobii-check"),
   tobiiToggle: () => ipcRenderer.invoke("tobii-toggle"),
-  setTobiiControl: (newConfig:boolean) => ipcRenderer.send('set-tobii-in-control', newConfig),
+  setTobiiControl: (newConfig: boolean) =>
+    ipcRenderer.send("set-tobii-in-control", newConfig),
   tobiiInControl: () => ipcRenderer.invoke("tobii-in-control"),
   tobiiStart: () => ipcRenderer.invoke("tobii-start"),
   tobiiStop: () => ipcRenderer.invoke("tobii-stop"),
-  onTobiiControlUpdate: (callback:any) => ipcRenderer.on('tobii-control-updated', callback),
-  offTobiiControlUpdate: (callback:any) => ipcRenderer.removeListener('tobii-control-updated', callback),
+  onTobiiControlUpdate: (callback: any) =>
+    ipcRenderer.on("tobii-control-updated", callback),
+  offTobiiControlUpdate: (callback: any) =>
+    ipcRenderer.removeListener("tobii-control-updated", callback),
 };
 
 contextBridge.exposeInMainWorld("ipc", handler);
