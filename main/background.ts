@@ -279,7 +279,7 @@ ipcMain.handle("auth", async (event, code) => {
   console.log("main: auth", code);
   try {
     const response = await fetch(
-      "https://neufitech-back-api.onrender.com/api/code/compare-code",
+      "https://neufitech-back-api.onrender.com/codes/compare-code",
       {
         method: "POST",
         headers: {
