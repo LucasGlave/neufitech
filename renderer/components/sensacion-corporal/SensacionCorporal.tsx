@@ -113,9 +113,9 @@ const SensacionCorporal = () => {
         />
         <ButtonAnimation
           disabled={isOff ? true : false}
-          speakText="Volver"
+          speakText="Cuerpo entero"
           state={() => changePart("body")}
-          text="VOLVER"
+          text="CUERPO ENTERO"
           color="bg-white"
           propClass="absolute w-32 h-32 bottom-0 right-0"
           buttonBorder="border-zinc-900"
