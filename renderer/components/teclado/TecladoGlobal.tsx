@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import ButtonAnimation from "../ButtonAnimation";
 import trash from "../../public/eliminar.svg";
+import ConfirmationModal from "../confirmation/confirmationModal";
 // import TestPredictor from "../TestPredictor";
 
 type TecladoGlobalProps = {
@@ -44,6 +45,7 @@ const TecladoGlobal = ({ isOff }: TecladoGlobalProps) => {
   const [isAllow, setIsAllow] = useState(false);
   const [ejecFunction, setEjecFunction] = useState("");
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const [modalProps, setModalProps] = useState(null);
 
   const currentSymbolsLayout =
     symbolPage === 1 ? SymbolsLayoutPage1 : SymbolsLayoutPage2;
@@ -94,6 +96,22 @@ const TecladoGlobal = ({ isOff }: TecladoGlobalProps) => {
     return layout;
   };
 
+  const handleDeleteAll = () => {
+    const showConfirmation = (question: string): Promise<boolean> => {
+      return new Promise((resolve) => {
+        setModalProps({ question, resolve });
+      });
+    };
+    showConfirmation("DESEA BORRAR TODO?").then((confirmed) => {
+      if (confirmed) {
+        deleteAll();
+        setModalProps(null);
+      } else {
+        setModalProps(null);
+      }
+    });
+  };
+
   useEffect(() => {
     isTildeActive && setIsTildeActive(false);
   }, [output]);
@@ -128,11 +146,19 @@ const TecladoGlobal = ({ isOff }: TecladoGlobalProps) => {
       id="teclado-global"
       tabIndex={-1}
     >
+      {modalProps !== null && (
+        <ConfirmationModal
+          question={modalProps.question}
+          resolve={(result) => {
+            modalProps.resolve(result);
+          }}
+        />
+      )}
       <div className="bg-zinc-900 flex flex-col w-full h-full gap-4 pt-4 p-2">
         <div className="flex flex-row justify-between items-center">
           <ButtonAnimation
             disabled={isOff}
-            functionKeyboard={{ funct: "deleteAll", state: changeState }}
+            state={handleDeleteAll}
             imagen={{ src: trash, width: 50, height: 50, add: "invert" }}
             propClass="w-[180px] h-[60px] flex justify-center items-center"
           />
