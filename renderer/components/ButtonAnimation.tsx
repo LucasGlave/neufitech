@@ -314,19 +314,19 @@ const ButtonAnimation = ({
             dangerouslySetInnerHTML={{ __html: svg }}
           />
         )}
-        {innerText && (
-          <h3 className="absolute font-bold text-3xl flex text-center items-center justify-center whitespace-pre-line mx-3">
-            {innerText}
-          </h3>
-        )}
-        {comingSoon && (
+        {/* {comingSoon && (
           <div className="absolute flex rotate-[-6deg] items-center justify-center w-full h-full z-20 backdrop-blur-[1.5px]">
-            <h3 className="w-[120%] mx-[-20px] bg-black py-2 opacity-80 font-bold">
-              PROXIMAMENTE
-            </h3>
+          <h3 className="w-[120%] mx-[-20px] bg-black py-2 opacity-80 font-bold">
+          PROXIMAMENTE
+          </h3>
           </div>
-        )}
+          )} */}
       </div>
+      {innerText && (
+        <div className="h-28 font-bold text-3xl flex text-center items-center justify-center whitespace-pre-line mx-3">
+          {innerText}
+        </div>
+      )}
     </button>
   );
 };

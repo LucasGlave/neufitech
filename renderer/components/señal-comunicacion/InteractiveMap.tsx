@@ -25,7 +25,7 @@ const InteractiveMap = ({
               innerText={category.title}
               speakText={category.title}
               titleSetter={setPageTitle}
-              propClass="aspect-square"
+              propClass="aspect-video"
               imagen={{
                 src: `${category.url}`,
                 width: 400,
@@ -45,7 +45,7 @@ const InteractiveMap = ({
                     key={index}
                     innerText={entry.frase}
                     speakText={entry.frase}
-                    propClass="aspect-square"
+                    propClass="aspect-video"
                     imagen={{
                       src: `${entry.url}`,
                       width: 400,
